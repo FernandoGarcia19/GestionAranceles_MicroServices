@@ -1,20 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\UCB\\GESTION 2-2025 UCB\\ARQUITECTURA DE SOFTWARE\\EC1\\Frambou 2\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{12699916-8B71-493E-96AF-7FE7E4496306}|MicroServicoUser.Inf\\MicroServicoUser.Inf.csproj|d:\\ucb\\gestion 2-2025 ucb\\arquitectura de software\\ec1\\frambou 2\\gestionaranceles_microservices\\microservices\\microserviciousuario.api\\microservicouser.inf\\repository\\irepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{12699916-8B71-493E-96AF-7FE7E4496306}|MicroServicoUser.Inf\\MicroServicoUser.Inf.csproj|solutionrelative:microservicouser.inf\\repository\\irepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{10E94D13-2307-42BE-9FC1-0A9383BD975A}|MicroServicioUser.App\\MicroServicioUser.App.csproj|d:\\ucb\\gestion 2-2025 ucb\\arquitectura de software\\ec1\\frambou 2\\gestionaranceles_microservices\\microservices\\microserviciousuario.api\\microserviciouser.app\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10E94D13-2307-42BE-9FC1-0A9383BD975A}|MicroServicioUser.App\\MicroServicioUser.App.csproj|solutionrelative:microserviciouser.app\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{43AB8997-12CA-456A-95EC-CECAFB2B5414}|MicroServicioUsuario\\MicroServicioUsuario.API.csproj|d:\\ucb\\gestion 2-2025 ucb\\arquitectura de software\\ec1\\frambou 2\\gestionaranceles_microservices\\microservices\\microserviciousuario.api\\microserviciousuario\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43AB8997-12CA-456A-95EC-CECAFB2B5414}|MicroServicioUsuario\\MicroServicioUsuario.API.csproj|solutionrelative:microserviciousuario\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -22,50 +9,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "IRepository.cs",
-              "DocumentMoniker": "D:\\UCB\\GESTION 2-2025 UCB\\ARQUITECTURA DE SOFTWARE\\EC1\\Frambou 2\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicoUser.Inf\\Repository\\IRepository.cs",
-              "RelativeDocumentMoniker": "MicroServicoUser.Inf\\Repository\\IRepository.cs",
-              "ToolTip": "D:\\UCB\\GESTION 2-2025 UCB\\ARQUITECTURA DE SOFTWARE\\EC1\\Frambou 2\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicoUser.Inf\\Repository\\IRepository.cs",
-              "RelativeToolTip": "MicroServicoUser.Inf\\Repository\\IRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-17T03:23:04.621Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "D:\\UCB\\GESTION 2-2025 UCB\\ARQUITECTURA DE SOFTWARE\\EC1\\Frambou 2\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.App\\Services\\UserService.cs",
-              "RelativeDocumentMoniker": "MicroServicioUser.App\\Services\\UserService.cs",
-              "ToolTip": "D:\\UCB\\GESTION 2-2025 UCB\\ARQUITECTURA DE SOFTWARE\\EC1\\Frambou 2\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.App\\Services\\UserService.cs",
-              "RelativeToolTip": "MicroServicioUser.App\\Services\\UserService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-17T03:03:28.699Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "D:\\UCB\\GESTION 2-2025 UCB\\ARQUITECTURA DE SOFTWARE\\EC1\\Frambou 2\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUsuario\\Controllers\\UserController.cs",
-              "RelativeDocumentMoniker": "MicroServicioUsuario\\Controllers\\UserController.cs",
-              "ToolTip": "D:\\UCB\\GESTION 2-2025 UCB\\ARQUITECTURA DE SOFTWARE\\EC1\\Frambou 2\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUsuario\\Controllers\\UserController.cs",
-              "RelativeToolTip": "MicroServicioUsuario\\Controllers\\UserController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-17T02:41:05.087Z",
-              "EditorCaption": ""
             }
           ]
         }

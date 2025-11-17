@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {}
+    "net8.0": {
+      "MicroServicioUser.Dom/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/MicroServicioUser.Dom.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MicroServicioUser.Dom.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "MicroServicioUser.Dom/1.0.0": {
+      "type": "project",
+      "path": "../MicroServicioUser.Dom/MicroServicioUser.Dom.csproj",
+      "msbuildProject": "../MicroServicioUser.Dom/MicroServicioUser.Dom.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net8.0": []
+    "net8.0": [
+      "MicroServicioUser.Dom >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Andre\\.nuget\\packages\\": {},
@@ -38,7 +57,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\UCB\\GESTION 2-2025 UCB\\ARQUITECTURA DE SOFTWARE\\EC1\\Frambou 2\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.Dom\\MicroServicioUser.Dom.csproj": {
+              "projectPath": "D:\\UCB\\GESTION 2-2025 UCB\\ARQUITECTURA DE SOFTWARE\\EC1\\Frambou 2\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.Dom\\MicroServicioUser.Dom.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

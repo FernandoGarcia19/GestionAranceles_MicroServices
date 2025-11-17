@@ -1,0 +1,16 @@
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\bin\Debug\net8.0\MicroServicioUser.App.deps.json
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\bin\Debug\net8.0\MicroServicioUser.App.dll
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\bin\Debug\net8.0\MicroServicioUser.App.pdb
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\bin\Debug\net8.0\MicroServicioUser.Dom.dll
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\bin\Debug\net8.0\MicroServicioUser.Dom.pdb
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\obj\Debug\net8.0\MicroServicioUser.App.csproj.AssemblyReference.cache
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\obj\Debug\net8.0\MicroServicioUser.App.GeneratedMSBuildEditorConfig.editorconfig
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\obj\Debug\net8.0\MicroServicioUser.App.AssemblyInfoInputs.cache
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\obj\Debug\net8.0\MicroServicioUser.App.AssemblyInfo.cs
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\obj\Debug\net8.0\MicroServicioUser.App.csproj.CoreCompileInputs.cache
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\obj\Debug\net8.0\MicroServicioUser.App.sourcelink.json
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\obj\Debug\net8.0\MicroSer.CBC5404E.Up2Date
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\obj\Debug\net8.0\MicroServicioUser.App.dll
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\obj\Debug\net8.0\refint\MicroServicioUser.App.dll
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\obj\Debug\net8.0\MicroServicioUser.App.pdb
+D:\UCB\GESTION 2-2025 UCB\ARQUITECTURA DE SOFTWARE\EC1\Frambou 2\GestionAranceles_MicroServices\MicroServices\MicroServicioUsuario.API\MicroServicioUser.App\obj\Debug\net8.0\ref\MicroServicioUser.App.dll
