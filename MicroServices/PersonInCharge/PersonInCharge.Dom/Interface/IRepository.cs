@@ -9,5 +9,4 @@ public interface IRepository
 
     Task<Model.PersonInCharge > SelectById(int id);
     Task<List<Model.PersonInCharge >> Select();
-
 }

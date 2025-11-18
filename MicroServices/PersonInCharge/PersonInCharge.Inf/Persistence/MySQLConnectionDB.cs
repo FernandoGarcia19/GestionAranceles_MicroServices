@@ -15,7 +15,4 @@ public class MySqlConnectionDB
     public MySqlConnection GetConnection() {
         return new MySqlConnection(connectionString);
     }
-
-
-
 }

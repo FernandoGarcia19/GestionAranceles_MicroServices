@@ -1,0 +1,16 @@
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/bin/Debug/net9.0/Establishment.Inf.deps.json
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/bin/Debug/net9.0/Establishment.Inf.dll
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/bin/Debug/net9.0/Establishment.Inf.pdb
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/bin/Debug/net9.0/Establishment.Dom.dll
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/bin/Debug/net9.0/Establishment.Dom.pdb
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/obj/Debug/net9.0/Establishment.Inf.csproj.AssemblyReference.cache
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/obj/Debug/net9.0/Establishment.Inf.GeneratedMSBuildEditorConfig.editorconfig
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/obj/Debug/net9.0/Establishment.Inf.AssemblyInfoInputs.cache
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/obj/Debug/net9.0/Establishment.Inf.AssemblyInfo.cs
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/obj/Debug/net9.0/Establishment.Inf.csproj.CoreCompileInputs.cache
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/obj/Debug/net9.0/Establishment.Inf.sourcelink.json
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/obj/Debug/net9.0/Establis.21E78CF0.Up2Date
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/obj/Debug/net9.0/Establishment.Inf.dll
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/obj/Debug/net9.0/refint/Establishment.Inf.dll
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/obj/Debug/net9.0/Establishment.Inf.pdb
+/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Inf/obj/Debug/net9.0/ref/Establishment.Inf.dll
