@@ -1,95 +1,195 @@
 ﻿using MicroServicioUser.Dom.Entities;
+using MicroServicioUser.Dom.Patterns;
 using MicroServicioUser.Dom.Interfaces;
-using MicroServicoUser.Inf.Persistence;
-using MySql.Data.MySqlClient;
-using MySqlX.XDevAPI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MicroServicoUser.Inf.Persistence.Database;
 
 namespace MicroServicoUser.Inf.Repository
 {
+    public class IdDto
+    {
+        public int Id { get; set; }
+    }
     public class UserRepository : IRepository
     {
-        private readonly MySqlConnectionDB connectionDB;
-        public UserRepository(MySqlConnectionDB con)
+        private readonly MySqlConnectionManager _dbConnectionManager;
+        public UserRepository(MySqlConnectionManager dbConnectionManager)
         {
-            connectionDB = con;
-        }
-        public Task<int> Delete(User t)
-        {
-            throw new NotImplementedException();
+            _dbConnectionManager = dbConnectionManager;
         }
 
-        public async Task<int> Insert(User t)
+        public async Task<IEnumerable<User>> GetAll()
         {
-            int id = 0;
-            string query = @"INSERT INTO `user` (username, email, password_hash, first_name, second_name, first_last_name, second_last_name, role, created_by)
-                            VALUES (@username, @email, MD5(@password_hash), @first_name, @second_name, @first_last_name, @second_last_name, @role, @created_by);SELECT LAST_INSERT_ID();";
+            string query = @"
+                SELECT
+                    id            AS Id,
+                    username      AS Username,
+                    password_hash AS PasswordHash,
+                    first_name    AS FirstName,
+                    second_name   AS SecondName,
+                    first_last_name     AS LastName,
+                    second_last_name AS SecondLastName,
+                    email         AS Email,
+                    role          AS Role,
+                    created_by    AS CreatedBy,
+                    created_date  AS CreatedDate,
+                    last_update   AS LastUpdate,
+                    status        AS Status,
+                    first_login   AS FirstLogin
+                FROM user
+                WHERE status = TRUE
+                ORDER BY id DESC;";
+            return _dbConnectionManager.ExecuteQuery<User>(query);
+        }
 
-            using (var conn = connectionDB.GetConnection())
+        public async Task<int> Insert(User model)
+        {
+            string query = @"
+                INSERT INTO user
+                (
+                    username,
+                    password_hash,
+                    first_name,
+                    second_name,
+                    first_last_name,
+                    second_last_name,
+                    email,
+                    role,
+                    created_by,
+                    created_date,
+                    last_update,
+                    status,
+                    first_login
+                )
+                VALUES
+                (
+                    @Username,
+                    MD5(@PasswordHash),
+                    @FirstName,
+                    @SecondName,
+                    @LastName,
+                    @SecondLastName,
+                    @Email,
+                    @Role,
+                    @CreatedBy,
+                    CURRENT_TIMESTAMP,
+                    CURRENT_TIMESTAMP,
+                    @Status,
+                    @FirstLogin
+                );";
+            return _dbConnectionManager.ExecuteParameterizedNonQuery(query, model);
+        }
+        public async Task<int> Update(User model)
+        {
+            string query = @"
+                UPDATE user
+                SET
+                    username      = @Username,
+                    password_hash = @PasswordHash,
+                    first_name    = @FirstName,
+                    second_name   = @SecondName,
+                    first_last_name     = @LastName,
+                    second_last_name    = @SecondLastName,
+                    email         = @Email,
+                    role         = @Role,
+                    created_by    = @CreatedBy,
+                    last_update   = CURRENT_TIMESTAMP,
+                    status       = @Status,
+                    first_login  = @FirstLogin
+                WHERE id = @Id;";
+            return _dbConnectionManager.ExecuteParameterizedNonQuery(query, model);
+        }
+
+        public async Task<IEnumerable<User>> Search(string property)
+        {
+            var probe = new User
             {
-                MySqlCommand command = new MySqlCommand(query, conn);
-                command.Parameters.AddWithValue("@username", t.Username);
-                command.Parameters.AddWithValue("@email", t.Email);
-                command.Parameters.AddWithValue("@password_hash", t.PasswordHash);
-                command.Parameters.AddWithValue("@first_name", t.FirstName);
-                command.Parameters.AddWithValue("@second_name", t.SecondName);
-                command.Parameters.AddWithValue("@first_last_name", t.FirstLastName);
-                command.Parameters.AddWithValue("@second_last_name", t.SecondLastName);
-                command.Parameters.AddWithValue("@role", t.Role);
-                command.Parameters.AddWithValue("@created_by", t.CreatedBy);
+                Username = property,
+                FirstName = property,
+                SecondName = property,
+                LastName = property,
+                SecondLastName = property,
+                Email = property,
+                Role = property
+            };
 
-                await conn.OpenAsync();
-                var res = await command.ExecuteScalarAsync();
-                id = Convert.ToInt32(res);
-
-            }
-
-            return id;
+            const string query = @"
+                SELECT
+                    id            ,
+                    username      ,
+                    password_hash ,
+                    first_name    ,
+                    second_name   ,
+                    first_last_name     ,
+                    second_last_name    ,
+                    email         ,
+                    role          ,
+                    created_by    ,
+                    created_date  ,
+                    last_update   ,
+                    status        ,
+                    first_login
+                FROM user
+                WHERE status = TRUE AND (
+                    (@Username IS NOT NULL AND username LIKE CONCAT('%', @Username, '%')) OR
+                    (@FirstName IS NOT NULL AND first_name LIKE CONCAT('%', @FirstName, '%')) OR
+                    (@SecondName IS NOT NULL AND second_name LIKE CONCAT('%', @SecondName, '%')) OR
+                    (@LastName IS NOT NULL AND first_last_name LIKE CONCAT('%', @LastName, '%')) OR
+                    (@SecondLastName IS NOT NULL AND second_last_name LIKE CONCAT('%', @SecondLastName, '%')) OR
+                    (@Email IS NOT NULL AND email LIKE CONCAT('%', @Email, '%')) OR
+                    (@Role IS NOT NULL AND role LIKE CONCAT('%', @Role, '%'))
+                )
+                ORDER BY id DESC;";
+            return _dbConnectionManager.ExecuteParameterizedQuery<User>(query, probe);
         }
 
-        public async Task<List<User>> Search(string p)
+        public async Task<User?> GetById(int id)
         {
-            throw new NotImplementedException();
+            string query = @"
+                SELECT
+                    id            AS Id,
+                    username      AS Username,
+                    password_hash AS PasswordHash,
+                    first_name    AS FirstName,
+                    second_name   AS SecondName,
+                    first_last_name     AS LastName,
+                    second_last_name AS SecondLastName,
+                    email         AS Email,
+                    role          AS Role,
+                    created_by    AS CreatedBy,
+                    created_date  AS CreatedDate,
+                    last_update   AS LastUpdate,
+                    status        AS Status,
+                    first_login   AS FirstLogin
+                FROM user
+                WHERE id = @Id AND status = TRUE
+                LIMIT 1;";
+
+            var model = new User { Id = id };
+
+            return _dbConnectionManager.ExecuteParameterizedQuery<User>(query, model).FirstOrDefault();
         }
 
-        public async Task<List<User>> Select()
+        public async Task<User?> GetByUsername(string username)
         {
-            List<User> lista = new List<User>();
-            string query = @"SELECT username, first_name, second_name, first_last_name, second_last_name, email, role
-                                FROM user
-                                WHERE status=1
-                                ORDER BY 4";
-            using (var conn = connectionDB.GetConnection())
-            {
-                MySqlCommand command = new MySqlCommand(query, conn);
-                await conn.OpenAsync();
-
-                var reader = await command.ExecuteReaderAsync();
-
-                while (await reader.ReadAsync())
-                {
-                    lista.Add(new User
-                    {
-                        Username = reader["username"].ToString(),
-                        FirstName = reader["first_name"].ToString(),
-                        SecondName = reader["second_name"].ToString(),
-                        FirstLastName = reader["first_last_name"].ToString(),
-                        SecondLastName = reader["second_last_name"].ToString(),
-                        Email = reader["email"].ToString(),
-                        Role = reader["role"].ToString()
-                    });
-                }
-                return lista;
-            }
+            const string sql = @"
+                SELECT id AS Id, username AS Username, password_hash AS PasswordHash,
+                       first_name AS FirstName, last_name AS LastName, email AS Email,
+                       role AS Role, created_by AS CreatedBy, created_date AS CreatedDate,
+                       last_update AS LastUpdate, status AS Status, first_login AS FirstLogin
+                FROM `user`
+                WHERE username = @Username
+                LIMIT 1;";
+            var probe = new User { Username = username };
+            return _dbConnectionManager.ExecuteParameterizedQuery<User>(sql, probe).FirstOrDefault();
         }
-
-        public async Task<int> Update(User t)
+        public async Task<int> Delete(int id)
         {
-            throw new NotImplementedException();
+            string query = @"
+                UPDATE user
+                SET last_update = CURRENT_TIMESTAMP,
+                    status = FALSE
+                WHERE id = @Id;";
+            return _dbConnectionManager.ExecuteParameterizedNonQuery(query, new IdDto() { Id = id});
         }
     }
 }

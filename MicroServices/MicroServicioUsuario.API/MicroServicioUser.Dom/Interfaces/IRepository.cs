@@ -9,10 +9,15 @@ namespace MicroServicioUser.Dom.Interfaces
 {
     public interface IRepository
     {
-        Task<int> Insert(User t);
-        Task<int> Update(User t);
-        Task<int> Delete(User t);
-        Task<List<User>> Select();
-        Task<List<User>> Search(string p);
+        public Task<int> Delete(int id);
+
+        public Task<IEnumerable<User>> GetAll();
+        public Task<int> Insert(User model);
+        public Task<int> Update(User model);
+        public Task<IEnumerable<User>> Search(string property);
+
+        public Task<User?> GetById(int id);
+
+        public Task<User?> GetByUsername(string username);
     }
 }

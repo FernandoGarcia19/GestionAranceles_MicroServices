@@ -1,7 +1,8 @@
 using MicroServicioUser.App.Services;
 using MicroServicioUser.Dom.Interfaces;
-using MicroServicoUser.Inf.Repository;
 using MicroServicoUser.Inf.Persistence;
+using MicroServicoUser.Inf.Repository;
+using MicroServicioUser.App.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,11 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Mysql
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+builder.Services.AddSingleton<MicroServicoUser.Inf.Persistence.Database.MySqlConnectionManager>();
 
 //Inyeccion de capas
 builder.Services.AddScoped<IRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<MicroServicoUser.Inf.Persistence.MySqlConnectionDB>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

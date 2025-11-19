@@ -8,24 +8,31 @@
     "net9.0": []
   },
   "packageFolders": {
-    "/home/nutria/.nuget/packages/": {}
+    "C:\\Users\\Andre\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Dom/Establishment.Dom.csproj",
+      "projectUniqueName": "D:\\UCB\\GESTION 2-2025 UCB\\ARQUITECTURA DE SOFTWARE\\EC1\\Frambou 2\\GestionAranceles_MicroServices\\MicroServices\\Establishment.API\\Establishment.Dom\\Establishment.Dom.csproj",
       "projectName": "Establishment.Dom",
-      "projectPath": "/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Dom/Establishment.Dom.csproj",
-      "packagesPath": "/home/nutria/.nuget/packages/",
-      "outputPath": "/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/MicroServices/Establishment.API/Establishment.Dom/obj/",
+      "projectPath": "D:\\UCB\\GESTION 2-2025 UCB\\ARQUITECTURA DE SOFTWARE\\EC1\\Frambou 2\\GestionAranceles_MicroServices\\MicroServices\\Establishment.API\\Establishment.Dom\\Establishment.Dom.csproj",
+      "packagesPath": "C:\\Users\\Andre\\.nuget\\packages\\",
+      "outputPath": "D:\\UCB\\GESTION 2-2025 UCB\\ARQUITECTURA DE SOFTWARE\\EC1\\Frambou 2\\GestionAranceles_MicroServices\\MicroServices\\Establishment.API\\Establishment.Dom\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/home/nutria/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Andre\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -65,7 +72,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.306/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

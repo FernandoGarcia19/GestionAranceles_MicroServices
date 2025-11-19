@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MicroServicioUser.App\MicroServicioUser.App.csproj" />
+    <ProjectReference Include="..\MicroServicioUser.Dom\MicroServicioUser.Dom.csproj" />
     <ProjectReference Include="..\MicroServicoUser.Inf\MicroServicoUser.Inf.csproj" />
   </ItemGroup>
 

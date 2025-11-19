@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MicroServicoUser.Inf")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+405fb8bc156d1901449eb6e6952a2c986a5bdf3f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d2296aa546fb4f4a066cd2b3d2c490f2435fdbb0")]
 [assembly: System.Reflection.AssemblyProductAttribute("MicroServicoUser.Inf")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MicroServicoUser.Inf")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

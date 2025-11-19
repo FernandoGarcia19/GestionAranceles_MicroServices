@@ -9,6 +9,7 @@
       "MicroServicioUsuario.API/1.0.0": {
         "dependencies": {
           "MicroServicioUser.App": "1.0.0",
+          "MicroServicioUser.Dom": "1.0.0",
           "MicroServicoUser.Inf": "1.0.0",
           "Swashbuckle.AspNetCore": "6.6.2"
         },
@@ -229,7 +230,8 @@
       },
       "MicroServicioUser.App/1.0.0": {
         "dependencies": {
-          "MicroServicioUser.Dom": "1.0.0"
+          "MicroServicioUser.Dom": "1.0.0",
+          "MicroServicoUser.Inf": "1.0.0"
         },
         "runtime": {
           "MicroServicioUser.App.dll": {
