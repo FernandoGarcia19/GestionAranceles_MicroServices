@@ -1,0 +1,10 @@
+# Visual Studio settings and caches
+.vs/
+
+# Build folders (C#, .NET)
+bin/
+obj/
+
+# Copilot temp DBs (extra safe)
+*.db-shm
+*.db-wal
