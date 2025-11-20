@@ -100,5 +100,22 @@ namespace MicroServiceCategory.Application.Services
                 return Result<List<Category>>.Failure("ServerError", ex.Message);
             }
         }
+        
+        public async Task<Result<Category>> SelectById(int id)
+        {
+            try
+            {
+                var category = await _categoryRepository.SelectById(id);
+                if (category == null)
+                    return Result<Category>.Failure("NotFound");
+
+                return Result<Category>.Success(category);
+            }
+            catch (Exception ex)
+            {
+                return Result<Category>.Failure("ServerError", ex.Message);
+            }
+        }
+
     }
 }

@@ -147,5 +147,15 @@ namespace MicroServiceCategory.API.Controllers
                 return MapFailure(result.Errors);
             }
         }
+        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var res = await _categoryService.SelectById(id);
+            if (res.IsSuccess)
+                return Ok(res.Value);
+
+            return MapFailure(res.Errors);
+        }
     }
 }
