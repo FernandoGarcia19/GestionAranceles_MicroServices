@@ -10,4 +10,6 @@ public interface IRepository
 
     Task<Result<Model.PersonInCharge>> SelectById(int id);
     Task<Result<List<Model.PersonInCharge>>> Select();
+    public Task<Result<IEnumerable<Model.PersonInCharge>>> Search(string property);
+
 }
