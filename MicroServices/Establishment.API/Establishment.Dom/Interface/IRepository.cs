@@ -1,11 +1,13 @@
+using Establishment.Dom.Model;
+
 namespace Establishment.Dom.Interface;
 
 public interface IRepository
 {
-    Task<int> Insert(Model.Establishment t); 
-    Task<int> Update(Model.Establishment  t);
-    Task<int> Delete(Model.Establishment  t);
+    Task<Result<int>> Insert(Model.Establishment t); 
+    Task<Result<int>> Update(Model.Establishment  t);
+    Task<Result<int>> Delete(Model.Establishment  t);
 
-    Task<Model.Establishment > SelectById(int id);
-    Task<List<Model.Establishment >> Select();
+    Task<Result<Model.Establishment>> SelectById(int id);
+    Task<Result<List<Model.Establishment>>> Select();
 }
