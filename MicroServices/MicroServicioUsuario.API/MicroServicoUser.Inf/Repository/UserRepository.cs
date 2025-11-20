@@ -210,11 +210,22 @@ namespace MicroServicoUser.Inf.Repository
         public async Task<Result<User?>> GetByUsername(string username)
         {
             const string sql = @"
-                SELECT id AS Id, username AS Username, password_hash AS PasswordHash,
-                       first_name AS FirstName, last_name AS LastName, email AS Email,
-                       role AS Role, created_by AS CreatedBy, created_date AS CreatedDate,
-                       last_update AS LastUpdate, status AS Status, first_login AS FirstLogin
-                FROM `user`
+                SELECT
+                    id            AS Id,
+                    username      AS Username,
+                    password_hash AS PasswordHash,
+                    first_name    AS FirstName,
+                    second_name   AS SecondName,
+                    first_last_name     AS LastName,
+                    second_last_name AS SecondLastName,
+                    email         AS Email,
+                    role          AS Role,
+                    created_by    AS CreatedBy,
+                    created_date  AS CreatedDate,
+                    last_update   AS LastUpdate,
+                    status        AS Status,
+                    first_login   AS FirstLogin
+                FROM user
                 WHERE username = @Username
                 LIMIT 1;";
             var probe = new User { Username = username };

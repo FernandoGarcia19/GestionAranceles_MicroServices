@@ -117,3 +117,11 @@ D:/UCB/GESTION 2-2025 UCB/ARQUITECTURA DE SOFTWARE/EC1/Frambou 2/GestionArancele
 /Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUsuario/obj/Debug/net8.0/MicroServicioUsuario.API.pdb
 /Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUsuario/obj/Debug/net8.0/MicroServicioUsuario.API.genruntimeconfig.cache
 /Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUsuario/obj/Debug/net8.0/ref/MicroServicioUsuario.API.dll
+/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUsuario/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUsuario/bin/Debug/net8.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUsuario/bin/Debug/net8.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUsuario/bin/Debug/net8.0/Microsoft.IdentityModel.Logging.dll
+/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUsuario/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.dll
+/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUsuario/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUsuario/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
+/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUsuario/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll
