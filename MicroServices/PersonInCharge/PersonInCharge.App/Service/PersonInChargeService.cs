@@ -1,5 +1,6 @@
-
+using System.ComponentModel.DataAnnotations;
 using PersonInCharge.Dom.Interface;
+using PersonInCharge.Dom.Model;
 
 namespace PersonInCharge.App.Service;
 
@@ -10,29 +11,80 @@ public class PersonInChargeService
     {
         _repository = repository;
     }
-    public async Task<int> Insert(Dom.Model.PersonInCharge t)
+    public async Task<Result<int>> Insert(Dom.Model.PersonInCharge t)
     {
-        var id = await _repository.Insert(t);
-        return id;
+        if (t == null)
+            return Result<int>.Failure("InvalidInput: body is null");
+
+        var validationErrors = ValidateModel(t);
+        if (validationErrors.Any())
+            return Result<int>.Failure(validationErrors.ToArray());
+
+        var repoRes = await _repository.Insert(t);
+        if (repoRes.IsFailure)
+            return Result<int>.Failure(repoRes.Errors.ToArray());
+
+        return Result<int>.Success(repoRes.Value);
     }
-    public async Task<List<Dom.Model.PersonInCharge>> Select()
+    public async Task<Result<List<Dom.Model.PersonInCharge>>> Select()
     {
-        return await _repository.Select();
+        var repoRes = await _repository.Select();
+        if (repoRes.IsFailure)
+            return Result<List<Dom.Model.PersonInCharge>>.Failure(repoRes.Errors.ToArray());
+
+        return Result<List<Dom.Model.PersonInCharge>>.Success(repoRes.Value);
     }
 
-    public async Task<Dom.Model.PersonInCharge> SelectById(int id)
+    public async Task<Result<Dom.Model.PersonInCharge>> SelectById(int id)
     {
-        return await _repository.SelectById(id);
+        if (id <= 0)
+            return Result<Dom.Model.PersonInCharge>.Failure("InvalidInput: id must be greater than zero");
+
+        var repoRes = await _repository.SelectById(id);
+        if (repoRes.IsFailure)
+            return Result<Dom.Model.PersonInCharge>.Failure(repoRes.Errors.ToArray());
+
+        return Result<Dom.Model.PersonInCharge>.Success(repoRes.Value);
     }
-    public async Task<int> Update(Dom.Model.PersonInCharge t)
+    public async Task<Result<int>> Update(Dom.Model.PersonInCharge t)
     {
-        var res = await _repository.Update(t);
-        return res;
+        if (t == null)
+            return Result<int>.Failure("InvalidInput: body is null");
+
+        if (t.Id <= 0)
+            return Result<int>.Failure("InvalidInput: id must be greater than zero");
+
+        var validationErrors = ValidateModel(t);
+        if (validationErrors.Any())
+            return Result<int>.Failure(validationErrors.ToArray());
+
+        var repoRes = await _repository.Update(t);
+        if (repoRes.IsFailure)
+            return Result<int>.Failure(repoRes.Errors.ToArray());
+
+        return Result<int>.Success(repoRes.Value);
     }
 
-    public async Task<int> Delete(Dom.Model.PersonInCharge t)
+    public async Task<Result<int>> Delete(Dom.Model.PersonInCharge t)
     {
-        var res = await _repository.Delete(t);
-        return res;
+        if (t == null)
+            return Result<int>.Failure("InvalidInput: body is null");
+
+        if (t.Id <= 0)
+            return Result<int>.Failure("InvalidInput: id must be greater than zero");
+
+        var repoRes = await _repository.Delete(t);
+        if (repoRes.IsFailure)
+            return Result<int>.Failure(repoRes.Errors.ToArray());
+
+        return Result<int>.Success(repoRes.Value);
+    }
+
+    private List<string> ValidateModel(Dom.Model.PersonInCharge model)
+    {
+        var validationResults = new List<ValidationResult>();
+        var ctx = new ValidationContext(model, serviceProvider: null, items: null);
+        Validator.TryValidateObject(model, ctx, validationResults, validateAllProperties: true);
+        return validationResults.Select(r => r.ErrorMessage ?? "").Where(m => !string.IsNullOrWhiteSpace(m)).ToList();
     }
 }
