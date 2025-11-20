@@ -12,6 +12,8 @@ namespace Aranceles_UI.Pages.Categories
     {
         private readonly HttpClient categoryClient;
         private readonly IdProtector _idProtector;
+        
+        [BindProperty]
         public CategoryDto Category { get; set; }
         public EditModel(IHttpClientFactory factory, IdProtector idProtector)
         {
@@ -19,8 +21,6 @@ namespace Aranceles_UI.Pages.Categories
             _idProtector = idProtector;
         }
 
-        [BindProperty]
-        public CategoryDto CategoryForm { get; set; } = new();
 
         public async Task<IActionResult> OnGet(string id)
         {

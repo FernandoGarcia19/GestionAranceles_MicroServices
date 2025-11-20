@@ -135,7 +135,7 @@ WHERE id = @id;";
             await conn.OpenAsync();
 
             using var cmd = conn.CreateCommand();
-            cmd.CommandText = @"SELECT id, first_name, last_name, email, phone, ci, created_by, created_date, last_update, status FROM person_in_charge;";
+            cmd.CommandText = @"SELECT id, first_name, last_name, email, phone, ci, created_by, created_date, last_update, status FROM person_in_charge WHERE status=1;";
 
             using var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())

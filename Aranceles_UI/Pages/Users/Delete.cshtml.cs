@@ -41,7 +41,7 @@ namespace Aranceles_UI.Pages.Users
 
         public async Task<IActionResult> OnPost()
         {
-            var result = await _userClient.DeleteAsync($"api/User/{User.Id}");
+            var result = await _userClient.DeleteAsync($"api/User/delete/{User.Id}");
             if (result.IsSuccessStatusCode)
             {
                 return RedirectToPage("./Index");

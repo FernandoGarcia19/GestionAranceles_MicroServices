@@ -15,6 +15,8 @@ namespace Aranceles_UI.Pages.Users
             _userClient = factory.CreateClient("userApi");
         }
 
+        public string GeneratedUsername { get; set; } = string.Empty;
+        
         [BindProperty]
         public UserDto User { get; set; } = new();
 
@@ -52,12 +54,14 @@ namespace Aranceles_UI.Pages.Users
             User.FirstName = fullFirstName;
             User.LastName = fullLastName;
 
-            var result = await _userClient.PostAsJsonAsync("api/User", User);
+            var result = await _userClient.PostAsJsonAsync("api/User/create", User);
             if (result.IsSuccessStatusCode)
             {
-                return RedirectToPage("./Index");
+                GeneratedUsername = User.Username;
+                return Page();
             }
-            return Page();
+                return RedirectToPage("./Index");
+            
         }
     }
 }

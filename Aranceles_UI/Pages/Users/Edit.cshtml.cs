@@ -47,7 +47,7 @@ namespace Aranceles_UI.Pages.Users
                 return Page();
             }
 
-            var result = await _userClient.PutAsJsonAsync($"api/User/{User.Id}", User);
+            var result = await _userClient.PutAsJsonAsync($"api/User/update", User);
             if (result.IsSuccessStatusCode)
             {
                 return RedirectToPage("./Index");
