@@ -3,6 +3,7 @@ using MicroServicioUser.Dom.Interfaces;
 using MicroServicoUser.Inf.Persistence;
 using MicroServicoUser.Inf.Repository;
 using MicroServicioUser.App.Services;
+using MicroServicioUser.Dom.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,7 @@ builder.Services.AddSingleton<MicroServicoUser.Inf.Persistence.Database.MySqlCon
 
 //Inyeccion de capas
 builder.Services.AddScoped<IRepository, UserRepository>();
-builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IRepositoryService<User>, UserService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
