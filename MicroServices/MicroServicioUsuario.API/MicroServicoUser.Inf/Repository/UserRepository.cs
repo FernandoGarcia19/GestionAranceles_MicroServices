@@ -199,7 +199,8 @@ namespace MicroServicoUser.Inf.Repository
             var model = new User { Id = id };
             try
             {
-                return Result<User?>.Success(_dbConnectionManager.ExecuteParameterizedQuery<User>(query, model).FirstOrDefault());
+                var res = Result<User?>.Success(_dbConnectionManager.ExecuteParameterizedQuery<User>(query, model).FirstOrDefault());
+                return res;
             }
             catch (Exception e)
             {

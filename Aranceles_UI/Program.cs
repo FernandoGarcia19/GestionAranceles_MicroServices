@@ -15,8 +15,12 @@ builder.Services.AddHttpClient("personInChargeApi", p => {
     p.BaseAddress = new Uri("http://localhost:5171");
 });
 builder.Services.AddHttpClient("userApi", u => {
-    u.BaseAddress = new Uri("http://localhost:<port>");
-});
+    u.BaseAddress = new Uri("http://localhost:5249");
+}).ConfigurePrimaryHttpMessageHandler(() =>
+    new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+    });
 
 builder.Services.AddScoped<IdProtector>();
 

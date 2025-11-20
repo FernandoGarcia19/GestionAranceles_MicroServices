@@ -24,7 +24,7 @@ namespace Aranceles_UI.Pages.Users
 
         public async Task OnGet()
         {
-            Users = await _userClient.GetFromJsonAsync<List<UserDto>>("api/User") ?? new();
+            Users = await _userClient.GetFromJsonAsync<List<UserDto>>("api/User/select") ?? new();
         }
 
         public async Task OnPostSearch()

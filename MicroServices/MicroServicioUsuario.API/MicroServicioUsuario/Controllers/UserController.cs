@@ -5,6 +5,7 @@ using MicroServicioUser.Dom.Entities;
 using MicroServicioUser.Dom.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 
 namespace MicroServicioUsuario.API.Controllers
 {
@@ -74,6 +75,24 @@ namespace MicroServicioUsuario.API.Controllers
                 {
                     message = "Error al obtener los usuarios",
                     error = categories.Errors
+                });
+            }
+        }
+
+        [HttpGet("getById/{id}")]
+        public async Task<ActionResult<User>> GetById(int id)
+        {
+            var category = await service.GetById(id);
+            if (category.IsSuccess)
+            {
+                return Ok(category.Value);
+            }
+            else
+            {
+                return StatusCode(500, new
+                {
+                    message = "Error al obtener el usuario",
+                    error = category.Errors
                 });
             }
         }

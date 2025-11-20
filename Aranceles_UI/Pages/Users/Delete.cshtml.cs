@@ -31,7 +31,7 @@ namespace Aranceles_UI.Pages.Users
                 return RedirectToPage("./Index");
             }
 
-            var user = await _userClient.GetFromJsonAsync<UserDto>($"api/User/{realId}");
+            var user = await _userClient.GetFromJsonAsync<UserDto>($"api/User/getById/{realId}");
             if (user == null)
                 return RedirectToPage("./Index");
 
