@@ -1,12 +1,13 @@
-
 namespace PersonInCharge.Dom.Interface;
+
+using PersonInCharge.Dom.Model;
 
 public interface IRepository
 {
-    Task<int> Insert(Model.PersonInCharge t); 
-    Task<int> Update(Model.PersonInCharge  t);
-    Task<int> Delete(Model.PersonInCharge  t);
+    Task<Result<int>> Insert(Model.PersonInCharge t); 
+    Task<Result<int>> Update(Model.PersonInCharge  t);
+    Task<Result<int>> Delete(Model.PersonInCharge  t);
 
-    Task<Model.PersonInCharge > SelectById(int id);
-    Task<List<Model.PersonInCharge >> Select();
+    Task<Result<Model.PersonInCharge>> SelectById(int id);
+    Task<Result<List<Model.PersonInCharge>>> Select();
 }
