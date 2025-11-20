@@ -1,0 +1,100 @@
+@page
+@model Aranceles_UI.Pages.Establishments.IndexModel
+@{
+    ViewData["Title"] = "Gestión de Establecimientos";
+}
+
+<!-- HEADER -->
+<div class="mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
+        <div>
+            <h2 class="mb-1 fw-bold text-dark">
+                <i class="bi bi-building text-primary me-2"></i>@ViewData["Title"]
+            </h2>
+            <p class="text-muted mb-0 small">Administra los establecimientos del sistema</p>
+        </div>
+        <a asp-page="Create" class="btn btn-primary px-4">
+            <i class="bi bi-plus-circle me-2"></i>Nuevo Establecimiento
+        </a>
+    </div>
+    <hr class="border-2 opacity-25">
+</div>
+
+<form method="post" asp-page-handler="Search" class="mb-3">
+    <div class="input-group">
+        <input asp-for="SearchTerm"
+               class="form-control"
+               placeholder="Buscar por nombre" />
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <a asp-page="Index" class="btn btn-secondary">Limpiar</a>
+    </div>
+</form>
+@if(Model.Establishments.Any())
+{
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-primary">
+            <tr>
+                <th>Nombre</th>
+                <th>NIT</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Tipo</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+                @foreach (var e in Model.Establishments)
+                {
+                    <tr>
+                        <td class="fw-semibold">@e.Name</td>
+                        <td>@e.TaxId</td>
+                        <td>
+                            <i class="bi bi-telephone text-muted me-1"></i>@e.Phone
+                        </td>
+                        <td class="text-muted">
+                            <i class="bi bi-envelope text-muted me-1"></i>@e.Email
+                        </td>
+                        <td>
+                            <span class="badge bg-info-subtle text-info px-3 py-2">
+                                @(e.EstablishmentType switch
+                                {
+                                    "RESTAURANT" => "Restaurante",
+                                    "BAR" => "Bar",
+                                    "CAFETERIA" => "Cafetería",
+                                    "FAST_FOOD" => "Comida Rápida",
+                                    "OTHER" => "Otro",
+                                    _ => e.EstablishmentType
+                                })
+                        </span>
+                        </td>
+                        <td class="text-end">
+                            <div class="btn-group" role="group">
+                                <a asp-page="Edit" asp-route-id="@(Model.Protect(e.Id))"
+                                   class="btn btn-sm bg-warning bg-opacity-25 text-dark border-warning btn-hover-warning">
+                                    <i class="bi bi-pencil-square me-1"></i>Editar
+                                </a>
+                                <a asp-page="Delete" asp-route-id="@(Model.Protect(e.Id))"
+                                   class="btn btn-sm bg-danger bg-opacity-25 text-dark border-danger btn-hover-danger">
+                                    <i class="bi bi-trash me-1"></i>Eliminar
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+        </tbody>
+    </table>
+</div>
+}
+else
+{
+<tr>
+    <td colspan="6" class="text-center py-5">
+        <div class="text-muted">
+            <i class="bi bi-building display-4 d-block mb-3 opacity-25"></i>
+            <p class="mb-0">No hay establecimientos registrados.</p>
+            <small>Comienza creando un nuevo establecimiento</small>
+        </div>
+    </td>
+</tr>
+}
