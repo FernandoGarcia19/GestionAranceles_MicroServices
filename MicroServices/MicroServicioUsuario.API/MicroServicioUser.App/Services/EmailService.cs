@@ -1,5 +1,4 @@
 ﻿using MicroServicioUser.Dom.Interfaces;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +9,6 @@ namespace MicroServicioUser.App.Services
 {
     public class EmailService
     {
-        private readonly ILogger<EmailService> _logger;
         private IEmailService _emailService;
 
         public EmailService(IEmailService emailService)

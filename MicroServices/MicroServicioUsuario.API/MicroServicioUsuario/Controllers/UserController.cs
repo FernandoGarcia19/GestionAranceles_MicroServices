@@ -18,7 +18,7 @@ namespace MicroServicioUsuario.API.Controllers
         [HttpGet("select")]
         public async Task<ActionResult<List<User>>> Select()
         {
-            var categories = await service.Select();
+            var categories = await service.GetAll();
             if (categories.IsSuccess)
             {
                 return Ok(categories.Value);

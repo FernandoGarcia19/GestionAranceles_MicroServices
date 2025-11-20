@@ -10,14 +10,10 @@ using System.Threading.Tasks;
 
 namespace MicroServicioUser.App.Services
 {
-    public class UserService
+    public class UserService : IRepositoryService<User>
     {
         private readonly IRepository userRepository;
-        public UserService(IRepository userRepository)
-        {
-            this.userRepository = userRepository;
-        }
-
+   
         public async Task<Result<int>> Insert(User t)
         {
             t.CreatedDate = DateTime.Now;
@@ -52,7 +48,6 @@ namespace MicroServicioUser.App.Services
                 return Result<int>.Failure("Error al actualizar el usuario en la base de datos", ex.Message);
             }
         }
-
         public async Task<Result<int>> Delete(int id)
         {
             try
@@ -69,34 +64,34 @@ namespace MicroServicioUser.App.Services
             }
         }
 
-        public async Task<Result<List<User>>> Select()
+        public async Task<Result<IEnumerable<User>>> GetAll()
         {
             try
             {
                 var users = await userRepository.GetAll();
-                return Result<List<User>>.Success(users.ToList());
+                return Result<IEnumerable<User>>.Success(users.ToList());
             }
             catch (Exception ex)
             {
-                return Result<List<User>>.Failure("Error al obtener los usuarios", ex.Message);
+                return Result<IEnumerable<User>>.Failure("Error al obtener los usuarios", ex.Message);
             }
         }
 
-        public async Task<Result<List<User>>> Search(string property)
+        public async Task<Result<IEnumerable<User>>> Search(string property)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(property))
                 {
-                    return Result<List<User>>.Failure("El término de búsqueda no puede estar vacío");
+                    return Result<IEnumerable<User>>.Failure("El término de búsqueda no puede estar vacío");
                 }
 
                 var users = await userRepository.Search(property);
-                return Result<List<User>>.Success(users.ToList());
+                return Result<IEnumerable<User>>.Success(users.ToList());
             }
             catch (Exception ex)
             {
-                return Result<List<User>>.Failure("Error al buscar usuario", ex.Message);
+                return Result<IEnumerable<User>>.Failure("Error al buscar usuario", ex.Message);
             }
         }
     }

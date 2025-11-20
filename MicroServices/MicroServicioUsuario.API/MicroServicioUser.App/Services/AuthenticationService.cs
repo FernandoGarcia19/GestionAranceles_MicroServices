@@ -225,7 +225,6 @@ namespace MicroServicioUser.App.Services
         }
 
 
-
         private static string Md5Hex(string input)
         {
             using var md5 = MD5.Create();
