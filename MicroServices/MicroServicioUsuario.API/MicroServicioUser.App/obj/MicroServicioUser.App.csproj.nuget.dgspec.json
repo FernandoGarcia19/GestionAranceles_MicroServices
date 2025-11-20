@@ -1,42 +1,36 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.App\\MicroServicioUser.App.csproj": {}
+    "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.App/MicroServicioUser.App.csproj": {}
   },
   "projects": {
-    "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.App\\MicroServicioUser.App.csproj": {
+    "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.App/MicroServicioUser.App.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.App\\MicroServicioUser.App.csproj",
+        "projectUniqueName": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.App/MicroServicioUser.App.csproj",
         "projectName": "MicroServicioUser.App",
-        "projectPath": "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.App\\MicroServicioUser.App.csproj",
-        "packagesPath": "C:\\Users\\usser\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.App\\obj\\",
+        "projectPath": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.App/MicroServicioUser.App.csproj",
+        "packagesPath": "/Users/jorgebarahona/.nuget/packages/",
+        "outputPath": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.App/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\usser\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/jorgebarahona/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.Dom\\MicroServicioUser.Dom.csproj": {
-                "projectPath": "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.Dom\\MicroServicioUser.Dom.csproj"
+              "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.Dom/MicroServicioUser.Dom.csproj": {
+                "projectPath": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.Dom/MicroServicioUser.Dom.csproj"
               },
-              "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicoUser.Inf\\MicroServicoUser.Inf.csproj": {
-                "projectPath": "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicoUser.Inf\\MicroServicoUser.Inf.csproj"
+              "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicoUser.Inf/MicroServicoUser.Inf.csproj": {
+                "projectPath": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicoUser.Inf/MicroServicoUser.Inf.csproj"
               }
             }
           }
@@ -50,8 +44,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -72,32 +65,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/Users/jorgebarahona/.dotnet/sdk/8.0.414/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.Dom\\MicroServicioUser.Dom.csproj": {
+    "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.Dom/MicroServicioUser.Dom.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.Dom\\MicroServicioUser.Dom.csproj",
+        "projectUniqueName": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.Dom/MicroServicioUser.Dom.csproj",
         "projectName": "MicroServicioUser.Dom",
-        "projectPath": "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.Dom\\MicroServicioUser.Dom.csproj",
-        "packagesPath": "C:\\Users\\usser\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.Dom\\obj\\",
+        "projectPath": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.Dom/MicroServicioUser.Dom.csproj",
+        "packagesPath": "/Users/jorgebarahona/.nuget/packages/",
+        "outputPath": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.Dom/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\usser\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/jorgebarahona/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -115,8 +102,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -137,40 +123,34 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/Users/jorgebarahona/.dotnet/sdk/8.0.414/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicoUser.Inf\\MicroServicoUser.Inf.csproj": {
+    "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicoUser.Inf/MicroServicoUser.Inf.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicoUser.Inf\\MicroServicoUser.Inf.csproj",
+        "projectUniqueName": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicoUser.Inf/MicroServicoUser.Inf.csproj",
         "projectName": "MicroServicoUser.Inf",
-        "projectPath": "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicoUser.Inf\\MicroServicoUser.Inf.csproj",
-        "packagesPath": "C:\\Users\\usser\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicoUser.Inf\\obj\\",
+        "projectPath": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicoUser.Inf/MicroServicoUser.Inf.csproj",
+        "packagesPath": "/Users/jorgebarahona/.nuget/packages/",
+        "outputPath": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicoUser.Inf/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\usser\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/jorgebarahona/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.Dom\\MicroServicioUser.Dom.csproj": {
-                "projectPath": "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.Dom\\MicroServicioUser.Dom.csproj"
+              "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.Dom/MicroServicioUser.Dom.csproj": {
+                "projectPath": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.Dom/MicroServicioUser.Dom.csproj"
               }
             }
           }
@@ -184,8 +164,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -216,7 +195,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/Users/jorgebarahona/.dotnet/sdk/8.0.414/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -123,8 +123,7 @@ namespace MicroServicoUser.Inf.Repository
             };
 
             var result = await _userRepository.Insert(user);
-
-            if (result == 0)
+            if (result.IsSuccess)
                 return (false, null, null,"");
 
             return (true, candidate, pwd, null);

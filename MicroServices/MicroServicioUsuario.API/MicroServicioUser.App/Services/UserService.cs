@@ -20,79 +20,28 @@ namespace MicroServicioUser.App.Services
             t.LastUpdate = DateTime.Now;
             t.Status = true;
 
-            try
-            {
-                var id = await userRepository.Insert(t);
-                return Result<int>.Success(id);
-            }
-            catch (Exception ex)
-            {
-                return Result<int>.Failure("Error al insertar el usuario en la base de datos", ex.Message);
-            }
+            return await userRepository.Insert(t);
         }
 
         public async Task<Result<int>> Update(User t)
         {
             t.LastUpdate = DateTime.Now;
 
-            try
-            {
-                var result = await userRepository.Update(t);
-                if (result == 0)
-                    return Result<int>.Failure("No se encontró el usuario para actualizar");
-
-                return Result<int>.Success(result);
-            }
-            catch (Exception ex)
-            {
-                return Result<int>.Failure("Error al actualizar el usuario en la base de datos", ex.Message);
-            }
+            return await userRepository.Update(t);
         }
         public async Task<Result<int>> Delete(int id)
         {
-            try
-            {
-                var result = await userRepository.Delete(id);
-                if (result == 0)
-                    return Result<int>.Failure("No se encontró el usuario para eliminar");
-
-                return Result<int>.Success(result);
-            }
-            catch (Exception ex)
-            {
-                return Result<int>.Failure("Error al eliminar el usuario en la base de datos", ex.Message);
-            }
+            return await userRepository.Delete(id);
         }
 
         public async Task<Result<IEnumerable<User>>> GetAll()
         {
-            try
-            {
-                var users = await userRepository.GetAll();
-                return Result<IEnumerable<User>>.Success(users.ToList());
-            }
-            catch (Exception ex)
-            {
-                return Result<IEnumerable<User>>.Failure("Error al obtener los usuarios", ex.Message);
-            }
+            return  await userRepository.GetAll();
         }
 
         public async Task<Result<IEnumerable<User>>> Search(string property)
         {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(property))
-                {
-                    return Result<IEnumerable<User>>.Failure("El término de búsqueda no puede estar vacío");
-                }
-
-                var users = await userRepository.Search(property);
-                return Result<IEnumerable<User>>.Success(users.ToList());
-            }
-            catch (Exception ex)
-            {
-                return Result<IEnumerable<User>>.Failure("Error al buscar usuario", ex.Message);
-            }
+            return await userRepository.Search(property);
         }
     }
 }
