@@ -17,7 +17,6 @@ namespace Aranceles_UI.Pages.Users
         public int CreatedBy { get; set; }
     }
     
-    
     public class CreateModel : PageModel
     {
         private readonly HttpClient _userClient;
@@ -27,6 +26,8 @@ namespace Aranceles_UI.Pages.Users
             _userClient = factory.CreateClient("userApi");
         }
 
+        public string GeneratedUsername { get; set; } = string.Empty;
+        
         [BindProperty]
         public RegisterDTO User { get; set; } = new();
 
@@ -67,6 +68,7 @@ namespace Aranceles_UI.Pages.Users
             var result = await _userClient.PostAsJsonAsync("api/User/register", User);
             if (result.IsSuccessStatusCode)
             {
+                GeneratedUsername = User.FirstName + User.LastName;
                 return RedirectToPage("./Index");
             }
             return Page();
