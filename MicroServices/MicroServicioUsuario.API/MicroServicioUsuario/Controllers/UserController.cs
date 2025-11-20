@@ -1,5 +1,6 @@
 ﻿using MicroServicioUser.App.Services;
 using MicroServicioUser.Dom.Entities;
+using MicroServicioUser.Dom.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,8 +10,8 @@ namespace MicroServicioUsuario.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserService service;
-        public UserController(UserService service)
+        private readonly IRepositoryService<User> service;
+        public UserController(IRepositoryService<User> service)
         {
             this.service = service;
         }

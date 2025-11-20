@@ -43,4 +43,9 @@ public class EstablishmentService
         var res = await _repository.Delete(t);
         return res;
     }
+    
+    public async Task<Result<IEnumerable<Dom.Model.Establishment>>> Search(string property)
+    {
+        return await _repository.Search(property);
+    }
 }

@@ -89,7 +89,6 @@ namespace MicroServiceCategory.Application.Services
             {
                 if (string.IsNullOrWhiteSpace(property))
                 {
-                    // Prefix with InvalidInput so the controller mapper can detect it
                     return Result<List<Category>>.Failure("InvalidInput: El término de búsqueda no puede estar vacío");
                 }
 
