@@ -8,24 +8,31 @@
     "net8.0": []
   },
   "packageFolders": {
-    "/Users/jorgebarahona/.nuget/packages/": {}
+    "C:\\Users\\usser\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.Dom/MicroServicioUser.Dom.csproj",
+      "projectUniqueName": "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.Dom\\MicroServicioUser.Dom.csproj",
       "projectName": "MicroServicioUser.Dom",
-      "projectPath": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.Dom/MicroServicioUser.Dom.csproj",
-      "packagesPath": "/Users/jorgebarahona/.nuget/packages/",
-      "outputPath": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.Dom/obj/",
+      "projectPath": "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.Dom\\MicroServicioUser.Dom.csproj",
+      "packagesPath": "C:\\Users\\usser\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\usser\\Desktop\\Uni\\ArquitecturaSoftware\\3EV\\MicroServicios-Aranceles-oficial\\GestionAranceles_MicroServices\\MicroServices\\MicroServicioUsuario.API\\MicroServicioUser.Dom\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/jorgebarahona/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\usser\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -43,7 +50,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
@@ -64,7 +72,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/Users/jorgebarahona/.dotnet/sdk/8.0.414/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
