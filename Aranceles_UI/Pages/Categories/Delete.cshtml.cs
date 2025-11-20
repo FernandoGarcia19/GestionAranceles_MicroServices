@@ -1,6 +1,7 @@
 using System.Linq;
 using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Security;
+using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -8,12 +9,12 @@ namespace Aranceles_UI.Pages.Categories
 {
     public class DeleteModel : PageModel
     {
-        private readonly HttpClient categoryClient;
+        private readonly ICategoryService _categoryService;
         private readonly IdProtector _idProtector;
 
-        public DeleteModel(IHttpClientFactory factory, IdProtector idProtector)
+        public DeleteModel(ICategoryService categoryService, IdProtector idProtector)
         {
-            categoryClient = factory.CreateClient("categoryApi");
+            _categoryService = categoryService;
             _idProtector = idProtector;
         }
 
@@ -34,7 +35,7 @@ namespace Aranceles_UI.Pages.Categories
                 return RedirectToPage("./Index");
             }
 
-            Category = await categoryClient.GetFromJsonAsync<CategoryDto>($"api/Category/{RealId}");
+            Category = await _categoryService.GetCategoryByIdAsync(RealId);
             
             if (Category == null)
                 return RedirectToPage("./Index");
@@ -44,8 +45,8 @@ namespace Aranceles_UI.Pages.Categories
 
         public async Task<IActionResult> OnPost()
         {
-            var result = await categoryClient.DeleteAsync($"api/Category/{RealId}");
-            if (result.IsSuccessStatusCode)
+            var success = await _categoryService.DeleteCategoryAsync(RealId);
+            if (success)
             {
                 return RedirectToPage("./Index");
             }

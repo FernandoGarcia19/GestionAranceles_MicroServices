@@ -1,6 +1,7 @@
 using System.Linq;
 using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Security;
+using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -8,15 +9,15 @@ namespace Aranceles_UI.Pages.Establishments
 {
     public class DeleteModel : PageModel
     {
-        private readonly HttpClient _establishmentClient;
+        private readonly IEstablishmentService _establishmentService;
         private readonly IdProtector _idProtector;
 
         [BindProperty]
         public EstablishmentDto Establishment { get; set; } = new();
 
-        public DeleteModel(IHttpClientFactory factory, IdProtector idProtector)
+        public DeleteModel(IEstablishmentService establishmentService, IdProtector idProtector)
         {
-            _establishmentClient = factory.CreateClient("establishmentApi");
+            _establishmentService = establishmentService;
             _idProtector = idProtector;
         }
 
@@ -32,7 +33,7 @@ namespace Aranceles_UI.Pages.Establishments
                 return RedirectToPage("./Index");
             }
 
-            var establishment = await _establishmentClient.GetFromJsonAsync<EstablishmentDto>($"api/Establishment/{realId}");
+            var establishment = await _establishmentService.GetEstablishmentByIdAsync(realId);
             if (establishment == null)
                 return RedirectToPage("./Index");
 
@@ -42,8 +43,8 @@ namespace Aranceles_UI.Pages.Establishments
 
         public async Task<IActionResult> OnPost()
         {
-            var result = await _establishmentClient.DeleteAsync($"api/Establishment/{Establishment.Id}");
-            if (result.IsSuccessStatusCode)
+            var success = await _establishmentService.DeleteEstablishmentAsync(Establishment.Id);
+            if (success)
             {
                 return RedirectToPage("./Index");
             }

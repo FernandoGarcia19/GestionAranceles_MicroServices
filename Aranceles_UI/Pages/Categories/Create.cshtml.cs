@@ -1,4 +1,5 @@
 using Aranceles_UI.Domain.Dtos;
+using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -6,11 +7,11 @@ namespace Aranceles_UI.Pages.Categories;
 
 public class CreateModel : PageModel
 {
-    private readonly HttpClient categoryClient;
+    private readonly ICategoryService _categoryService;
 
-    public CreateModel(IHttpClientFactory factory)
+    public CreateModel(ICategoryService categoryService)
     {
-        categoryClient = factory.CreateClient("categoryApi");
+        _categoryService = categoryService;
     }
         
     [BindProperty]
@@ -24,8 +25,9 @@ public class CreateModel : PageModel
         {
             return Page();
         }
-        var result = await categoryClient.PostAsJsonAsync("api/Category", Category);
-        if (result.IsSuccessStatusCode)
+        
+        var success = await _categoryService.CreateCategoryAsync(Category);
+        if (success)
         {
             return RedirectToPage("./Index");
         }

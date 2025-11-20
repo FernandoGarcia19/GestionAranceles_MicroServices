@@ -4,29 +4,30 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Security;
+using Aranceles_UI.Services.Interfaces;
 
 namespace Aranceles_UI.Pages.PersonInCharges
 {
     public class CreateModel : PageModel
     {
-        private readonly HttpClient personClient;
+        private readonly IPersonInChargeService _personService;
 
         [BindProperty]
         public PersonInChargeDto Person { get; set; } = new();
 
         [BindProperty]
         [StringLength(50, ErrorMessage = "El segundo nombre no puede exceder 50 caracteres.")]
-        [RegularExpression(@"^[a-zA-Z������������\s]*$", ErrorMessage = "El segundo nombre solo puede contener letras y espacios.")]
+        [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$", ErrorMessage = "El segundo nombre solo puede contener letras y espacios.")]
         public string? SecondName { get; set; }
 
         [BindProperty]
         [StringLength(50, ErrorMessage = "El segundo apellido no puede exceder 50 caracteres.")]
-        [RegularExpression(@"^[a-zA-Z������������\s]*$", ErrorMessage = "El segundo apellido solo puede contener letras y espacios.")]
+        [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$", ErrorMessage = "El segundo apellido solo puede contener letras y espacios.")]
         public string? SecondLastName { get; set; }
 
-        public CreateModel(IHttpClientFactory factory)
+        public CreateModel(IPersonInChargeService personService)
         {
-            personClient = factory.CreateClient("personInChargeApi");
+            _personService = personService;
         }
 
         public void OnGet() { }
@@ -38,23 +39,8 @@ namespace Aranceles_UI.Pages.PersonInCharges
                 return Page();
             }
 
-            var fullFirstName = Person.FirstName.Trim();
-            if (!string.IsNullOrWhiteSpace(SecondName))
-            {
-                fullFirstName += " " + SecondName.Trim();
-            }
-
-            var fullLastName = Person.LastName.Trim();
-            if (!string.IsNullOrWhiteSpace(SecondLastName))
-            {
-                fullLastName += " " + SecondLastName.Trim();
-            }
-
-            Person.FirstName = fullFirstName;
-            Person.LastName = fullLastName;
-
-            var result = await personClient.PostAsJsonAsync<PersonInChargeDto>("api/PersonInCharge/insert", Person);
-            if (result.IsSuccessStatusCode)
+            var success = await _personService.CreatePersonInChargeAsync(Person, SecondName, SecondLastName);
+            if (success)
             {
                 return RedirectToPage("./Index");
             }

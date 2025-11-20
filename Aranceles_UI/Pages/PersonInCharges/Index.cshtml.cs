@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Aranceles_UI.Domain.Dtos;
+using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 using Microsoft.AspNetCore.Mvc;
@@ -11,29 +12,27 @@ namespace Aranceles_UI.Pages.PersonInCharges
 {
     public class IndexModel : PageModel
     {
-        private readonly HttpClient personClient;
+        private readonly IPersonInChargeService _personService;
         private readonly IdProtector _idProtector;
 
         [BindProperty]
         public string SearchTerm { get; set; }
         public List<PersonInChargeDto> Persons { get; set; } = new();
-        public IndexModel(IHttpClientFactory factory, IdProtector idProtector)
+        
+        public IndexModel(IPersonInChargeService personService, IdProtector idProtector)
         {
-            personClient = factory.CreateClient("personInChargeApi");
+            _personService = personService;
             _idProtector = idProtector;
         }
 
         public async Task OnGet()
         {
-            Persons = await personClient.GetFromJsonAsync<List<PersonInChargeDto>>("api/PersonInCharge/");
+            Persons = await _personService.GetAllPersonsInChargeAsync();
         }
 
         public async Task OnPostAsync()
         {
-            if (!string.IsNullOrWhiteSpace(SearchTerm))
-                Persons = await personClient.GetFromJsonAsync<List<PersonInChargeDto>>($"api/PersonInCharge/search/{SearchTerm}") ?? new();
-            else
-                Persons = await personClient.GetFromJsonAsync<List<PersonInChargeDto>>("api/PersonInCharge") ?? new();
+            Persons = await _personService.SearchPersonsInChargeAsync(SearchTerm);
         }
 
 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Security;
+using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -8,7 +9,7 @@ namespace Aranceles_UI.Pages.Users
 {
     public class IndexModel : PageModel
     {
-        private readonly HttpClient _userClient;
+        private readonly IUserService _userService;
         private readonly IdProtector _idProtector;
 
         [BindProperty(SupportsGet = true)]
@@ -16,23 +17,20 @@ namespace Aranceles_UI.Pages.Users
 
         public List<UserDto> Users { get; set; } = new();
 
-        public IndexModel(IHttpClientFactory factory, IdProtector idProtector)
+        public IndexModel(IUserService userService, IdProtector idProtector)
         {
-            _userClient = factory.CreateClient("userApi");
+            _userService = userService;
             _idProtector = idProtector;
         }
 
         public async Task OnGet()
         {
-            Users = await _userClient.GetFromJsonAsync<List<UserDto>>("api/User/select") ?? new();
+            Users = await _userService.GetAllUsersAsync();
         }
 
         public async Task OnPostSearch()
         {
-            if (!string.IsNullOrWhiteSpace(SearchTerm))
-                Users = await _userClient.GetFromJsonAsync<List<UserDto>>($"api/User/search/{SearchTerm}") ?? new();
-            else
-                Users = await _userClient.GetFromJsonAsync<List<UserDto>>("api/User") ?? new();
+            Users = await _userService.SearchUsersAsync(SearchTerm);
         }
 
         public string Protect(int id) => _idProtector.ProtectInt(id);
