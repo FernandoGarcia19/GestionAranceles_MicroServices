@@ -17,37 +17,47 @@ public class EstablishmentRepository: IRepository
         _connectionDB = connectionDB;
     }
 
-    public async Task<int> Insert(Establishment.Dom.Model.Establishment t)
+    public async Task<Result<int>> Insert(Establishment.Dom.Model.Establishment t)
     {
         const string sql = @"INSERT INTO establishment
             (name, tax_id, sanitary_license, sanitary_license_expiry, address, phone, email, establishment_type, created_by, status, last_update)
             VALUES
             (@name, @tax_id, @sanitary_license, @sanitary_license_expiry, @address, @phone, @email, @establishment_type, @created_by, @status, @last_update);";
 
-        await using var conn = _connectionDB.GetConnection();
-        await conn.OpenAsync();
-        await using var cmd = new MySqlCommand(sql, conn);
-        var lastUpdate = t.LastUpdate == default ? DateTime.Now : t.LastUpdate;
+        try
+        {
+            await using var conn = _connectionDB.GetConnection();
+            await conn.OpenAsync();
+            await using var cmd = new MySqlCommand(sql, conn);
+            var lastUpdate = t.LastUpdate == default ? DateTime.Now : t.LastUpdate;
 
-        cmd.Parameters.AddWithValue("@name", t.Name ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@tax_id", t.TaxId ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@sanitary_license", t.SanitaryLicense ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@sanitary_license_expiry", t.SanitaryLicenseExpiry ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@address", t.Address ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@phone", t.Phone ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@email", t.Email ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@establishment_type", t.EstablishmentType ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@created_by", t.CreatedBy);
-        cmd.Parameters.AddWithValue("@status", t.Status ? 1 : 0);
-        cmd.Parameters.AddWithValue("@last_update", lastUpdate);
+            cmd.Parameters.AddWithValue("@name", t.Name ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@tax_id", t.TaxId ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@sanitary_license", t.SanitaryLicense ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@sanitary_license_expiry", t.SanitaryLicenseExpiry ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@address", t.Address ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@phone", t.Phone ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@email", t.Email ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@establishment_type", t.EstablishmentType ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@created_by", t.CreatedBy);
+            cmd.Parameters.AddWithValue("@status", 1);
+            cmd.Parameters.AddWithValue("@last_update", lastUpdate);
 
-        await cmd.ExecuteNonQueryAsync();
-         // LastInsertedId is available on MySqlCommand after execution
-         var lastId = (int)cmd.LastInsertedId;
-         return lastId;
+            var affected = await cmd.ExecuteNonQueryAsync();
+            var lastId = (int)cmd.LastInsertedId;
+
+            if (affected == 0 || lastId == 0)
+                return Result<int>.Failure("NoRowsAffected");
+
+            return Result<int>.Success(lastId);
+        }
+        catch (Exception ex)
+        {
+            return Result<int>.Failure(ex.Message);
+        }
     }
 
-    public async Task<int> Update(Establishment.Dom.Model.Establishment t)
+    public async Task<Result<int>> Update(Establishment.Dom.Model.Establishment t)
     {
         const string sql = @"UPDATE establishment SET
             name = @name,
@@ -62,74 +72,108 @@ public class EstablishmentRepository: IRepository
             status = @status
             WHERE id = @id;";
 
-        await using var conn = _connectionDB.GetConnection();
-        await conn.OpenAsync();
-        await using var cmd = new MySqlCommand(sql, conn);
+        try
+        {
+            await using var conn = _connectionDB.GetConnection();
+            await conn.OpenAsync();
+            await using var cmd = new MySqlCommand(sql, conn);
 
-        cmd.Parameters.AddWithValue("@name", t.Name ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@tax_id", t.TaxId ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@sanitary_license", t.SanitaryLicense ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@sanitary_license_expiry", t.SanitaryLicenseExpiry ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@address", t.Address ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@phone", t.Phone ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@email", t.Email ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@establishment_type", t.EstablishmentType ?? (object)DBNull.Value);
-        cmd.Parameters.AddWithValue("@status", t.Status ? 1 : 0);
-        cmd.Parameters.AddWithValue("@id", t.Id);
+            cmd.Parameters.AddWithValue("@name", t.Name ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@tax_id", t.TaxId ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@sanitary_license", t.SanitaryLicense ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@sanitary_license_expiry", t.SanitaryLicenseExpiry ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@address", t.Address ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@phone", t.Phone ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@email", t.Email ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@establishment_type", t.EstablishmentType ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@status", 1);
+            cmd.Parameters.AddWithValue("@id", t.Id);
 
-        var affected = await cmd.ExecuteNonQueryAsync();
-        return affected;
+            var affected = await cmd.ExecuteNonQueryAsync();
+            if (affected == 0)
+                return Result<int>.Failure("NoRowsAffected");
+
+            return Result<int>.Success((int)affected);
+        }
+        catch (Exception ex)
+        {
+            return Result<int>.Failure(ex.Message);
+        }
     }
 
     // Logical delete: set status = 0 and update last_update
-    public async Task<int> Delete(Establishment.Dom.Model.Establishment t)
+    public async Task<Result<int>> Delete(Establishment.Dom.Model.Establishment t)
     {
         const string sql = @"UPDATE establishment SET status = 0, last_update = CURRENT_TIMESTAMP WHERE id = @id;";
 
-        await using var conn = _connectionDB.GetConnection();
-        await conn.OpenAsync();
-        await using var cmd = new MySqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("@id", t.Id);
+        try
+        {
+            await using var conn = _connectionDB.GetConnection();
+            await conn.OpenAsync();
+            await using var cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@id", t.Id);
 
-        var affected = await cmd.ExecuteNonQueryAsync();
-        return affected;
+            var affected = await cmd.ExecuteNonQueryAsync();
+            if (affected == 0)
+                return Result<int>.Failure("NoRowsAffected");
+
+            return Result<int>.Success((int)affected);
+        }
+        catch (Exception ex)
+        {
+            return Result<int>.Failure(ex.Message);
+        }
     }
 
-    public async Task<Establishment.Dom.Model.Establishment> SelectById(int id)
+    public async Task<Result<Establishment.Dom.Model.Establishment>> SelectById(int id)
     {
         const string sql = @"SELECT id, name, tax_id, sanitary_license, sanitary_license_expiry, address, phone, email, establishment_type, created_by, created_date, last_update, status
             FROM establishment WHERE id = @id;";
 
-        await using var conn = _connectionDB.GetConnection();
-        await conn.OpenAsync();
-        await using var cmd = new MySqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("@id", id);
+        try
+        {
+            await using var conn = _connectionDB.GetConnection();
+            await conn.OpenAsync();
+            await using var cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@id", id);
 
-        await using var reader = (MySqlDataReader)await cmd.ExecuteReaderAsync();
-        if (!await reader.ReadAsync()) return null;
+            await using var reader = (MySqlDataReader)await cmd.ExecuteReaderAsync();
+            if (!await reader.ReadAsync()) return Result<Establishment.Dom.Model.Establishment>.Failure("NotFound");
 
-        var est = MapReaderToEstablishment(reader);
-        return est;
+            var est = MapReaderToEstablishment(reader);
+            return Result<Establishment.Dom.Model.Establishment>.Success(est);
+        }
+        catch (Exception ex)
+        {
+            return Result<Establishment.Dom.Model.Establishment>.Failure(ex.Message);
+        }
     }
 
-    public async Task<List<Establishment.Dom.Model.Establishment>> Select()
+    public async Task<Result<List<Establishment.Dom.Model.Establishment>>> Select()
     {
         const string sql = @"SELECT id, name, tax_id, sanitary_license, sanitary_license_expiry, address, phone, email, establishment_type, created_by, created_date, last_update, status
             FROM establishment WHERE status = 1;";
 
         var list = new List<Establishment.Dom.Model.Establishment>();
 
-        await using var conn = _connectionDB.GetConnection();
-        await conn.OpenAsync();
-        await using var cmd = new MySqlCommand(sql, conn);
-
-        await using var reader = (MySqlDataReader)await cmd.ExecuteReaderAsync();
-        while (await reader.ReadAsync())
+        try
         {
-            list.Add(MapReaderToEstablishment(reader));
-        }
+            await using var conn = _connectionDB.GetConnection();
+            await conn.OpenAsync();
+            await using var cmd = new MySqlCommand(sql, conn);
 
-        return list;
+            await using var reader = (MySqlDataReader)await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                list.Add(MapReaderToEstablishment(reader));
+            }
+
+            return Result<List<Establishment.Dom.Model.Establishment>>.Success(list);
+        }
+        catch (Exception ex)
+        {
+            return Result<List<Establishment.Dom.Model.Establishment>>.Failure(ex.Message);
+        }
     }
 
     private static Establishment.Dom.Model.Establishment MapReaderToEstablishment(MySqlDataReader reader)

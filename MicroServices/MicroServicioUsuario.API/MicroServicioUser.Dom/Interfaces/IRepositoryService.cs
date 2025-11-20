@@ -5,9 +5,9 @@ namespace MicroServicioUser.Dom.Interfaces;
 
 public interface IRepositoryService<TModel>
 {
-    public Result<IEnumerable<TModel>> GetAll();
-    public Result<TModel> Insert(TModel model);
-    public Result<TModel> Update(TModel model);
-    public Result<TModel> Delete(TModel model);
-    public Result<IEnumerable<TModel>> Search(string property);
+    public  Task<Result<IEnumerable<TModel>>> GetAll();
+    public Task<Result<int>> Insert(TModel model);
+    public Task<Result<int>> Update(TModel model);
+    public Task<Result<int>> Delete(int id);
+    public Task<Result<IEnumerable<TModel>>> Search(string property);
 }
