@@ -28,14 +28,18 @@ namespace Aranceles_UI.Pages.Categories
 
         public async Task OnGet()
         {
-            Categories = await categoryClient.GetFromJsonAsync<List<CategoryDto>>("/api/category");
+            Categories = await categoryClient.GetFromJsonAsync<List<CategoryDto>>("/api/Category");
         }
 
         public async Task OnPostSearch()
         {
-            Categories = string.IsNullOrWhiteSpace(SearchTerm) ? 
-                Categories = await categoryClient.GetFromJsonAsync<List<CategoryDto>>("/api/category") : 
-                await categoryClient.GetFromJsonAsync<List<CategoryDto>>("/api/category/search");
+            if(!string.IsNullOrWhiteSpace(SearchTerm))
+                await categoryClient.GetFromJsonAsync<List<CategoryDto>>($"/api/Category/search/{SearchTerm}");
+                
+            // Categories = string.IsNullOrWhiteSpace(SearchTerm) ? 
+            //     await categoryClient.GetFromJsonAsync<List<CategoryDto>>("/api/Category") : 
+            //     await categoryClient.GetFromJsonAsync<List<CategoryDto>>("/api/category/search");
+                
         }
         public string Protect(int id) => _idProtector.ProtectInt(id);
     }

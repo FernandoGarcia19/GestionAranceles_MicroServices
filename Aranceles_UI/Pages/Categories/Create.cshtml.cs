@@ -25,7 +25,7 @@ public class CreateModel : PageModel
         {
             return Page();
         }
-        var result = categoryClient.PostAsJsonAsync("api/category/insert", Category);
+        var result = categoryClient.PostAsJsonAsync("api/Category", Category);
         return RedirectToPage("./Index");
     }
 }

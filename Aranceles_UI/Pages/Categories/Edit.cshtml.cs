@@ -35,7 +35,7 @@ namespace Aranceles_UI.Pages.Categories
                 return RedirectToPage("../Error");
             }
 
-            var result = categoryClient.GetFromJsonAsync<CategoryDto>($"api/category/{realId}");
+            Category = await categoryClient.GetFromJsonAsync<CategoryDto>($"api/Category/{realId}");
             
             if (Category == null)
                 return RedirectToPage("./Index");
@@ -51,15 +51,12 @@ namespace Aranceles_UI.Pages.Categories
                 return Page();
             }
 
-            var result = categoryClient.PostAsJsonAsync("api/category/edit").Update(Category);
-            if (result.IsSuccess)
+            var result = await categoryClient.PutAsJsonAsync("api/Category/", Category);
+            if (result.IsSuccessStatusCode)
             {
                 return RedirectToPage("./Index");
             }
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error);
-            }
+            
             return Page();
         }
     }
