@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Aranceles_UI.Domain.Dtos;
 
 public class CategoryDto

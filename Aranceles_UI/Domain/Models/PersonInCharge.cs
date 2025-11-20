@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Aranceles_UI.Domain.Dtos;
+namespace Aranceles_UI.Domain.Models;
 
 public class PersonInCharge
 {

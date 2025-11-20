@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Aranceles_UI.Domain.Dtos;
+namespace Aranceles_UI.Domain.Models;
 
 public class User
 {
@@ -31,6 +31,4 @@ public class User
 
     [Required(ErrorMessage = "El rol es obligatorio.")]
     public string Role { get; set; }
-    
-    public int FirstLogin { get; set; }
 }

@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Aranceles_UI.Domain.Dtos;
 
 public class UserDto
@@ -17,6 +15,5 @@ public class UserDto
     public string Email { get; set; }
 
     public string Role { get; set; }
-    
-    public int FirstLogin { get; set; }
+
 }
