@@ -33,5 +33,5 @@ public class UserDto
 
     [Required(ErrorMessage = "El rol es obligatorio.")]
     public string Role { get; set; }
-
+    public int FirstLogin { get; set; }
 }

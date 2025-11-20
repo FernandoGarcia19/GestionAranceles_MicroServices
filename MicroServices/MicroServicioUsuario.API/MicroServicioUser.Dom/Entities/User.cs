@@ -9,7 +9,7 @@ public class User
     [Required(ErrorMessage = "El nombre de usuario es obligatorio.")]
     [StringLength(50, MinimumLength = 3, ErrorMessage = "El nombre de usuario debe tener entre 3 y 50 caracteres.")]
     [RegularExpression(@"^[a-zA-Z0-9._-]+$", ErrorMessage = "El nombre de usuario solo puede contener letras, números, puntos, guiones bajos y guiones.")]
-    public string Username { get; set; }
+    public string Username { get; set; } 
 
     [Required(ErrorMessage = "La contraseña es obligatoria.")]
     [StringLength(255, MinimumLength = 8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres.")]

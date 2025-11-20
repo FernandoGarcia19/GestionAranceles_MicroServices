@@ -4,8 +4,20 @@ using Aranceles_UI.Domain.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
+
+
 namespace Aranceles_UI.Pages.Users
 {
+    
+    public class RegisterDTO{
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string Role { get; set; }
+        public int CreatedBy { get; set; }
+    }
+    
+    
     public class CreateModel : PageModel
     {
         private readonly HttpClient _userClient;
@@ -16,7 +28,7 @@ namespace Aranceles_UI.Pages.Users
         }
 
         [BindProperty]
-        public UserDto User { get; set; } = new();
+        public RegisterDTO User { get; set; } = new();
 
         [BindProperty]
         [StringLength(50, ErrorMessage = "El segundo nombre no puede exceder 50 caracteres.")]
@@ -52,7 +64,7 @@ namespace Aranceles_UI.Pages.Users
             User.FirstName = fullFirstName;
             User.LastName = fullLastName;
 
-            var result = await _userClient.PostAsJsonAsync("api/User", User);
+            var result = await _userClient.PostAsJsonAsync("api/User/register", User);
             if (result.IsSuccessStatusCode)
             {
                 return RedirectToPage("./Index");

@@ -9,6 +9,12 @@ using Org.BouncyCastle.Bcpg.OpenPgp;
 
 namespace MicroServicioUsuario.API.Controllers
 {
+    public class ChangePasswordDTO
+    {
+        public int UserId { get; set; }
+        public string CurrentPassword { get; set;  }
+        public string NewPassword{ get; set; }
+    }
     public class LoginDTO{
         public string Username { get; set; }
         public string Password { get; set; }
@@ -38,6 +44,16 @@ namespace MicroServicioUsuario.API.Controllers
             this.loginService = loginService;
             this.registrationService = registrationService;
             this.jwtService = jwtService;
+        }
+        
+            
+        [HttpPost("change-password")]
+        public async Task<ActionResult<bool>> ChangePasswordFirstLogin([FromBody] ChangePasswordDTO cpDTO)
+        {
+            var res = await this.loginService.ChangePasswordFirstLogin(cpDTO.UserId, cpDTO.CurrentPassword,
+                cpDTO.NewPassword);
+            
+            return Ok(new {Ok = res.ok, Error = res.error});
         }
         [HttpPost("login")]
         public async Task<ActionResult<bool>> Login([FromBody] LoginDTO loginDTO)

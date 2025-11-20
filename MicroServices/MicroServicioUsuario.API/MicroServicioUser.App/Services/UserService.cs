@@ -23,7 +23,8 @@ namespace MicroServicioUser.App.Services
             t.CreatedDate = DateTime.Now;
             t.LastUpdate = DateTime.Now;
             t.Status = true;
-
+            t.FirstLogin = 1;
+            
             return await userRepository.Insert(t);
         }
 

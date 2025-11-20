@@ -69,7 +69,7 @@ namespace MicroServicoUser.Inf.Repository
                 VALUES
                 (
                     @Username,
-                    MD5(@PasswordHash),
+                    @PasswordHash,
                     @FirstName,
                     @LastName,
                     @Email,
@@ -101,6 +101,7 @@ namespace MicroServicoUser.Inf.Repository
                     email         = @Email,
                     role         = @Role,
                     created_by    = @CreatedBy,
+                    first_login    = @FirstLogin,
                     last_update   = CURRENT_TIMESTAMP
                 WHERE id = @Id;";
             try
