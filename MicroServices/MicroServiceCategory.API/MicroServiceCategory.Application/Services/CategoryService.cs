@@ -31,7 +31,8 @@ namespace MicroServiceCategory.Application.Services
             }
             catch (Exception ex)
             {
-                return Result<int>.Failure("Error al insertar la categoría en la base de datos", ex.Message);
+                // Return a server error with the exception message for diagnostics
+                return Result<int>.Failure("ServerError", ex.Message);
             }
         }
 
@@ -43,13 +44,13 @@ namespace MicroServiceCategory.Application.Services
             {
                 var result = await _categoryRepository.Update(c);
                 if (result == 0)
-                    return Result<int>.Failure("No se encontró la categoría para actualizar");
+                    return Result<int>.Failure("NotFound");
 
                 return Result<int>.Success(result);
             }
             catch (Exception ex)
             {
-                return Result<int>.Failure("Error al actualizar la categoría en la base de datos", ex.Message);
+                return Result<int>.Failure("ServerError", ex.Message);
             }
         }
 
@@ -59,13 +60,13 @@ namespace MicroServiceCategory.Application.Services
             {
                 var result = await _categoryRepository.Delete(c);
                 if (result == 0)
-                    return Result<int>.Failure("No se encontró la categoría para eliminar");
+                    return Result<int>.Failure("NotFound");
 
                 return Result<int>.Success(result);
             }
             catch (Exception ex)
             {
-                return Result<int>.Failure("Error al eliminar la categoría en la base de datos", ex.Message);
+                return Result<int>.Failure("ServerError", ex.Message);
             }
         }
 
@@ -74,11 +75,11 @@ namespace MicroServiceCategory.Application.Services
             try
             {
                 var categories = await _categoryRepository.Select();
-                return Result<List<Category>>.Success(await _categoryRepository.Select());
+                return Result<List<Category>>.Success(categories);
             }
             catch (Exception ex)
             {
-                return Result<List<Category>>.Failure("Error al obtener las categorías", ex.Message);
+                return Result<List<Category>>.Failure("ServerError", ex.Message);
             }
         }
 
@@ -88,15 +89,16 @@ namespace MicroServiceCategory.Application.Services
             {
                 if (string.IsNullOrWhiteSpace(property))
                 {
-                    return Result<List<Category>>.Failure("El término de búsqueda no puede estar vacío");
+                    // Prefix with InvalidInput so the controller mapper can detect it
+                    return Result<List<Category>>.Failure("InvalidInput: El término de búsqueda no puede estar vacío");
                 }
 
                 var categories = await _categoryRepository.Search(property);
-                return Result<List<Category>>.Success(await _categoryRepository.Search(property));
+                return Result<List<Category>>.Success(categories);
             }
             catch (Exception ex)
             {
-                return Result<List<Category>>.Failure("Error al buscar categorías", ex.Message);
+                return Result<List<Category>>.Failure("ServerError", ex.Message);
             }
         }
     }

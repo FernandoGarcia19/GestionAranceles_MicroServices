@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroServiceCategory.Application.Services;
 using MicroServiceCategory.Domain.Entities;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace MicroServiceCategory.API.Controllers
 {
@@ -16,54 +18,65 @@ namespace MicroServiceCategory.API.Controllers
             _categoryService = categoryService;
         }
 
+        private IActionResult MapFailure(IEnumerable<string> errors)
+        {
+            var errorList = errors.ToList();
+            if (errorList.Count == 0)
+                return StatusCode(500, new { errors = new[] { "UnknownError" } });
+
+            // Validation errors start with "InvalidInput" or contain typical validation messages
+            if (errorList.Any(e => e.StartsWith("InvalidInput") || e.Contains("El ") || e.Contains("must be") || e.Contains("debe")))
+                return BadRequest(new { errors = errorList });
+
+            if (errorList.Any(e => e.Equals("NotFound") || e.Contains("NoRowsAffected")))
+                return NotFound(new { errors = errorList });
+
+            // DB or other server errors
+            return StatusCode(500, new { errors = errorList });
+        }
+
         // GET: api/category
 
         [HttpGet]
-        public async Task<ActionResult<List<Category>>> Select()
+        public async Task<IActionResult> Select()
         {
-            var categories = await _categoryService.Select();
-            if (categories.IsSuccess)
+            var result = await _categoryService.Select();
+            if (result.IsSuccess)
             {
-                return Ok(categories.Value);
+                return Ok(result.Value);
             }
             else
             {
-                return StatusCode(500, new
-                {
-                    message = "Error al obtener las categorías",
-                    error = categories.Errors
-                });
+                return MapFailure(result.Errors);
             }
         }
 
         // GET: api/category/search/comida
 
         [HttpGet("search/{property}")]
-        public async Task<ActionResult<List<Category>>> Search(string property)
+        public async Task<IActionResult> Search(string property)
         {
-            var categories = await _categoryService.Search(property);
-            if (categories.IsSuccess)
+            var result = await _categoryService.Search(property);
+            if (result.IsSuccess)
             {
-                return Ok(categories.Value);
+                return Ok(result.Value);
             }
             else
             {
-                return StatusCode(500, new
-                {
-                    message = "Error al buscar categorías",
-                    error = categories.Errors
-                });
+                return MapFailure(result.Errors);
             }
         }
 
         // POST: api/category
 
         [HttpPost]
-        public async Task<ActionResult> Create([FromBody] Category category)
+        public async Task<IActionResult> Create([FromBody] Category category)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                // Convert modelstate errors into Result failure format
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => "InvalidInput: " + (string.IsNullOrEmpty(e.ErrorMessage) ? e.Exception?.Message : e.ErrorMessage));
+                return MapFailure(errors);
             }
 
             var result = await _categoryService.Insert(category);
@@ -83,24 +96,21 @@ namespace MicroServiceCategory.API.Controllers
             }
             else
             {
-                return StatusCode(500, new
-                {
-                    message = "Error al crear la categoría",
-                    error = result.Errors
-                });
+                return MapFailure(result.Errors);
             }
         }
 
         // PUT: api/category/5
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, [FromBody] Category category)
+        public async Task<IActionResult> Update(int id, [FromBody] Category category)
         {
             category.Id = id;
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => "InvalidInput: " + (string.IsNullOrEmpty(e.ErrorMessage) ? e.Exception?.Message : e.ErrorMessage));
+                return MapFailure(errors);
             }
 
             var result = await _categoryService.Update(category);
@@ -115,28 +125,14 @@ namespace MicroServiceCategory.API.Controllers
             }
             else
             {
-                if (result.Errors.Any(e => e.Contains("No se encontró")))
-                {
-                    return NotFound(new
-                    {
-                        message = $"Categoría con ID {id} no encontrada"
-                    });
-                }
-                else
-                {
-                    return StatusCode(500, new
-                    {
-                        message = "Error al actualizar la categoría",
-                        error = result.Errors
-                    });
-                }
+                return MapFailure(result.Errors);
             }
         }
 
         // DELETE: api/category/5
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
 
             var category = new Category { Id = id };
@@ -151,21 +147,7 @@ namespace MicroServiceCategory.API.Controllers
             }
             else
             {
-                if (result.Errors.Any(e => e.Contains("No se encontró")))
-                {
-                    return NotFound(new
-                    {
-                        message = $"Categoría con ID {id} no encontrada"
-                    });
-                }
-                else
-                {
-                    return StatusCode(500, new
-                    {
-                        message = "Error al eliminar la categoría",
-                        error = result.Errors
-                    });
-                }
+                return MapFailure(result.Errors);
             }
         }
     }
