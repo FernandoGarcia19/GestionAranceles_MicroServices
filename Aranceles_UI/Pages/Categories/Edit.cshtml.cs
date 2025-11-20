@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Aranceles_UI.Domain.Dtos;
-using Aranceles_UI.Domain.Models;
 using Aranceles_UI.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -21,7 +20,7 @@ namespace Aranceles_UI.Pages.Categories
         }
 
         [BindProperty]
-        public Category CategoryForm { get; set; } = new();
+        public CategoryDto CategoryForm { get; set; } = new();
 
         public async Task<IActionResult> OnGet(string id)
         {
@@ -51,7 +50,7 @@ namespace Aranceles_UI.Pages.Categories
                 return Page();
             }
 
-            var result = await categoryClient.PutAsJsonAsync("api/Category/", Category);
+            var result = await categoryClient.PutAsJsonAsync($"api/Category/{Category.Id}", Category);
             if (result.IsSuccessStatusCode)
             {
                 return RedirectToPage("./Index");

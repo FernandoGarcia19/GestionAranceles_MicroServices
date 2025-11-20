@@ -42,8 +42,17 @@ namespace Aranceles_UI.Pages.Categories
 
         public async Task<IActionResult> OnPost()
         {
-            var result = categoryClient.DeleteFromJsonAsync<CategoryDto>($"api/Category/{RealId}");
-            if (result.IsCompleted)
+            Console.WriteLine(RealId);
+            Console.WriteLine(RealId);
+            Console.WriteLine(RealId);
+            Console.WriteLine(RealId);
+            Console.WriteLine(RealId);
+            Console.WriteLine(RealId);
+            Console.WriteLine(RealId);
+            Console.WriteLine(RealId);
+            Console.WriteLine(RealId);
+            var result = await categoryClient.DeleteAsync($"api/Category/{RealId}");
+            if (result.IsSuccessStatusCode)
             {
                 return RedirectToPage("./Index");
             }

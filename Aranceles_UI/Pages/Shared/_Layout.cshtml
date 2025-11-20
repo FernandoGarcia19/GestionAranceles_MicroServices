@@ -1,8 +1,8 @@
 ﻿@{
     var title = ViewData["Title"] ?? "Sistema de Pagos de Aranceles";
-    bool isAuthenticated = User?.Identity?.IsAuthenticated == true;
-    bool isAdmin = User?.IsInRole("Admin") == true;
-    bool isContador = User?.IsInRole("Contador") == true;
+    bool isAuthenticated = true;// User?.Identity?.IsAuthenticated == true;
+    bool isAdmin = true; //User?.IsInRole("Admin") == true;
+    bool isContador = false;//User?.IsInRole("Contador") == true;
 }
 
 <!DOCTYPE html>

@@ -1,19 +1,69 @@
-@page
-@model Aranceles_UI.Pages.Users.Delete
-
+@page "{id?}"
+@model Aranceles_UI.Pages.Users.DeleteModel
 @{
-    Layout = null;
+    ViewData["Title"] = "Eliminar Usuario";
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    
+<div class="mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
+        <div>
+            <h2 class="mb-1 fw-bold text-dark">
+                <i class="bi bi-trash text-danger me-2"></i>
+                @ViewData["Title"]
+            </h2>
+            <p class="text-muted mb-0 small">
+                Confirma la eliminación del establecimiento seleccionado
+            </p>
+        </div>
+
+        <a asp-page="Index" class="btn btn-outline-secondary px-4">
+            <i class="bi bi-arrow-left me-2"></i>Volver
+        </a>
+    </div>
+
+    <hr class="border-2 opacity-25">
 </div>
-</body>
-</html>
+
+<div class="alert alert-warning">
+    <h4>¿Estás seguro de que deseas eliminar este usuario?</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Usuario:</dt>
+        <dd class="col-sm-9">@Model.User.Username</dd>
+
+        <dt class="col-sm-3">Nombre Completo:</dt>
+        <dd class="col-sm-9">@Model.User.FirstName @Model.User.LastName</dd>
+
+        <dt class="col-sm-3">Email:</dt>
+        <dd class="col-sm-9">@Model.User.Email</dd>
+
+        <dt class="col-sm-3">Rol:</dt>
+        <dd class="col-sm-9">
+            @if (Model.User.Role == "1")
+            {
+                <span class="badge bg-danger">Admin</span>
+            }
+            else if (Model.User.Role == "2")
+            {
+                <span class="badge bg-info">Contador</span>
+            }
+            else
+            {
+                <span>@Model.User.Role</span>
+            }
+        </dd>
+
+    </dl>
+    
+    <p class="text-danger">
+        <strong>Nota:</strong> Esta acción marcará el usuario como inactivo en el sistema. 
+        El usuario no podrá iniciar sesión pero sus datos se mantendrán en el sistema.
+    </p>
+</div>
+
+<form method="post">
+    <input type="hidden" asp-for="User.Id" />
+    <button type="submit" class="btn btn-danger">Eliminar Usuario</button>
+    <a asp-page="Index" class="btn btn-secondary ms-2">Cancelar</a>
+</form>

@@ -1,5 +1,4 @@
 using Aranceles_UI.Domain.Dtos;
-using Aranceles_UI.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -15,7 +14,7 @@ public class CreateModel : PageModel
     }
         
     [BindProperty]
-    public Category Category { get; set; } = new();
+    public CategoryDto Category { get; set; } = new();
 
     public void OnGet() { }
 
@@ -25,7 +24,12 @@ public class CreateModel : PageModel
         {
             return Page();
         }
-        var result = categoryClient.PostAsJsonAsync("api/Category", Category);
-        return RedirectToPage("./Index");
+        var result = await categoryClient.PostAsJsonAsync("api/Category", Category);
+        if (result.IsSuccessStatusCode)
+        {
+            return RedirectToPage("./Index");
+        }
+
+        return Page();
     }
 }

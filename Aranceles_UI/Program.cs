@@ -1,21 +1,26 @@
+using Aranceles_UI.Security;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-
 builder.Services.AddHttpClient("categoryApi", c => {
-    c.BaseAddress = new Uri("http://localhost:<port>");
+    c.BaseAddress = new Uri("http://localhost:5093");
 });
 builder.Services.AddHttpClient("establishmentApi", e => {
-    e.BaseAddress = new Uri("http://localhost:<port>");
+    e.BaseAddress = new Uri("http://localhost:5284");
 });
 builder.Services.AddHttpClient("personInChargeApi", p => {
-    p.BaseAddress = new Uri("http://localhost:<port>");
+    p.BaseAddress = new Uri("http://localhost:5171");
 });
 builder.Services.AddHttpClient("userApi", u => {
     u.BaseAddress = new Uri("http://localhost:<port>");
 });
+
+builder.Services.AddScoped<IdProtector>();
+
+
 
 var app = builder.Build();
 
