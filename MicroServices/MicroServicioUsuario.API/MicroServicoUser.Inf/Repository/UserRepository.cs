@@ -26,9 +26,7 @@ namespace MicroServicoUser.Inf.Repository
                     username      AS Username,
                     password_hash AS PasswordHash,
                     first_name    AS FirstName,
-                    second_name   AS SecondName,
                     first_last_name     AS LastName,
-                    second_last_name AS SecondLastName,
                     email         AS Email,
                     role          AS Role,
                     created_by    AS CreatedBy,
@@ -59,9 +57,7 @@ namespace MicroServicoUser.Inf.Repository
                     username,
                     password_hash,
                     first_name,
-                    second_name,
                     first_last_name,
-                    second_last_name,
                     email,
                     role,
                     created_by,
@@ -75,9 +71,7 @@ namespace MicroServicoUser.Inf.Repository
                     @Username,
                     MD5(@PasswordHash),
                     @FirstName,
-                    @SecondName,
                     @LastName,
-                    @SecondLastName,
                     @Email,
                     @Role,
                     @CreatedBy,
@@ -103,15 +97,11 @@ namespace MicroServicoUser.Inf.Repository
                     username      = @Username,
                     password_hash = @PasswordHash,
                     first_name    = @FirstName,
-                    second_name   = @SecondName,
                     first_last_name     = @LastName,
-                    second_last_name    = @SecondLastName,
                     email         = @Email,
                     role         = @Role,
                     created_by    = @CreatedBy,
-                    last_update   = CURRENT_TIMESTAMP,
-                    status       = @Status,
-                    first_login  = @FirstLogin
+                    last_update   = CURRENT_TIMESTAMP
                 WHERE id = @Id;";
             try
             {
@@ -143,9 +133,7 @@ namespace MicroServicoUser.Inf.Repository
                     username      ,
                     password_hash ,
                     first_name    ,
-                    second_name   ,
                     first_last_name     ,
-                    second_last_name    ,
                     email         ,
                     role          ,
                     created_by    ,
@@ -157,9 +145,7 @@ namespace MicroServicoUser.Inf.Repository
                 WHERE status = TRUE AND (
                     (@Username IS NOT NULL AND username LIKE CONCAT('%', @Username, '%')) OR
                     (@FirstName IS NOT NULL AND first_name LIKE CONCAT('%', @FirstName, '%')) OR
-                    (@SecondName IS NOT NULL AND second_name LIKE CONCAT('%', @SecondName, '%')) OR
                     (@LastName IS NOT NULL AND first_last_name LIKE CONCAT('%', @LastName, '%')) OR
-                    (@SecondLastName IS NOT NULL AND second_last_name LIKE CONCAT('%', @SecondLastName, '%')) OR
                     (@Email IS NOT NULL AND email LIKE CONCAT('%', @Email, '%')) OR
                     (@Role IS NOT NULL AND role LIKE CONCAT('%', @Role, '%'))
                 )
@@ -182,9 +168,7 @@ namespace MicroServicoUser.Inf.Repository
                     username      AS Username,
                     password_hash AS PasswordHash,
                     first_name    AS FirstName,
-                    second_name   AS SecondName,
                     first_last_name     AS LastName,
-                    second_last_name AS SecondLastName,
                     email         AS Email,
                     role          AS Role,
                     created_by    AS CreatedBy,
@@ -216,9 +200,7 @@ namespace MicroServicoUser.Inf.Repository
                     username      AS Username,
                     password_hash AS PasswordHash,
                     first_name    AS FirstName,
-                    second_name   AS SecondName,
                     first_last_name     AS LastName,
-                    second_last_name AS SecondLastName,
                     email         AS Email,
                     role          AS Role,
                     created_by    AS CreatedBy,
