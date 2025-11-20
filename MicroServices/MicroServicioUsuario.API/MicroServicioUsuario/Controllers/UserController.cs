@@ -1,20 +1,65 @@
-﻿using MicroServicioUser.App.Services;
+﻿using System.Runtime.InteropServices.JavaScript;
+using MicroServicioUser.App.Services;
+using MicroServicioUser.Dom.Dto;
 using MicroServicioUser.Dom.Entities;
+using MicroServicioUser.Dom.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MicroServicioUsuario.API.Controllers
 {
+    public class LoginDTO{
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+    
+    public class RegisterDTO{
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string Role { get; set; }
+        public int CreatedBy { get; set; }
+    }
+    
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserService service;
-        public UserController(UserService service)
+        private readonly IRepositoryService<User> service;
+        private readonly LoginService loginService;
+        private readonly RegistrationService registrationService;
+        private readonly IJwtService jwtService;
+        
+        public UserController(IRepositoryService<User> service, LoginService loginService, RegistrationService registrationService,
+            IJwtService jwtService)
         {
             this.service = service;
+            this.loginService = loginService;
+            this.registrationService = registrationService;
+            this.jwtService = jwtService;
         }
-
+        [HttpPost("login")]
+        public async Task<ActionResult<bool>> Login([FromBody] LoginDTO loginDTO)
+        {
+            
+            var obj = await this.loginService.ValidateLogin(loginDTO.Username, loginDTO.Password);
+            if (obj.ok)
+            {
+                var result = await jwtService.GenerateToken((int)obj.userId, obj.role);
+                return Ok( 
+                    new LoginResponse(){Error = "", Ok = true, Token = result.Value, TokenType = "Bearer"}
+                    );
+            }
+            return Ok(new LoginResponse(  ){ Error = obj.error, Ok = false });
+        }
+        
+        [HttpPost("register")]
+        public async Task<ActionResult<bool>> Register([FromBody] RegisterDTO registerDto)
+        {
+            var obj = await this.registrationService.RegisterUser(registerDto.FirstName, registerDto.LastName, registerDto.Email, registerDto.Role, registerDto.CreatedBy);
+            return Ok(new {Ok=obj.ok, Error=obj.error});
+        }
+            
         [HttpGet("select")]
         public async Task<ActionResult<List<User>>> Select()
         {

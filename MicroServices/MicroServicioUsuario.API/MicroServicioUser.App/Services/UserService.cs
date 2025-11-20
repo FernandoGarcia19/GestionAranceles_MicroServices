@@ -13,7 +13,11 @@ namespace MicroServicioUser.App.Services
     public class UserService : IRepositoryService<User>
     {
         private readonly IRepository userRepository;
-   
+
+        public UserService(IRepository userRepository)
+        {
+            this.userRepository = userRepository;
+        }
         public async Task<Result<int>> Insert(User t)
         {
             t.CreatedDate = DateTime.Now;

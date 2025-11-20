@@ -96,7 +96,7 @@ namespace MicroServicoUser.Inf.Repository
 
             var candidate = baseUser;
             int suffix = 2;
-            while (_userRepository.GetByUsername(candidate) != null)
+            while ((await _userRepository.GetByUsername(candidate)).Value!=null)
             {
                 candidate = baseUser + suffix.ToString();
                 suffix++;
@@ -123,8 +123,8 @@ namespace MicroServicoUser.Inf.Repository
             };
 
             var result = await _userRepository.Insert(user);
-            if (result.IsSuccess)
-                return (false, null, null,"");
+            if (!result.IsSuccess)
+                return (false, null, null,result.Errors.First());
 
             return (true, candidate, pwd, null);
         }

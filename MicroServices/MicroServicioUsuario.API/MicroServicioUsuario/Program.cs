@@ -17,6 +17,7 @@ builder.Services.AddSingleton<MicroServicoUser.Inf.Persistence.Database.MySqlCon
 //Inyeccion de capas
 builder.Services.AddScoped<IRepository, UserRepository>();
 builder.Services.AddScoped<IRepositoryService<User>, UserService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddScoped<ILogin, Login>();
 builder.Services.AddScoped<IRegistration, Registration>();

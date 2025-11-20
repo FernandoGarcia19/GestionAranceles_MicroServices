@@ -24,6 +24,7 @@ namespace MicroServicioUser.App.Services
 
         public async Task<(bool ok, string? generatedUsername, string? generatedPassword, string? error)> RegisterUser(string firstName, string lastName, string email, string role, int createdBy)
         {
+            var t = false;
             (bool ok, string ? generatedUsername, string ? generatedPassword, string ? error) =  await _registration.RegisterUser(firstName, lastName, email, role, createdBy);
             if (!ok)
                 return (false, null, null, error);
