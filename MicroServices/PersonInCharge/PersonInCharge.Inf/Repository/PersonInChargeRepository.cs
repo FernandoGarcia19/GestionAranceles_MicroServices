@@ -41,7 +41,7 @@ VALUES (@first_name, @last_name, @email, @phone, @ci, @created_by, @created_date
 
             cmd.Parameters.AddWithValue("@created_date", createdDate);
             cmd.Parameters.AddWithValue("@last_update", lastUpdate);
-            cmd.Parameters.AddWithValue("@status", t.Status ? 1 : 0);
+            cmd.Parameters.AddWithValue("@status", 1);
 
             await cmd.ExecuteNonQueryAsync();
 
@@ -85,7 +85,7 @@ WHERE id = @id;";
             cmd.Parameters.AddWithValue("@ci", t.Ci);
             cmd.Parameters.AddWithValue("@created_by", t.CreatedBy);
             cmd.Parameters.AddWithValue("@last_update", t.UpdateDate == default ? DateTime.Now : t.UpdateDate);
-            cmd.Parameters.AddWithValue("@status", t.Status ? 1 : 0);
+            cmd.Parameters.AddWithValue("@status", 1);
             cmd.Parameters.AddWithValue("@id", t.Id);
 
             var affected = await cmd.ExecuteNonQueryAsync();

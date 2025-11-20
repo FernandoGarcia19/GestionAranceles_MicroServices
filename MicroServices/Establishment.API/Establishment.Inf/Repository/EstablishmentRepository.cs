@@ -40,7 +40,7 @@ public class EstablishmentRepository: IRepository
             cmd.Parameters.AddWithValue("@email", t.Email ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("@establishment_type", t.EstablishmentType ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("@created_by", t.CreatedBy);
-            cmd.Parameters.AddWithValue("@status", t.Status ? 1 : 0);
+            cmd.Parameters.AddWithValue("@status", 1);
             cmd.Parameters.AddWithValue("@last_update", lastUpdate);
 
             var affected = await cmd.ExecuteNonQueryAsync();
@@ -86,7 +86,7 @@ public class EstablishmentRepository: IRepository
             cmd.Parameters.AddWithValue("@phone", t.Phone ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("@email", t.Email ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("@establishment_type", t.EstablishmentType ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@status", t.Status ? 1 : 0);
+            cmd.Parameters.AddWithValue("@status", 1);
             cmd.Parameters.AddWithValue("@id", t.Id);
 
             var affected = await cmd.ExecuteNonQueryAsync();
