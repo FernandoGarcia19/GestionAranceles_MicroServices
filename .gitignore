@@ -17,6 +17,24 @@
 # Mono auto generated files
 mono_crash.*
 
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon files
+Icon?
+
+# Thumbnails
+._*
+
+# macOS metadata
+.Spotlight-V100
+.Trashes
+
+# AFP share files
+.apdisk
+
 # Rider / IntelliJ project files
 .idea/
 .idea.*
