@@ -70,7 +70,7 @@ public class PersonInChargeService : IPersonInChargeService
         person.FirstName = fullFirstName;
         person.LastName = fullLastName;
 
-        var result = await _personClient.PutAsJsonAsync($"api/PersonInCharge/{person.Id}", person);
+        var result = await _personClient.PutAsJsonAsync($"api/PersonInCharge/", person);
         return result.IsSuccessStatusCode;
     }
 

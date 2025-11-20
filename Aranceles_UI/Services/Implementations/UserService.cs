@@ -62,7 +62,7 @@ public class UserService : IUserService
 
     public async Task<bool> DeleteUserAsync(int id)
     {
-        var result = await _userClient.DeleteAsync($"api/User/{id}");
+        var result = await _userClient.DeleteAsync($"api/User/delete/{id}");
         return result.IsSuccessStatusCode;
     }
 }

@@ -40,7 +40,7 @@ public class EstablishmentService : IEstablishmentService
 
     public async Task<bool> UpdateEstablishmentAsync(EstablishmentDto establishment)
     {
-        var result = await _establishmentClient.PutAsJsonAsync($"api/Establishment/{establishment.Id}", establishment);
+        var result = await _establishmentClient.PutAsJsonAsync($"api/Establishment/", establishment);
         return result.IsSuccessStatusCode;
     }
 
