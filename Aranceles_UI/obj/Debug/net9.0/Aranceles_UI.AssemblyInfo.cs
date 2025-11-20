@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Aranceles_UI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bdc35a9fdcb336d9870ee939f394e614c1a483c0")]
 [assembly: System.Reflection.AssemblyProductAttribute("Aranceles_UI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Aranceles_UI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
