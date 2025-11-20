@@ -28,9 +28,14 @@ namespace Aranceles_UI.Pages.PersonInCharges
             Persons = await personClient.GetFromJsonAsync<List<PersonInChargeDto>>("api/PersonInCharge/");
         }
 
-        public void OnPost()
+        public async Task OnPostAsync()
         {
+            if (!string.IsNullOrWhiteSpace(SearchTerm))
+                Persons = await personClient.GetFromJsonAsync<List<PersonInChargeDto>>($"api/PersonInCharge/search/{SearchTerm}") ?? new();
+            else
+                Persons = await personClient.GetFromJsonAsync<List<PersonInChargeDto>>("api/PersonInCharge") ?? new();
         }
+
 
         public string Protect(int id) => _idProtector.ProtectInt(id);
     }

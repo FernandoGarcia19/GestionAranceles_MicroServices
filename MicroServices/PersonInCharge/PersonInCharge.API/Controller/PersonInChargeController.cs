@@ -88,4 +88,20 @@ public class PersonInChargeController: ControllerBase
         // DB or other server errors
         return StatusCode(500, new { errors = errorList });
     }
+    
+    [HttpGet("search/{property}")]
+    public async Task<ActionResult<List<Dom.Model.PersonInCharge>>> Search(string property)
+    {
+        var res = await _service.Search(property);
+        if (res.IsSuccess)
+        {
+            return Ok(res.Value);
+        }
+
+        return StatusCode(500, new
+        {
+            message = "Error al buscar establecimientos",
+            error = res.Errors
+        });
+    }
 }

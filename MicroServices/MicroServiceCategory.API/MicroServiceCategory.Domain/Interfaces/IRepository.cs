@@ -13,5 +13,6 @@ namespace MicroServiceCategory.Domain.Interfaces
         Task<int> Delete(TModel model);
         Task<List<TModel>> Select();
         Task<List<TModel>> Search(string property);
+        Task<TModel> SelectById(int id);
     }
 }
