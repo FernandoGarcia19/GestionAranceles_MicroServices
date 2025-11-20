@@ -9,41 +9,121 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Aranceles_UI
 build_property.RootNamespace = Aranceles_UI
-build_property.ProjectDir = /home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/Aranceles_UI/
+build_property.ProjectDir = /Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = /home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/Aranceles_UI
+build_property.MSBuildProjectDirectory = /Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/Aranceles_UI/Pages/Error.cshtml]
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Categories/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ2F0ZWdvcmllcy9DcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Categories/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ2F0ZWdvcmllcy9EZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Categories/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ2F0ZWdvcmllcy9FZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Categories/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ2F0ZWdvcmllcy9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/ChangePassword.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ2hhbmdlUGFzc3dvcmQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/Aranceles_UI/Pages/Index.cshtml]
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Establishments/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRXN0YWJsaXNobWVudHMvQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Establishments/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRXN0YWJsaXNobWVudHMvRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Establishments/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRXN0YWJsaXNobWVudHMvRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Establishments/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRXN0YWJsaXNobWVudHMvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/Aranceles_UI/Pages/Privacy.cshtml]
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTG9naW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Logout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTG9nb3V0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/MyProfile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTXlQcm9maWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/PersonInCharges/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUGVyc29uSW5DaGFyZ2VzL0NyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/PersonInCharges/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUGVyc29uSW5DaGFyZ2VzL0RlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/PersonInCharges/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUGVyc29uSW5DaGFyZ2VzL0VkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/PersonInCharges/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUGVyc29uSW5DaGFyZ2VzL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/Aranceles_UI/Pages/Shared/_ValidationScriptsPartial.cshtml]
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/Aranceles_UI/Pages/_ViewImports.cshtml]
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Users/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVXNlcnMvQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Users/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVXNlcnMvRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Users/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVXNlcnMvRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Users/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVXNlcnMvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/Aranceles_UI/Pages/_ViewStart.cshtml]
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/Aranceles_UI/Pages/Shared/_Layout.cshtml]
+[/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL19MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-pb1008w98y

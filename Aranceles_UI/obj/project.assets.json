@@ -8,19 +8,19 @@
     "net9.0": []
   },
   "packageFolders": {
-    "/home/nutria/.nuget/packages/": {}
+    "/Users/jorgebarahona/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/Aranceles_UI/Aranceles_UI.csproj",
+      "projectUniqueName": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Aranceles_UI.csproj",
       "projectName": "Aranceles_UI",
-      "projectPath": "/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/Aranceles_UI/Aranceles_UI.csproj",
-      "packagesPath": "/home/nutria/.nuget/packages/",
-      "outputPath": "/home/nutria/Documents/UNI/8SEMESTRE/Arqui Soft/Microservicios/Aranceles_UI/obj/",
+      "projectPath": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/Aranceles_UI.csproj",
+      "packagesPath": "/Users/jorgebarahona/.nuget/packages/",
+      "outputPath": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/Aranceles_UI/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/nutria/.nuget/NuGet/NuGet.Config"
+        "/Users/jorgebarahona/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -68,7 +68,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.306/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/Users/jorgebarahona/.dotnet/sdk/9.0.308/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -1,0 +1,239 @@
+@page
+@model Aranceles_UI.Pages.Establishments.CreateModel
+@{
+    ViewData["Title"] = "Registrar Establecimiento";
+}
+
+<!-- HEADER con divisor -->
+<div class="mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
+        <div>
+            <h2 class="mb-1 fw-bold text-dark">
+                <i class="bi bi-building-fill-add text-primary me-2"></i>
+                @ViewData["Title"]
+            </h2>
+            <p class="text-muted mb-0 small">
+                Completa el formulario para registrar un nuevo establecimiento
+            </p>
+        </div>
+
+        <a asp-page="Index" class="btn btn-outline-secondary px-4">
+            <i class="bi bi-arrow-left me-2"></i>Volver
+        </a>
+    </div>
+
+    <hr class="border-2 opacity-25">
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-10 col-xl-9">
+        <form method="post" class="card shadow border-0">
+            <div class="card-body p-3.5 p-md-4">
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0" role="alert"></div>
+
+                <div class="row g-4">
+
+                    <div class="col-md-6">
+                        <label asp-for="Establishment.Name" class="form-label fw-semibold">
+                            <i class="bi bi-signpost text-primary me-1"></i>Nombre
+                        </label>
+                        <input asp-for="Establishment.Name" class="form-control" placeholder="Ingrese el nombre del establecimiento" required />
+                        <span asp-validation-for="Establishment.Name" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Establishment.TaxId" class="form-label fw-semibold">
+                            <i class="bi bi-receipt text-primary me-1"></i>NIT
+                        </label>
+                        <input asp-for="Establishment.TaxId" class="form-control" placeholder="Ingrese el NIT" />
+                        <span asp-validation-for="Establishment.TaxId" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Establishment.Email" class="form-label fw-semibold">
+                            <i class="bi bi-envelope text-primary me-1"></i>Correo Electrónico
+                        </label>
+                        <input asp-for="Establishment.Email" type="email" class="form-control" placeholder="correo@ejemplo.com" />
+                        <span asp-validation-for="Establishment.Email" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Establishment.Phone" class="form-label fw-semibold">
+                            <i class="bi bi-telephone text-primary me-1"></i>Teléfono celular
+                        </label>
+                        <input asp-for="Establishment.Phone" class="form-control" placeholder="Ej. 7000-0000" />
+                        <span asp-validation-for="Establishment.Phone" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Establishment.Address" class="form-label fw-semibold">
+                            <i class="bi bi-geo-alt text-primary me-1"></i>Dirección
+                        </label>
+                        <input asp-for="Establishment.Address" class="form-control" placeholder="Ingrese la dirección" />
+                        <span asp-validation-for="Establishment.Address" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Establishment.SanitaryLicense" class="form-label fw-semibold">
+                            <i class="bi bi-file-medical text-primary me-1"></i>Licencia Sanitaria
+                        </label>
+                        <input asp-for="Establishment.SanitaryLicense" class="form-control" placeholder="Número de licencia sanitaria" />
+                        <span asp-validation-for="Establishment.SanitaryLicense" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Establishment.SanitaryLicenseExpiry" class="form-label fw-semibold">
+                            <i class="bi bi-calendar-event text-primary me-1"></i>Fecha de expiración de licencia
+                        </label>
+                        <input asp-for="Establishment.SanitaryLicenseExpiry" class="form-control" type="date" />
+                        <span asp-validation-for="Establishment.SanitaryLicenseExpiry" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Establishment.EstablishmentType" class="form-label fw-semibold">
+                            <i class="bi bi-ui-checks-grid text-primary me-1"></i>Tipo de Establecimiento
+                        </label>
+                        <select asp-for="Establishment.EstablishmentType" class="form-select">
+                            <option value="">Seleccionar tipo</option>
+                            <option value="RESTAURANT">Restaurante</option>
+                            <option value="BAR">Bar</option>
+                            <option value="CAFETERIA">Cafeteria</option>
+                            <option value="FAST_FOOD">Comida Rapida</option>
+                            <option value="OTHER">Otro</option>
+                        </select>
+                        <span asp-validation-for="Establishment.EstablishmentType" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
+                    </div>
+
+                   @*  <div class="col-md-6">
+                        <label class="form-label fw-semibold">
+                            <i class="bi bi-person-vcard text-primary me-1"></i>Person in Charge
+                        </label>
+                        <select asp-for="Establishment.PersonInChargeId" class="form-select">
+                            @foreach (var person in Model.PersonsInCharge)
+                            {
+                                <option value="@person.Id">@String.Concat(person.FirstName, " ", person.LastName)</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Establishment.PersonInChargeId" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
+                    </div> *@
+
+
+                  @*   <div class="col-md-6">
+                        <label class="form-label fw-semibold">
+                            <i class="bi bi-person-vcard text-primary me-1"></i>Persona a Cargo
+                        </label>
+
+                        <!-- Barra de búsqueda -->
+                        <div class="input-group mb-2">
+                            <span class="input-group-text bg-light">
+                                <i class="bi bi-search text-muted"></i>
+                            </span>
+                            <input asp-for="PersonSearchTerm"
+                                   class="form-control"
+                                   placeholder="Buscar por nombre, CI o email..."
+                                   autocomplete="off" />
+                            <button type="submit"
+                                    asp-page-handler="SearchPerson"
+                                    class="btn btn-outline-secondary">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+
+                        <!-- Select con resultados -->
+                        <select asp-for="Establishment.PersonInChargeId"
+                                class="form-select"
+                                size="5">
+                            <option value=""></option>
+                            @foreach (var person in Model.PersonsInCharge)
+                            {
+                                <option value="@person.Id">
+                                    @person.FirstName @person.LastName
+                                </option>
+                            }
+                        </select>
+
+                        @if (!string.IsNullOrWhiteSpace(Model.PersonSearchTerm) && !Model.PersonsInCharge.Any())
+                        {
+                            <small class="text-warning d-block mt-2">
+                                <i class="bi bi-exclamation-triangle me-1"></i>
+                                No se encontraron resultados para "@Model.PersonSearchTerm"
+                            </small>
+                        }
+                        else if (!string.IsNullOrWhiteSpace(Model.PersonSearchTerm))
+                        {
+                            <small class="text-success d-block mt-2">
+                                <i class="bi bi-check-circle me-1"></i>
+                                Mostrando @Model.PersonsInCharge.Count resultado(s)
+                            </small>
+                        }
+
+                        <small class="text-muted d-block mt-2">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Escribe para buscar o selecciona de la lista
+                        </small>
+
+                        <span asp-validation-for="Establishment.PersonInChargeId"
+                              class="text-danger d-block mt-2 fw-semibold"
+                              style="font-size: 0.9rem;"></span>
+                    </div>
+ *@
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">
+                            <i class="bi bi-person-vcard text-primary me-1"></i>Persona a Cargo
+                        </label>
+
+                        <input type="text"
+                               id="personSearchInput"
+                               class="form-control mb-2"
+                               placeholder="Filtrar por nombre..."
+                               autocomplete="off" />
+
+                        <select asp-for="Establishment.PersonInChargeId"
+                                id="personSelect"
+                                class="form-select"
+                                size="5">
+                            <option value="">-- Seleccionar persona --</option>
+                            @foreach (var person in Model.PersonsInCharge)
+                            {
+                                <option value="@person.Id" data-name="@person.FirstName @person.LastName">
+                                    @person.FirstName @person.LastName
+                                </option>
+                            }
+                        </select>
+                        <span asp-validation-for="Establishment.PersonInChargeId"
+                              class="text-danger d-block mt-2 fw-semibold"
+                              style="font-size: 0.9rem;"></span>
+                    </div>
+
+                    <script>
+                        document.getElementById('personSearchInput').addEventListener('input', function() {
+                            const filter = this.value.toLowerCase();
+                            const options = document.querySelectorAll('#personSelect option');
+
+                            options.forEach(option => {
+                                const name = option.getAttribute('data-name')?.toLowerCase() || '';
+                                option.style.display = name.includes(filter) || option.value === '' ? '' : 'none';
+                            });
+                        });
+                    </script>
+
+
+                <div class="d-flex gap-3 justify-content-end mt-5 pt-4 border-top">
+                    <a asp-page="Index" class="btn btn-outline-secondary px-4">
+                        <i class="bi bi-x-circle me-2"></i>Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-success px-5">
+                        <i class="bi bi-check-circle me-2"></i>Guardar
+                    </button>
+                </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
