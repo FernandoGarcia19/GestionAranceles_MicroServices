@@ -1,4 +1,7 @@
 using Establishment.Dom.Interface;
+using Establishment.Dom.Model;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Establishment.App.Service;
 
@@ -11,31 +14,31 @@ public class EstablishmentService
         _repository = repository;
     }
     
-    public async Task<int> Insert(Dom.Model.Establishment t)
+    public async Task<Result<int>> Insert(Dom.Model.Establishment t)
     {
-        var id = await _repository.Insert(t);
-        return id;
+        var res = await _repository.Insert(t);
+        return res;
     }
 
-    public async Task<List<Dom.Model.Establishment>> Select()
+    public async Task<Result<List<Dom.Model.Establishment>>> Select()
     {
         var res = await _repository.Select();
         return res;
     }
     
-    public async Task<Dom.Model.Establishment> SelectById(int id)
+    public async Task<Result<Dom.Model.Establishment>> SelectById(int id)
     {
         var res = await _repository.SelectById(id);
         return res;
     }
     
-    public async Task<int> Update(Dom.Model.Establishment t)
+    public async Task<Result<int>> Update(Dom.Model.Establishment t)
     {
         var res = await _repository.Update(t);
         return res;
     }
     
-    public async Task<int> Delete(Dom.Model.Establishment t)
+    public async Task<Result<int>> Delete(Dom.Model.Establishment t)
     {
         var res = await _repository.Delete(t);
         return res;
