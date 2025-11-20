@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Z0La3sWns1A=",
+  "dgSpecHash": "xRSugKKrPgs=",
   "success": true,
   "projectFilePath": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.App/MicroServicioUser.App.csproj",
   "expectedPackageFiles": [
@@ -28,7 +28,9 @@
     "/Users/jorgebarahona/.nuget/packages/system.security.cryptography.protecteddata/8.0.0/system.security.cryptography.protecteddata.8.0.0.nupkg.sha512",
     "/Users/jorgebarahona/.nuget/packages/system.security.permissions/8.0.0/system.security.permissions.8.0.0.nupkg.sha512",
     "/Users/jorgebarahona/.nuget/packages/system.windows.extensions/8.0.0/system.windows.extensions.8.0.0.nupkg.sha512",
-    "/Users/jorgebarahona/.nuget/packages/zstdsharp.port/0.8.6/zstdsharp.port.0.8.6.nupkg.sha512"
+    "/Users/jorgebarahona/.nuget/packages/zstdsharp.port/0.8.6/zstdsharp.port.0.8.6.nupkg.sha512",
+    "/Users/jorgebarahona/.nuget/packages/microsoft.netcore.app.ref/8.0.22/microsoft.netcore.app.ref.8.0.22.nupkg.sha512",
+    "/Users/jorgebarahona/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.22/microsoft.aspnetcore.app.ref.8.0.22.nupkg.sha512"
   ],
   "logs": []
 }

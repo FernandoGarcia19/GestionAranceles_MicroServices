@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "JviiemYNEf8=",
+  "dgSpecHash": "bFHu7Xy78uo=",
   "success": true,
   "projectFilePath": "/Users/jorgebarahona/RiderProjects/GestionAranceles_MicroServices/MicroServices/MicroServicioUsuario.API/MicroServicioUser.Dom/MicroServicioUser.Dom.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/jorgebarahona/.nuget/packages/microsoft.netcore.app.ref/8.0.22/microsoft.netcore.app.ref.8.0.22.nupkg.sha512",
+    "/Users/jorgebarahona/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.22/microsoft.aspnetcore.app.ref.8.0.22.nupkg.sha512"
+  ],
   "logs": []
 }

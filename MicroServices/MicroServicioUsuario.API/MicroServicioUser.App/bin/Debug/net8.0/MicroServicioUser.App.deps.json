@@ -280,7 +280,7 @@
       "MicroServicioUser.Dom/1.0.0": {
         "runtime": {
           "MicroServicioUser.Dom.dll": {
-            "assemblyVersion": "1.0.0",
+            "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
@@ -293,7 +293,7 @@
         },
         "runtime": {
           "MicroServicoUser.Inf.dll": {
-            "assemblyVersion": "1.0.0",
+            "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
