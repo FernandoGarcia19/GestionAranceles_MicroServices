@@ -41,6 +41,13 @@ var adapter = new SmtpEmailAdapter(
     }
 );
 
+builder.Services.AddHttpClient("userApi", u => {
+    u.BaseAddress = new Uri("http://localhost:5249");
+}).ConfigurePrimaryHttpMessageHandler(() =>
+    new HttpClientHandler {
+        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+    });
+
 builder.Services.AddScoped<IEmailService, SmtpEmailAdapter>(sp => adapter);
 builder.Services.AddScoped<EmailService>();
 

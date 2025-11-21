@@ -54,21 +54,19 @@ public class Login : ILogin
 
         var user = userResult.Value;
 
-        if (user.FirstLogin != 0)
+        if (user.FirstLogin != 1)
             return (false, "Este usuario ya ha cambiado su contraseña inicial.");
 
         var currentHash = RegistrationHelpers.Md5Hex(currentPassword);
         if (!string.Equals(user.PasswordHash, currentHash, StringComparison.OrdinalIgnoreCase))
             return (false, "La contraseña actual no es correcta.");
 
-        var pwCheck = PasswordValidator.Validate(newPassword);
-        if (!pwCheck.ok)
-            return (false, pwCheck.error);
+   
         var newHash = RegistrationHelpers.Md5Hex(newPassword);
         if (string.Equals(user.PasswordHash, newHash, StringComparison.OrdinalIgnoreCase))
             return (false, "La nueva contraseña debe ser diferente a la actual.");
         user.PasswordHash = newHash;
-        user.FirstLogin = 1;
+        user.FirstLogin = 0;
         user.LastUpdate = DateTime.UtcNow;
 
         var update = await _userService.Update(user);

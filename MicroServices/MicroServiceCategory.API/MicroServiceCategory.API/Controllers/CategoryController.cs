@@ -52,7 +52,6 @@ namespace MicroServiceCategory.API.Controllers
         }
 
         // GET: api/category/search/comida
-
         [HttpGet("search/{property}")]
         public async Task<IActionResult> Search(string property)
         {
@@ -68,13 +67,11 @@ namespace MicroServiceCategory.API.Controllers
         }
 
         // POST: api/category
-
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Category category)
         {
             if (!ModelState.IsValid)
             {
-                // Convert modelstate errors into Result failure format
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => "InvalidInput: " + (string.IsNullOrEmpty(e.ErrorMessage) ? e.Exception?.Message : e.ErrorMessage));
                 return MapFailure(errors);
             }
@@ -149,6 +146,16 @@ namespace MicroServiceCategory.API.Controllers
             {
                 return MapFailure(result.Errors);
             }
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var res = await _categoryService.SelectById(id);
+            if (res.IsSuccess)
+                return Ok(res.Value);
+
+            return MapFailure(res.Errors);
         }
     }
 }

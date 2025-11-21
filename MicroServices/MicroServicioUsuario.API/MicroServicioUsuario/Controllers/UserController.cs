@@ -5,9 +5,16 @@ using MicroServicioUser.Dom.Entities;
 using MicroServicioUser.Dom.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 
 namespace MicroServicioUsuario.API.Controllers
 {
+    public class ChangePasswordDTO
+    {
+        public int UserId { get; set; }
+        public string CurrentPassword { get; set;  }
+        public string NewPassword{ get; set; }
+    }
     public class LoginDTO{
         public string Username { get; set; }
         public string Password { get; set; }
@@ -37,6 +44,16 @@ namespace MicroServicioUsuario.API.Controllers
             this.loginService = loginService;
             this.registrationService = registrationService;
             this.jwtService = jwtService;
+        }
+        
+            
+        [HttpPost("change-password")]
+        public async Task<ActionResult<bool>> ChangePasswordFirstLogin([FromBody] ChangePasswordDTO cpDTO)
+        {
+            var res = await this.loginService.ChangePasswordFirstLogin(cpDTO.UserId, cpDTO.CurrentPassword,
+                cpDTO.NewPassword);
+            
+            return Ok(new {Ok = res.ok, Error = res.error});
         }
         [HttpPost("login")]
         public async Task<ActionResult<bool>> Login([FromBody] LoginDTO loginDTO)
@@ -74,6 +91,24 @@ namespace MicroServicioUsuario.API.Controllers
                 {
                     message = "Error al obtener los usuarios",
                     error = categories.Errors
+                });
+            }
+        }
+
+        [HttpGet("getById/{id}")]
+        public async Task<ActionResult<User>> GetById(int id)
+        {
+            var category = await service.GetById(id);
+            if (category.IsSuccess)
+            {
+                return Ok(category.Value);
+            }
+            else
+            {
+                return StatusCode(500, new
+                {
+                    message = "Error al obtener el usuario",
+                    error = category.Errors
                 });
             }
         }

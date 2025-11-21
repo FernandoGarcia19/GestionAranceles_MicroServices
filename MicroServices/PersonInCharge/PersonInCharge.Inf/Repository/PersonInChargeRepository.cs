@@ -41,7 +41,7 @@ VALUES (@first_name, @last_name, @email, @phone, @ci, @created_by, @created_date
 
             cmd.Parameters.AddWithValue("@created_date", createdDate);
             cmd.Parameters.AddWithValue("@last_update", lastUpdate);
-            cmd.Parameters.AddWithValue("@status", t.Status ? 1 : 0);
+            cmd.Parameters.AddWithValue("@status", 1);
 
             await cmd.ExecuteNonQueryAsync();
 
@@ -85,7 +85,7 @@ WHERE id = @id;";
             cmd.Parameters.AddWithValue("@ci", t.Ci);
             cmd.Parameters.AddWithValue("@created_by", t.CreatedBy);
             cmd.Parameters.AddWithValue("@last_update", t.UpdateDate == default ? DateTime.Now : t.UpdateDate);
-            cmd.Parameters.AddWithValue("@status", t.Status ? 1 : 0);
+            cmd.Parameters.AddWithValue("@status", 1);
             cmd.Parameters.AddWithValue("@id", t.Id);
 
             var affected = await cmd.ExecuteNonQueryAsync();
@@ -135,7 +135,7 @@ WHERE id = @id;";
             await conn.OpenAsync();
 
             using var cmd = conn.CreateCommand();
-            cmd.CommandText = @"SELECT id, first_name, last_name, email, phone, ci, created_by, created_date, last_update, status FROM person_in_charge;";
+            cmd.CommandText = @"SELECT id, first_name, last_name, email, phone, ci, created_by, created_date, last_update, status FROM person_in_charge WHERE status=1;";
 
             using var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())
@@ -230,5 +230,82 @@ WHERE id = @id;";
             // Consider logging here
             return Result<PersonInCharge.Dom.Model.PersonInCharge>.Failure($"DbError: {ex.Message}");
         }
+    }
+    
+    public async Task<Result<IEnumerable<PersonInCharge.Dom.Model.PersonInCharge>>> Search(string property)
+    {
+        const string sql = @"
+        SELECT
+            id,
+            first_name,
+            last_name,
+            email,
+            phone,
+            ci,
+            created_by,
+            created_date,
+            last_update,
+            status
+        FROM person_in_charge
+        WHERE status = 1 AND (
+            (@prop IS NOT NULL AND first_name LIKE CONCAT('%', @prop, '%')) OR
+            (@prop IS NOT NULL AND last_name LIKE CONCAT('%', @prop, '%')) OR
+            (@prop IS NOT NULL AND email LIKE CONCAT('%', @prop, '%')) OR
+            (@prop IS NOT NULL AND phone LIKE CONCAT('%', @prop, '%')) OR
+            (@prop IS NOT NULL AND ci LIKE CONCAT('%', @prop, '%'))
+        )
+        ORDER BY id DESC;";
+    
+        var list = new List<PersonInCharge.Dom.Model.PersonInCharge>();
+    
+        try
+        {
+            using var conn = _connectionDB.GetConnection();
+            await conn.OpenAsync();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = sql;
+    
+            cmd.Parameters.AddWithValue("@prop", string.IsNullOrWhiteSpace(property) ? DBNull.Value : property);
+    
+            using var reader = (MySqlDataReader)await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                list.Add(MapReaderToPersonInCharge(reader));
+            }
+    
+            return Result<IEnumerable<PersonInCharge.Dom.Model.PersonInCharge>>.Success(list);
+        }
+        catch (Exception ex)
+        {
+            return Result<IEnumerable<PersonInCharge.Dom.Model.PersonInCharge>>.Failure(ex.Message);
+        }
+    }
+    
+    private static PersonInCharge.Dom.Model.PersonInCharge MapReaderToPersonInCharge(MySqlDataReader reader)
+    {
+        var idxId = reader.GetOrdinal("id");
+        var idxFirstName = reader.GetOrdinal("first_name");
+        var idxLastName = reader.GetOrdinal("last_name");
+        var idxEmail = reader.GetOrdinal("email");
+        var idxPhone = reader.GetOrdinal("phone");
+        var idxCi = reader.GetOrdinal("ci");
+        var idxCreatedBy = reader.GetOrdinal("created_by");
+        var idxCreatedDate = reader.GetOrdinal("created_date");
+        var idxLastUpdate = reader.GetOrdinal("last_update");
+        var idxStatus = reader.GetOrdinal("status");
+    
+        return new PersonInCharge.Dom.Model.PersonInCharge
+        {
+            Id = reader.IsDBNull(idxId) ? 0 : reader.GetInt32(idxId),
+            FirstName = reader.IsDBNull(idxFirstName) ? string.Empty : reader.GetString(idxFirstName),
+            LastName = reader.IsDBNull(idxLastName) ? string.Empty : reader.GetString(idxLastName),
+            Email = reader.IsDBNull(idxEmail) ? string.Empty : reader.GetString(idxEmail),
+            Phone = reader.IsDBNull(idxPhone) ? string.Empty : reader.GetString(idxPhone),
+            Ci = reader.IsDBNull(idxCi) ? string.Empty : reader.GetString(idxCi),
+            CreatedBy = reader.IsDBNull(idxCreatedBy) ? 0 : reader.GetInt32(idxCreatedBy),
+            CreatedDate = reader.IsDBNull(idxCreatedDate) ? DateTime.MinValue : reader.GetDateTime(idxCreatedDate),
+            UpdateDate = reader.IsDBNull(idxLastUpdate) ? DateTime.MinValue : reader.GetDateTime(idxLastUpdate),
+            Status = reader.IsDBNull(idxStatus) ? false : reader.GetInt32(idxStatus) == 1
+        };
     }
 }

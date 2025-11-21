@@ -23,7 +23,8 @@ namespace MicroServicioUser.App.Services
             t.CreatedDate = DateTime.Now;
             t.LastUpdate = DateTime.Now;
             t.Status = true;
-
+            t.FirstLogin = 1;
+            
             return await userRepository.Insert(t);
         }
 
@@ -33,6 +34,12 @@ namespace MicroServicioUser.App.Services
 
             return await userRepository.Update(t);
         }
+
+        public async Task<Result<User>> GetById(int id)
+        {
+            return await userRepository.GetById(id);
+        }
+
         public async Task<Result<int>> Delete(int id)
         {
             return await userRepository.Delete(id);

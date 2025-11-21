@@ -119,7 +119,7 @@ namespace MicroServicoUser.Inf.Repository
                 CreatedDate = System.DateTime.UtcNow,
                 LastUpdate = System.DateTime.UtcNow,
                 Status = true,
-                FirstLogin = 0
+                FirstLogin = 1
             };
 
             var result = await _userRepository.Insert(user);
