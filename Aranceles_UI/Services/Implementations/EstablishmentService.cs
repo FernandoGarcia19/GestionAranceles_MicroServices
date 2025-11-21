@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Services.Interfaces;
 
@@ -6,14 +7,19 @@ namespace Aranceles_UI.Services.Implementations;
 public class EstablishmentService : IEstablishmentService
 {
     private readonly HttpClient _establishmentClient;
+    private readonly ClaimsPrincipal User;
 
-    public EstablishmentService(IHttpClientFactory factory)
+    public EstablishmentService(IHttpClientFactory factory, IHttpContextAccessor accessor)
     {
         _establishmentClient = factory.CreateClient("establishmentApi");
+        User = accessor.HttpContext.User;
     }
 
     public async Task<List<EstablishmentDto>> GetAllEstablishmentsAsync()
     {
+        var token = User.FindFirst("access_token")?.Value;
+        _establishmentClient.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
         return await _establishmentClient.GetFromJsonAsync<List<EstablishmentDto>>("api/Establishment") ?? new();
     }
 

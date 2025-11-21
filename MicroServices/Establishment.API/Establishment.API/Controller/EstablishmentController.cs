@@ -1,6 +1,7 @@
 using Establishment.App.Service;
 using Microsoft.AspNetCore.Mvc;
 using Establishment.Dom.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Establishment.API.Controller;
 [Route("api/[controller]")]
@@ -14,7 +15,7 @@ public class EstablishmentController: ControllerBase
         _service = service;
     }
 
-    [HttpPost("insert")]
+        [HttpPost("insert")]
     public async Task<IActionResult> Insert([FromBody] Dom.Model.Establishment t)
     {
         var res = await _service.Insert(t);
