@@ -57,7 +57,7 @@ public class LoginModel : PageModel
             Password =  Input.Password
         };
     
-        var result = userClient.PostAsJsonAsync<LoginDTO>("api/user/login", dto).Result;
+        var result = userClient.PostAsJsonAsync<LoginDTO>("api/User/login", dto).Result;
         LoginResponseDTO response = await result.Content.ReadFromJsonAsync<LoginResponseDTO>();
         if (!response.Ok) 
         { 

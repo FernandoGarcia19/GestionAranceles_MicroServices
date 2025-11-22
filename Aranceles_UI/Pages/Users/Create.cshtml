@@ -21,8 +21,8 @@
     <hr class="border-2 opacity-25">
 </div>
 
-@* @if (Model.GeneratedUsername != null) *@
-@* { *@
+@if (!String.IsNullOrEmpty(Model.GeneratedUsername))
+{
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
             <div class="alert alert-success shadow-sm border-0" role="alert">

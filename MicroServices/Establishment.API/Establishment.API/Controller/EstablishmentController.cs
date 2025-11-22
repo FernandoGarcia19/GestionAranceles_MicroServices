@@ -1,6 +1,7 @@
 using Establishment.App.Service;
 using Microsoft.AspNetCore.Mvc;
 using Establishment.Dom.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Establishment.API.Controller;
 [Route("api/[controller]")]
@@ -14,7 +15,7 @@ public class EstablishmentController: ControllerBase
         _service = service;
     }
 
-    [HttpPost("insert")]
+        [HttpPost("insert")]
     public async Task<IActionResult> Insert([FromBody] Dom.Model.Establishment t)
     {
         var res = await _service.Insert(t);
@@ -68,6 +69,23 @@ public class EstablishmentController: ControllerBase
         return MapFailure(res.Errors);
     }
 
+    [HttpGet("search/{property}")]
+    public async Task<ActionResult<List<Dom.Model.Establishment>>> Search(string property)
+    {
+        var res = await _service.Search(property);
+        if (res.IsSuccess)
+        {
+            return Ok(res.Value);
+        }
+
+        return StatusCode(500, new
+        {
+            message = "Error al buscar establecimientos",
+            error = res.Errors
+        });
+    }
+
+    
     private IActionResult MapFailure(IEnumerable<string> errors)
     {
         var errorList = errors.ToList();

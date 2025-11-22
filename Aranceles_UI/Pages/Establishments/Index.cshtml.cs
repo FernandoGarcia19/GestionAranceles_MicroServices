@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Security;
+using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -8,7 +9,7 @@ namespace Aranceles_UI.Pages.Establishments
 {
     public class IndexModel : PageModel
     {
-        private readonly HttpClient _establishmentClient;
+        private readonly IEstablishmentService _establishmentService;
         private readonly IdProtector _idProtector;
 
         [BindProperty(SupportsGet = true)]
@@ -16,23 +17,20 @@ namespace Aranceles_UI.Pages.Establishments
 
         public List<EstablishmentDto> Establishments { get; set; } = new();
 
-        public IndexModel(IHttpClientFactory factory, IdProtector idProtector)
+        public IndexModel(IEstablishmentService establishmentService, IdProtector idProtector)
         {
-            _establishmentClient = factory.CreateClient("establishmentApi");
+            _establishmentService = establishmentService;
             _idProtector = idProtector;
         }
 
         public async Task OnGet()
         {
-            Establishments = await _establishmentClient.GetFromJsonAsync<List<EstablishmentDto>>("api/Establishment") ?? new();
+            Establishments = await _establishmentService.GetAllEstablishmentsAsync();
         }
 
         public async Task OnPostSearch()
         {
-            if (!string.IsNullOrWhiteSpace(SearchTerm))
-                Establishments = await _establishmentClient.GetFromJsonAsync<List<EstablishmentDto>>($"api/Establishment/search/{SearchTerm}") ?? new();
-            else
-                Establishments = await _establishmentClient.GetFromJsonAsync<List<EstablishmentDto>>("api/Establishment") ?? new();
+            Establishments = await _establishmentService.SearchEstablishmentsAsync(SearchTerm);
         }
 
         public string Protect(int id) => _idProtector.ProtectInt(id);

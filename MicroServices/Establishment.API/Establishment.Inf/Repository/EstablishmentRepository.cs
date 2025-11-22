@@ -5,6 +5,7 @@ using Establishment.Inf.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Org.BouncyCastle.Crypto.Engines;
 
 namespace Establishment.Inf.Repository;
 
@@ -195,5 +196,57 @@ public class EstablishmentRepository: IRepository
         est.Status = !reader.IsDBNull(reader.GetOrdinal("status")) && reader.GetInt32("status") == 1;
 
         return est;
+    }
+    
+    public async Task<Result<IEnumerable<Dom.Model.Establishment>>> Search(string property)
+    {
+        const string sql = @"
+        SELECT
+            id,
+            name,
+            tax_id,
+            sanitary_license,
+            sanitary_license_expiry,
+            address,
+            phone,
+            email,
+            establishment_type,
+            created_by,
+            created_date,
+            last_update,
+            status
+        FROM establishment
+        WHERE status = 1 AND (
+            (@prop IS NOT NULL AND name LIKE CONCAT('%', @prop, '%')) OR
+            (@prop IS NOT NULL AND tax_id LIKE CONCAT('%', @prop, '%')) OR
+            (@prop IS NOT NULL AND address LIKE CONCAT('%', @prop, '%')) OR
+            (@prop IS NOT NULL AND phone LIKE CONCAT('%', @prop, '%')) OR
+            (@prop IS NOT NULL AND email LIKE CONCAT('%', @prop, '%')) OR
+            (@prop IS NOT NULL AND establishment_type LIKE CONCAT('%', @prop, '%'))
+        )
+        ORDER BY id DESC;";
+
+        var list = new List<Dom.Model.Establishment>();
+
+        try
+        {
+            await using var conn = _connectionDB.GetConnection();
+            await conn.OpenAsync();
+            await using var cmd = new MySqlCommand(sql, conn);
+
+            cmd.Parameters.AddWithValue("@prop", string.IsNullOrWhiteSpace(property) ? DBNull.Value : property);
+
+            await using var reader = (MySqlDataReader)await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                list.Add(MapReaderToEstablishment(reader));
+            }
+
+            return Result<IEnumerable<Dom.Model.Establishment>>.Success(list);
+        }
+        catch (Exception ex)
+        {
+            return Result<IEnumerable<Dom.Model.Establishment>>.Failure(ex.Message);
+        }
     }
 }
