@@ -90,7 +90,7 @@ public class LoginModel : PageModel
         if (user.FirstLogin == 1)
         {
             System.Console.WriteLine("Redirecting to ChangePassword");
-            return RedirectToPage("/ChangePassword");
+            return RedirectToPage("/ChangePassword", new { ForceFirstLogin = true });
         }
 
         if (!string.IsNullOrWhiteSpace(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))

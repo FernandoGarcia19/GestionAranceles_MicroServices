@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Aranceles_UI.Security;
 
 namespace Aranceles_UI.Pages.PersonInCharges
 {
+    [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
         private readonly IPersonInChargeService _personService;

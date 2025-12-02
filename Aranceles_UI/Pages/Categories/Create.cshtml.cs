@@ -2,9 +2,11 @@ using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aranceles_UI.Pages.Categories;
 
+[Authorize(Roles = "Admin")]
 public class CreateModel : PageModel
 {
     private readonly ICategoryService _categoryService;

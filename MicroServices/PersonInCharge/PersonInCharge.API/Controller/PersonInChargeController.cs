@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using PersonInCharge.App.Service;
 using PersonInCharge.Dom.Model;
 
@@ -6,6 +7,7 @@ namespace PersonInCharge.API.Controller;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize] // Require authentication for all endpoints
 public class PersonInChargeController: ControllerBase
 {
     private readonly PersonInChargeService _service;

@@ -4,11 +4,13 @@ using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 
 
 namespace Aranceles_UI.Pages.Users
 {
+    [Authorize(Roles = "Admin")]
     
     public class RegisterDTO{
         public string FirstName { get; set; }

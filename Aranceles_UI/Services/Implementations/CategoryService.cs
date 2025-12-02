@@ -3,18 +3,16 @@ using Aranceles_UI.Services.Interfaces;
 
 namespace Aranceles_UI.Services.Implementations;
 
-public class CategoryService : ICategoryService
+public class CategoryService : BaseHttpService, ICategoryService
 {
-    private readonly HttpClient _categoryClient;
-
-    public CategoryService(IHttpClientFactory factory)
+    public CategoryService(IHttpClientFactory factory, IHttpContextAccessor httpContextAccessor) 
+        : base(factory.CreateClient("categoryApi"), httpContextAccessor)
     {
-        _categoryClient = factory.CreateClient("categoryApi");
     }
 
     public async Task<List<CategoryDto>> GetAllCategoriesAsync()
     {
-        return await _categoryClient.GetFromJsonAsync<List<CategoryDto>>("/api/Category") ?? new();
+        return await GetFromJsonAuthenticatedAsync<List<CategoryDto>>("/api/Category") ?? new();
     }
 
     public async Task<List<CategoryDto>> SearchCategoriesAsync(string searchTerm)
@@ -25,29 +23,29 @@ public class CategoryService : ICategoryService
         }
 
         var term = Uri.EscapeDataString(searchTerm.Trim());
-        return await _categoryClient.GetFromJsonAsync<List<CategoryDto>>($"/api/Category/search/{term}") ?? new();
+        return await GetFromJsonAuthenticatedAsync<List<CategoryDto>>($"/api/Category/search/{term}") ?? new();
     }
 
     public async Task<CategoryDto?> GetCategoryByIdAsync(int id)
     {
-        return await _categoryClient.GetFromJsonAsync<CategoryDto>($"api/Category/{id}");
+        return await GetFromJsonAuthenticatedAsync<CategoryDto>($"api/Category/{id}");
     }
 
     public async Task<bool> CreateCategoryAsync(CategoryDto category)
     {
-        var result = await _categoryClient.PostAsJsonAsync("api/Category", category);
+        var result = await PostAsJsonAuthenticatedAsync("api/Category", category);
         return result.IsSuccessStatusCode;
     }
 
     public async Task<bool> UpdateCategoryAsync(CategoryDto category)
     {
-        var result = await _categoryClient.PutAsJsonAsync($"api/Category/{category.Id}", category);
+        var result = await PutAsJsonAuthenticatedAsync($"api/Category/{category.Id}", category);
         return result.IsSuccessStatusCode;
     }
 
     public async Task<bool> DeleteCategoryAsync(int id)
     {
-        var result = await _categoryClient.DeleteAsync($"api/Category/{id}");
+        var result = await DeleteAuthenticatedAsync($"api/Category/{id}");
         return result.IsSuccessStatusCode;
     }
 }

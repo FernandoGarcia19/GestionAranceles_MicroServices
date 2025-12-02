@@ -4,33 +4,31 @@ using Aranceles_UI.Services.Interfaces;
 
 namespace Aranceles_UI.Services.Implementations;
 
-public class UserService : IUserService
+public class UserService : BaseHttpService, IUserService
 {
-    private readonly HttpClient _userClient;
-
-    public UserService(IHttpClientFactory factory)
+    public UserService(IHttpClientFactory factory, IHttpContextAccessor httpContextAccessor)
+        : base(factory.CreateClient("userApi"), httpContextAccessor)
     {
-        _userClient = factory.CreateClient("userApi");
     }
 
     public async Task<List<UserDto>> GetAllUsersAsync()
     {
-        return await _userClient.GetFromJsonAsync<List<UserDto>>("api/User/select") ?? new();
+        return await GetFromJsonAuthenticatedAsync<List<UserDto>>("api/User/select") ?? new();
     }
 
     public async Task<List<UserDto>> SearchUsersAsync(string searchTerm)
     {
         if (string.IsNullOrWhiteSpace(searchTerm))
         {
-            return await _userClient.GetFromJsonAsync<List<UserDto>>("api/User") ?? new();
+            return await GetFromJsonAuthenticatedAsync<List<UserDto>>("api/User") ?? new();
         }
 
-        return await _userClient.GetFromJsonAsync<List<UserDto>>($"api/User/search/{searchTerm}") ?? new();
+        return await GetFromJsonAuthenticatedAsync<List<UserDto>>($"api/User/search/{searchTerm}") ?? new();
     }
 
     public async Task<UserDto?> GetUserByIdAsync(int id)
     {
-        return await _userClient.GetFromJsonAsync<UserDto>($"api/User/getById/{id}");
+        return await GetFromJsonAuthenticatedAsync<UserDto>($"api/User/getById/{id}");
     }
 
     public async Task<bool> CreateUserAsync(RegisterDTO registerDto, string? secondName, string? secondLastName)
@@ -50,19 +48,19 @@ public class UserService : IUserService
         registerDto.FirstName = fullFirstName;
         registerDto.LastName = fullLastName;
 
-        var result = await _userClient.PostAsJsonAsync("api/User/register", registerDto);
+        var result = await PostAsJsonAuthenticatedAsync("api/User/register", registerDto);
         return result.IsSuccessStatusCode;
     }
 
     public async Task<bool> UpdateUserAsync(UserDto user)
     {
-        var result = await _userClient.PutAsJsonAsync("api/User/update", user);
+        var result = await PutAsJsonAuthenticatedAsync("api/User/update", user);
         return result.IsSuccessStatusCode;
     }
 
     public async Task<bool> DeleteUserAsync(int id)
     {
-        var result = await _userClient.DeleteAsync($"api/User/delete/{id}");
+        var result = await DeleteAuthenticatedAsync($"api/User/delete/{id}");
         return result.IsSuccessStatusCode;
     }
 }
