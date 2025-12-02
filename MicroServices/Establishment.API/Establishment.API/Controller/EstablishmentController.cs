@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Establishment.API.Controller;
 [Route("api/[controller]")]
 [ApiController]
+[Authorize] // Require authentication for all endpoints
 public class EstablishmentController: ControllerBase
 {
     private readonly EstablishmentService _service;

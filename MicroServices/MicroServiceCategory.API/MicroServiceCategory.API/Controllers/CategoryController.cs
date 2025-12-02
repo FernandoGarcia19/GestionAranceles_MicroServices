@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using MicroServiceCategory.Application.Services;
 using MicroServiceCategory.Domain.Entities;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace MicroServiceCategory.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize] // Require authentication for all endpoints
     public class CategoryController : ControllerBase
     {
         private readonly CategoryService _categoryService;

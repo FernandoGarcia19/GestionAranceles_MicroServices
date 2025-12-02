@@ -5,9 +5,11 @@ using System.ComponentModel.DataAnnotations;
 using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Security;
 using Aranceles_UI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aranceles_UI.Pages.PersonInCharges
 {
+    [Authorize(Roles = "Admin")]
     public class CreateModel : PageModel
     {
         private readonly IPersonInChargeService _personService;

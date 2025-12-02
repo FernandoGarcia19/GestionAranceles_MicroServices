@@ -1,9 +1,12 @@
 ﻿﻿@{
     var title = ViewData["Title"] ?? "Sistema de Pagos de Aranceles";
     bool isAuthenticated = User?.Identity?.IsAuthenticated ?? false;
-    bool isAdmin = User?.IsInRole("Admin") ?? false;
-    bool isContador = User?.IsInRole("Contador") ?? false;
+    bool isAdmin = isAuthenticated && (User?.IsInRole("Admin") ?? false);
+    bool isContador = isAuthenticated && (User?.IsInRole("Contador") ?? false);
     bool hideSidebar = ViewData["HideSidebar"] as bool? ?? false;
+    
+    // Debug info
+    System.Console.WriteLine($"Layout Debug - isAuthenticated: {isAuthenticated}, hideSidebar: {hideSidebar}, Title: {title}");
 }
 
 <!DOCTYPE html>
@@ -11,6 +14,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>@title</title>
 
     <!-- Bootstrap 5 -->
@@ -77,61 +83,70 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link" asp-page="/ChangePassword">
+                                        <i class="bi bi-shield-lock"></i> Cambiar Contraseña
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link" asp-page="/Logout">
                                         <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
                                     </a>
                                 </li>
                             }
 
-                            <li class="nav-item mt-3">
-                                <span class="text-muted small ps-3">Gestión</span>
-                            </li>
-
-                            @if (isAdmin)
+                            @* Only show CRUD navigation if user is authenticated *@
+                            @if (isAuthenticated)
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-page="/Establishments/Index">
-                                        <i class="bi bi-building"></i> Establecimientos
-                                    </a>
+                                <li class="nav-item mt-3">
+                                    <span class="text-muted small ps-3">Gestión</span>
                                 </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-page="/PersonInCharges/Index">
-                                        <i class="bi bi-person-badge-fill"></i> Encargados
-                                    </a>
-                                </li>
+                                @if (isAdmin)
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Establishments/Index">
+                                            <i class="bi bi-building"></i> Establecimientos
+                                        </a>
+                                    </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-page="/Categories/Index">
-                                        <i class="bi bi-tags-fill"></i> Categorías
-                                    </a>
-                                </li>
-                                
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-page="/Fees/Index">
-                                        <i class="bi bi-cash-stack"></i> Aranceles
-                                    </a>
-                                </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/PersonInCharges/Index">
+                                            <i class="bi bi-person-badge-fill"></i> Encargados
+                                        </a>
+                                    </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-page="/Users/Index">
-                                        <i class="bi bi-people-fill"></i> Usuarios
-                                    </a>
-                                </li>
-                            }
-                            else if (isContador)
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-page="/Establishments/Index">
-                                        <i class="bi bi-building"></i> Establecimientos
-                                    </a>
-                                </li>
-                                
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-page="/Fees/Index">
-                                        <i class="bi bi-cash-stack"></i> Aranceles
-                                    </a>
-                                </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Categories/Index">
+                                            <i class="bi bi-tags-fill"></i> Categorías
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Fees/Index">
+                                            <i class="bi bi-cash-stack"></i> Aranceles
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Users/Index">
+                                            <i class="bi bi-people-fill"></i> Usuarios
+                                        </a>
+                                    </li>
+                                }
+                                else if (isContador)
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Establishments/Index">
+                                            <i class="bi bi-building"></i> Establecimientos
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Fees/Index">
+                                            <i class="bi bi-cash-stack"></i> Aranceles
+                                        </a>
+                                    </li>
+                                }
                             }
                             
 

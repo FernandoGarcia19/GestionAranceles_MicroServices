@@ -3,11 +3,12 @@ using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Security;
 using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aranceles_UI.Pages.Categories
 {
+    [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
         private readonly ICategoryService _categoryService;

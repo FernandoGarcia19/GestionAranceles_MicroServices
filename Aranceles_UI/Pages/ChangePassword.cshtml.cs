@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using Aranceles_UI.Domain.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Aranceles_UI.Pages
@@ -18,6 +19,8 @@ namespace Aranceles_UI.Pages
         public string CurrentPassword { get; set;  }
         public string NewPassword{ get; set; }
     }
+    
+    [Authorize]
     public class ChangePasswordModel : PageModel
     {
         private readonly HttpClient _authService;
@@ -44,59 +47,71 @@ namespace Aranceles_UI.Pages
         public string ConfirmPassword { get; set; } = string.Empty;
         public bool IsFirstLogin { get; private set; }
 
+        [BindProperty(SupportsGet = true)]
+        public bool? ForceFirstLogin { get; set; }
+
         public async Task<IActionResult> OnGet()
         {
-            var name = User.Identity.Name;
-            var token = User.FindFirst("access_token")?.Value;
             var userId = User.FindFirst(JwtRegisteredClaimNames.NameId)?.Value;
             if (userId == null) return RedirectToPage("/Login");
 
-            var user =  await _authService.GetFromJsonAsync<UserDto>($"api/User/getById/{userId}");
+            var user = await _authService.GetFromJsonAsync<UserDto>($"api/User/getById/{userId}");
             if (user == null) return RedirectToPage("/Login");
             
+            IsFirstLogin = ForceFirstLogin ?? (user.FirstLogin == 1);
             
-            IsFirstLogin = (user.FirstLogin == 0);
-
             ViewData["HideSidebar"] = IsFirstLogin;
+
+            
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var name = User.Identity.Name;
-            var token = User.FindFirst("access_token")?.Value;
             var userId = User.FindFirst(JwtRegisteredClaimNames.NameId)?.Value;
             if (userId == null) return RedirectToPage("/Login");
 
-            var user =  await _authService.GetFromJsonAsync<UserDto>($"api/User/getById/{userId}");
+            var user = await _authService.GetFromJsonAsync<UserDto>($"api/User/getById/{userId}");
             if (user == null) return RedirectToPage("/Login");
 
-            IsFirstLogin = (user.FirstLogin == 0);
+            IsFirstLogin = ForceFirstLogin ?? (user.FirstLogin == 1);
+            
             ViewData["HideSidebar"] = IsFirstLogin;
 
-            
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            (bool ok, string? error) result;
-
-            if (user.FirstLogin == 1)
+            try
             {
-                var cpdto = new ChangePasswordDTO()
+                var changePasswordDto = new ChangePasswordDTO()
                 {
                     UserId = int.Parse(userId),
                     CurrentPassword = CurrentPassword,
                     NewPassword = NewPassword
                 };
-                var res = await _authService.PostAsJsonAsync<ChangePasswordDTO>("api/User/change-password", cpdto);
-                var q = await res.Content.ReadFromJsonAsync<ChangePasswordRespondesDTO>();
-                RedirectToPage("/Index");
+                
+                var response = await _authService.PostAsJsonAsync("api/User/change-password", changePasswordDto);
+                var result = await response.Content.ReadFromJsonAsync<ChangePasswordRespondesDTO>();
+                
+                if (result?.Ok == true)
+                {
+                    TempData["SuccessMessage"] = "Contraseña cambiada exitosamente.";
+                    return RedirectToPage("/Index");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, result?.Error ?? "Error al cambiar la contraseña.");
+                    return Page();
+                }
             }
-            
-            return RedirectToPage("/Index");
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Error al procesar la solicitud.");
+                return Page();
+            }
         }
 
     }

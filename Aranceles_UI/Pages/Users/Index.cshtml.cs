@@ -4,9 +4,11 @@ using Aranceles_UI.Security;
 using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aranceles_UI.Pages.Users
 {
+    [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
         private readonly IUserService _userService;

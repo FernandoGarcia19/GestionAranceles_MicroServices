@@ -5,9 +5,11 @@ using Aranceles_UI.Security;
 using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aranceles_UI.Pages.Establishments
 {
+    [Authorize(Roles = "Admin,Contador")]
     public class EditModel : PageModel
     {
         private readonly IEstablishmentService _establishmentService;

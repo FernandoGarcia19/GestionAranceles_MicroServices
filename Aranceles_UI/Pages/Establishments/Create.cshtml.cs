@@ -4,9 +4,11 @@ using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aranceles_UI.Pages.Establishments
 {
+    [Authorize(Roles = "Admin,Contador")]
     public class CreateModel : PageModel
     {
         private readonly IEstablishmentService _establishmentService;
