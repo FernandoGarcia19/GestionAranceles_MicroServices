@@ -39,12 +39,7 @@
                         </label>
                         <input asp-for="Person.FirstName"
                                class="form-control"
-                               placeholder="Ej: Juan"
-                               required
-                               minlength="3"
-                               maxlength="50"
-                               pattern="^(?!\d+$).+"
-                               title="El nombre debe contener letras y no puede ser solo números." />
+                               placeholder="Ej: Juan"/>
                         <span asp-validation-for="Person.FirstName"
                               class="text-danger d-block mt-2 fw-semibold"
                               style="font-size: 0.9rem;"></span>
@@ -69,12 +64,7 @@
                         </label>
                         <input asp-for="Person.LastName"
                                class="form-control"
-                               placeholder="Ej: Pérez"
-                               required
-                               minlength="3"
-                               maxlength="50"
-                               pattern="^(?!\d+$).+"
-                               title="El apellido debe contener letras y no puede ser solo números." />
+                               placeholder="Ej: Pérez"/>
                         <span asp-validation-for="Person.LastName"
                               class="text-danger d-block mt-2 fw-semibold"
                               style="font-size: 0.9rem;"></span>
@@ -86,8 +76,7 @@
                         </label>
                         <input asp-for="SecondLastName"
                                class="form-control"
-                               placeholder="Ej: García"
-                               maxlength="50" />
+                               placeholder="Ej: García"/>
                         <span asp-validation-for="SecondLastName"
                               class="text-danger d-block mt-2 fw-semibold"
                               style="font-size: 0.9rem;"></span>
@@ -100,8 +89,7 @@
                         <input asp-for="Person.Email"
                                type="email"
                                class="form-control"
-                               placeholder="correo@ejemplo.com"
-                               maxlength="150" />
+                               placeholder="correo@ejemplo.com"/>
                         <span asp-validation-for="Person.Email"
                               class="text-danger d-block mt-2 fw-semibold"
                               style="font-size: 0.9rem;"></span>
@@ -113,10 +101,7 @@
                         </label>
                         <input asp-for="Person.Phone"
                                class="form-control"
-                               placeholder="Ej. 7000-0000"
-                               maxlength="20"
-                               pattern="^[0-9()+\\-\\s]+$"
-                               title="Teléfono inválido." />
+                               placeholder="Ej. 7000-0000"/>
                         <span asp-validation-for="Person.Phone"
                               class="text-danger d-block mt-2 fw-semibold"
                               style="font-size: 0.9rem;"></span>
@@ -128,12 +113,7 @@
                         </label>
                         <input asp-for="Person.Ci"
                                class="form-control"
-                               placeholder="Documento de identidad"
-                               required
-                               minlength="5"
-                               maxlength="50"
-                               pattern="^[A-Za-z0-9]+$"
-                               title="CI inválido. Sólo letras y números." />
+                               placeholder="Documento de identidad"/>
                         <span asp-validation-for="Person.Ci"
                               class="text-danger d-block mt-2 fw-semibold"
                               style="font-size: 0.9rem;"></span>
