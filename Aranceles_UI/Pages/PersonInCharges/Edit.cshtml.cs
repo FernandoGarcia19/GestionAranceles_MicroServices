@@ -1,25 +1,27 @@
 using System;
 using System.Linq;
 using Aranceles_UI.Domain.Dtos;
+using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
+using Microsoft.AspNetCore.Authorization;
 using Aranceles_UI.Security;
 
 
 namespace Aranceles_UI.Pages.PersonInCharges
 {
+    [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
     {
-        private readonly HttpClient personClient;
+        private readonly IPersonInChargeService _personService;
         private readonly IdProtector _idProtector;
         
         [BindProperty]
         public PersonInChargeDto PersonDto { get; set; } = new();
 
-        public EditModel(IHttpClientFactory factory, IdProtector idProtector)
+        public EditModel(IPersonInChargeService personService, IdProtector idProtector)
         {
-            personClient = factory.CreateClient("personInChargeApi");
+            _personService = personService;
             _idProtector = idProtector;
         }
 
@@ -35,7 +37,7 @@ namespace Aranceles_UI.Pages.PersonInCharges
                 return RedirectToPage("../Error");
             }
 
-            var result = await personClient.GetFromJsonAsync<PersonInChargeDto>($"api/PersonInCharge/{realId}");
+            var result = await _personService.GetPersonInChargeByIdAsync(realId);
             if (result == null)
             {
                 return RedirectToPage("Index");
@@ -53,8 +55,8 @@ namespace Aranceles_UI.Pages.PersonInCharges
                 return Page();
             }
             
-            var result = await personClient.PutAsJsonAsync($"api/PersonInCharge", PersonDto);
-            if (result.IsSuccessStatusCode)
+            var success = await _personService.UpdatePersonInChargeAsync(PersonDto, null, null);
+            if (success)
             {
                 return RedirectToPage("./Index");
             }

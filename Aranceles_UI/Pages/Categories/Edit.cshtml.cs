@@ -2,25 +2,29 @@ using System;
 using System.Linq;
 using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Security;
+using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Aranceles_UI.Pages.Categories
 {
+    [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
     {
-        private readonly HttpClient categoryClient;
+        private readonly ICategoryService _categoryService;
         private readonly IdProtector _idProtector;
+        
+        [BindProperty]
         public CategoryDto Category { get; set; }
-        public EditModel(IHttpClientFactory factory, IdProtector idProtector)
+        
+        public EditModel(ICategoryService categoryService, IdProtector idProtector)
         {
-            categoryClient = factory.CreateClient("categoryApi");
+            _categoryService = categoryService;
             _idProtector = idProtector;
         }
 
-        [BindProperty]
-        public CategoryDto CategoryForm { get; set; } = new();
 
         public async Task<IActionResult> OnGet(string id)
         {
@@ -34,7 +38,7 @@ namespace Aranceles_UI.Pages.Categories
                 return RedirectToPage("../Error");
             }
 
-            Category = await categoryClient.GetFromJsonAsync<CategoryDto>($"api/Category/{realId}");
+            Category = await _categoryService.GetCategoryByIdAsync(realId);
             
             if (Category == null)
                 return RedirectToPage("./Index");
@@ -50,8 +54,8 @@ namespace Aranceles_UI.Pages.Categories
                 return Page();
             }
 
-            var result = await categoryClient.PutAsJsonAsync($"api/Category/{Category.Id}", Category);
-            if (result.IsSuccessStatusCode)
+            var success = await _categoryService.UpdateCategoryAsync(Category);
+            if (success)
             {
                 return RedirectToPage("./Index");
             }

@@ -5,6 +5,7 @@ using MicroServicioUser.Dom.Entities;
 using MicroServicioUser.Dom.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Org.BouncyCastle.Bcpg.OpenPgp;
 
 namespace MicroServicioUsuario.API.Controllers
@@ -30,6 +31,7 @@ namespace MicroServicioUsuario.API.Controllers
     
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize] // Require authentication for all endpoints by default
     public class UserController : ControllerBase
     {
         private readonly IRepositoryService<User> service;
@@ -48,6 +50,7 @@ namespace MicroServicioUsuario.API.Controllers
         
             
         [HttpPost("change-password")]
+        [AllowAnonymous]
         public async Task<ActionResult<bool>> ChangePasswordFirstLogin([FromBody] ChangePasswordDTO cpDTO)
         {
             var res = await this.loginService.ChangePasswordFirstLogin(cpDTO.UserId, cpDTO.CurrentPassword,
@@ -56,6 +59,7 @@ namespace MicroServicioUsuario.API.Controllers
             return Ok(new {Ok = res.ok, Error = res.error});
         }
         [HttpPost("login")]
+        [AllowAnonymous] // Allow anonymous access for login
         public async Task<ActionResult<bool>> Login([FromBody] LoginDTO loginDTO)
         {
             
@@ -71,6 +75,7 @@ namespace MicroServicioUsuario.API.Controllers
         }
         
         [HttpPost("register")]
+        [AllowAnonymous] 
         public async Task<ActionResult<bool>> Register([FromBody] RegisterDTO registerDto)
         {
             var obj = await this.registrationService.RegisterUser(registerDto.FirstName, registerDto.LastName, registerDto.Email, registerDto.Role, registerDto.CreatedBy);
@@ -96,6 +101,7 @@ namespace MicroServicioUsuario.API.Controllers
         }
 
         [HttpGet("getById/{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<User>> GetById(int id)
         {
             var category = await service.GetById(id);

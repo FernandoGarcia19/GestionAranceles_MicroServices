@@ -79,6 +79,11 @@ public class PersonInChargeService
 
         return Result<int>.Success(repoRes.Value);
     }
+    
+    public async Task<Result<IEnumerable<Dom.Model.PersonInCharge>>> Search(string property)
+    {
+        return await _repository.Search(property);
+    }
 
     private List<string> ValidateModel(Dom.Model.PersonInCharge model)
     {

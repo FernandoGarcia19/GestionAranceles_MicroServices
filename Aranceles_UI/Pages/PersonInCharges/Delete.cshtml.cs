@@ -1,25 +1,27 @@
 using System.Linq;
 using Aranceles_UI.Domain.Dtos;
+using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
+using Microsoft.AspNetCore.Authorization;
 using Aranceles_UI.Security;
 
 
 
 namespace Aranceles_UI.Pages.PersonInCharges
 {
+    [Authorize(Roles = "Admin")]
     public class DeleteModel : PageModel
     {
-        private readonly HttpClient personClient;
+        private readonly IPersonInChargeService _personService;
         private readonly IdProtector _idProtector;
 
         [BindProperty]
         public PersonInChargeDto Person { get; set; } = new();
 
-        public DeleteModel(IHttpClientFactory factory, IdProtector idProtector)
+        public DeleteModel(IPersonInChargeService personService, IdProtector idProtector)
         {
-            personClient= factory.CreateClient("personInChargeApi");
+            _personService = personService;
             _idProtector = idProtector;
         }
 
@@ -35,7 +37,7 @@ namespace Aranceles_UI.Pages.PersonInCharges
                 return RedirectToPage("./Index");
             }
 
-            var result = await personClient.GetFromJsonAsync<PersonInChargeDto>($"api/PersonInCharge/{realId}");
+            var result = await _personService.GetPersonInChargeByIdAsync(realId);
             if (result == null)
             {
                 return NotFound();
@@ -44,11 +46,11 @@ namespace Aranceles_UI.Pages.PersonInCharges
             Person = result;
             return Page();
         }
+        
         public async Task<IActionResult> OnPost()
         {
-            var result = await personClient.DeleteAsync($"api/PersonInCharge/{Person.Id}");
-            Console.WriteLine(result);
-            if (result.IsSuccessStatusCode)
+            var success = await _personService.DeletePersonInChargeAsync(Person.Id);
+            if (success)
             {
                 return RedirectToPage("./Index");
             }

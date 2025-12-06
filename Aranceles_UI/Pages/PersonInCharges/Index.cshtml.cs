@@ -1,36 +1,41 @@
 using System;
 using System.Collections.Generic;
 using Aranceles_UI.Domain.Dtos;
+using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Aranceles_UI.Security;
 
 namespace Aranceles_UI.Pages.PersonInCharges
 {
+    [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
-        private readonly HttpClient personClient;
+        private readonly IPersonInChargeService _personService;
         private readonly IdProtector _idProtector;
 
         [BindProperty]
         public string SearchTerm { get; set; }
         public List<PersonInChargeDto> Persons { get; set; } = new();
-        public IndexModel(IHttpClientFactory factory, IdProtector idProtector)
+        
+        public IndexModel(IPersonInChargeService personService, IdProtector idProtector)
         {
-            personClient = factory.CreateClient("personInChargeApi");
+            _personService = personService;
             _idProtector = idProtector;
         }
 
         public async Task OnGet()
         {
-            Persons = await personClient.GetFromJsonAsync<List<PersonInChargeDto>>("api/PersonInCharge/");
+            Persons = await _personService.GetAllPersonsInChargeAsync();
         }
 
-        public void OnPost()
+        public async Task OnPostAsync()
         {
+            Persons = await _personService.SearchPersonsInChargeAsync(SearchTerm);
         }
+
 
         public string Protect(int id) => _idProtector.ProtectInt(id);
     }
