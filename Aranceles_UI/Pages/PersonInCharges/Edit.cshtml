@@ -95,6 +95,18 @@
                               class="text-danger d-block mt-2 fw-semibold"
                               style="font-size: 0.9rem;"></span>
                     </div>
+                    <div class="col-md-6">
+                        <label asp-for="Complemento" class="form-label fw-semibold">
+                            <i class="bi bi-card-text text-primary me-1"></i>Complemento
+                        </label>
+                        <input asp-for="Complemento"
+                               class="form-control"
+                               placeholder="Ej: CB"
+                               maxlength="2"/>
+                        <span asp-validation-for="Complemento"
+                              class="text-danger d-block mt-2 fw-semibold"
+                              style="font-size: 0.9rem;"></span>
+                    </div>
                 </div>
 
                 <div class="d-flex gap-3 justify-content-end mt-4 pt-3 border-top">
