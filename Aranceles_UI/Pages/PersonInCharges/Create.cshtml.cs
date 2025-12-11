@@ -26,6 +26,10 @@ namespace Aranceles_UI.Pages.PersonInCharges
         [StringLength(50, ErrorMessage = "El segundo apellido no puede exceder 50 caracteres.")]
         [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$", ErrorMessage = "El segundo apellido solo puede contener letras y espacios.")]
         public string? SecondLastName { get; set; }
+        
+        [BindProperty]
+        [StringLength(3, ErrorMessage = "El complemento solo puede tener 2 caracteres")]
+        public string? Complemento { get; set; }
 
         public CreateModel(IPersonInChargeService personService)
         {
@@ -36,6 +40,10 @@ namespace Aranceles_UI.Pages.PersonInCharges
 
         public async Task<IActionResult> OnPost()
         {
+            if (Complemento != null)
+            {
+                Person.Ci = Person.Ci + "-" + Complemento.ToString();
+            }
             if (!ModelState.IsValid)
             {
                 return Page();

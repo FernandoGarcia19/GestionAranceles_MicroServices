@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
 using Aranceles_UI.Security;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace Aranceles_UI.Pages.PersonInCharges
@@ -18,6 +19,10 @@ namespace Aranceles_UI.Pages.PersonInCharges
         
         [BindProperty]
         public PersonInChargeDto PersonDto { get; set; } = new();
+
+        [BindProperty]
+        [StringLength(2, ErrorMessage = "El complemento no puede tener más de 2 caracteres.")]
+        public string? Complemento { get; set; }
 
         public EditModel(IPersonInChargeService personService, IdProtector idProtector)
         {
@@ -44,11 +49,18 @@ namespace Aranceles_UI.Pages.PersonInCharges
             }
             
             PersonDto = result;
+            Complemento = PersonDto.Ci.Split('-').Skip(1).FirstOrDefault();
+            PersonDto.Ci = PersonDto.Ci.Split('-').FirstOrDefault() ?? PersonDto.Ci;
+        
             return Page();
         }
 
         public async Task<IActionResult> OnPost()
         {
+            if (Complemento != null)
+            {
+                PersonDto.Ci = PersonDto.Ci + "-" + Complemento.ToString();
+            }
 
             if (!ModelState.IsValid)
             {

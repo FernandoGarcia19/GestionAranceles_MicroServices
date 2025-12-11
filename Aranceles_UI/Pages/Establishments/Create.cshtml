@@ -38,7 +38,7 @@
                         <label asp-for="Establishment.Name" class="form-label fw-semibold">
                             <i class="bi bi-signpost text-primary me-1"></i>Nombre
                         </label>
-                        <input asp-for="Establishment.Name" class="form-control" placeholder="Ingrese el nombre del establecimiento" required />
+                        <input asp-for="Establishment.Name" class="form-control" placeholder="Ingrese el nombre del establecimiento" />
                         <span asp-validation-for="Establishment.Name" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
                     </div>
 
@@ -104,81 +104,6 @@
                         </select>
                         <span asp-validation-for="Establishment.EstablishmentType" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
                     </div>
-
-                   @*  <div class="col-md-6">
-                        <label class="form-label fw-semibold">
-                            <i class="bi bi-person-vcard text-primary me-1"></i>Person in Charge
-                        </label>
-                        <select asp-for="Establishment.PersonInChargeId" class="form-select">
-                            @foreach (var person in Model.PersonsInCharge)
-                            {
-                                <option value="@person.Id">@String.Concat(person.FirstName, " ", person.LastName)</option>
-                            }
-                        </select>
-                        <span asp-validation-for="Establishment.PersonInChargeId" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
-                    </div> *@
-
-
-                  @*   <div class="col-md-6">
-                        <label class="form-label fw-semibold">
-                            <i class="bi bi-person-vcard text-primary me-1"></i>Persona a Cargo
-                        </label>
-
-                        <!-- Barra de búsqueda -->
-                        <div class="input-group mb-2">
-                            <span class="input-group-text bg-light">
-                                <i class="bi bi-search text-muted"></i>
-                            </span>
-                            <input asp-for="PersonSearchTerm"
-                                   class="form-control"
-                                   placeholder="Buscar por nombre, CI o email..."
-                                   autocomplete="off" />
-                            <button type="submit"
-                                    asp-page-handler="SearchPerson"
-                                    class="btn btn-outline-secondary">
-                                <i class="bi bi-search"></i>
-                            </button>
-                        </div>
-
-                        <!-- Select con resultados -->
-                        <select asp-for="Establishment.PersonInChargeId"
-                                class="form-select"
-                                size="5">
-                            <option value=""></option>
-                            @foreach (var person in Model.PersonsInCharge)
-                            {
-                                <option value="@person.Id">
-                                    @person.FirstName @person.LastName
-                                </option>
-                            }
-                        </select>
-
-                        @if (!string.IsNullOrWhiteSpace(Model.PersonSearchTerm) && !Model.PersonsInCharge.Any())
-                        {
-                            <small class="text-warning d-block mt-2">
-                                <i class="bi bi-exclamation-triangle me-1"></i>
-                                No se encontraron resultados para "@Model.PersonSearchTerm"
-                            </small>
-                        }
-                        else if (!string.IsNullOrWhiteSpace(Model.PersonSearchTerm))
-                        {
-                            <small class="text-success d-block mt-2">
-                                <i class="bi bi-check-circle me-1"></i>
-                                Mostrando @Model.PersonsInCharge.Count resultado(s)
-                            </small>
-                        }
-
-                        <small class="text-muted d-block mt-2">
-                            <i class="bi bi-info-circle me-1"></i>
-                            Escribe para buscar o selecciona de la lista
-                        </small>
-
-                        <span asp-validation-for="Establishment.PersonInChargeId"
-                              class="text-danger d-block mt-2 fw-semibold"
-                              style="font-size: 0.9rem;"></span>
-                    </div>
- *@
-
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">
                             <i class="bi bi-person-vcard text-primary me-1"></i>Persona a Cargo

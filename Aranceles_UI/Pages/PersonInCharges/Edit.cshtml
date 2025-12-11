@@ -41,11 +41,7 @@
                         </label>
                         <input asp-for="PersonDto.FirstName"
                                class="form-control"
-                               placeholder="Ingrese el nombre"
-                               minlength="3"
-                               maxlength="50"
-                               pattern="^(?!\d+$).+"
-                               title="El nombre debe contener letras y no puede ser solo números." />
+                               placeholder="Ingrese el nombre"/>
                         <span asp-validation-for="PersonDto.FirstName"
                               class="text-danger d-block mt-2 fw-semibold"
                               style="font-size: 0.9rem;"></span>
@@ -57,11 +53,7 @@
                         </label>
                         <input asp-for="PersonDto.LastName"
                                class="form-control"
-                               placeholder="Ingrese el apellido"
-                               minlength="3"
-                               maxlength="50"
-                               pattern="^(?!\d+$).+"
-                               title="El apellido debe contener letras y no puede ser solo números." />
+                               placeholder="Ingrese el apellido"/>
                         <span asp-validation-for="PersonDto.LastName"
                               class="text-danger d-block mt-2 fw-semibold"
                               style="font-size: 0.9rem;"></span>
@@ -74,8 +66,7 @@
                         <input asp-for="PersonDto.Email"
                                type="email"
                                class="form-control"
-                               placeholder="correo@ejemplo.com"
-                               maxlength="150" />
+                               placeholder="correo@ejemplo.com"/>
                         <span asp-validation-for="PersonDto.Email"
                               class="text-danger d-block mt-2 fw-semibold"
                               style="font-size: 0.9rem;"></span>
@@ -87,10 +78,7 @@
                         </label>
                         <input asp-for="PersonDto.Phone"
                                class="form-control"
-                               placeholder="Ej. 7000-0000"
-                               maxlength="20"
-                               pattern="^[0-9()+\\-\\s]+$"
-                               title="Teléfono inválido." />
+                               placeholder="Ej. 7000-0000"/>
                         <span asp-validation-for="PersonDto.Phone"
                               class="text-danger d-block mt-2 fw-semibold"
                               style="font-size: 0.9rem;"></span>
@@ -102,12 +90,20 @@
                         </label>
                         <input asp-for="PersonDto.Ci"
                                class="form-control"
-                               placeholder="Documento de identidad"
-                               minlength="5"
-                               maxlength="50"
-                               pattern="^[A-Za-z0-9]+$"
-                               title="CI inválido. Sólo letras y números." />
+                               placeholder="Documento de identidad"/>
                         <span asp-validation-for="PersonDto.Ci"
+                              class="text-danger d-block mt-2 fw-semibold"
+                              style="font-size: 0.9rem;"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Complemento" class="form-label fw-semibold">
+                            <i class="bi bi-card-text text-primary me-1"></i>Complemento
+                        </label>
+                        <input asp-for="Complemento"
+                               class="form-control"
+                               placeholder="Ej: CB"
+                               maxlength="2"/>
+                        <span asp-validation-for="Complemento"
                               class="text-danger d-block mt-2 fw-semibold"
                               style="font-size: 0.9rem;"></span>
                     </div>
