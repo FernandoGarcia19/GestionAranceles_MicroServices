@@ -19,58 +19,98 @@ public class PaymentRepository: IRepository
 
     public async Task<Result<int>> Insert(Payment.Dom.Model.Payment t)
     {
+        MySqlConnection? conn = null;
+        MySqlTransaction? transaction = null;
+        
         try
         {
-            using var conn = _connectionDB.GetConnection();
+            conn = _connectionDB.GetConnection();
             await conn.OpenAsync();
+            transaction = await conn.BeginTransactionAsync();
 
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = @"INSERT INTO payment
-(establishment_id, category_id, payment_date, amount_paid, payment_method, receipt_number, created_by, created_date, last_update, status)
-VALUES (@establishment_id, @category_id, @payment_date, @amount_paid, @payment_method, @receipt_number, @created_by, @created_date, @last_update, @status);";
+            // Insert payment
+            using var cmdPayment = conn.CreateCommand();
+            cmdPayment.Transaction = transaction;
+            cmdPayment.CommandText = @"INSERT INTO payment
+(establishment_id, payment_date, amount_paid, payment_method, receipt_number, created_by, created_date, last_update, status)
+VALUES (@establishment_id, @payment_date, @amount_paid, @payment_method, @receipt_number, @created_by, @created_date, @last_update, @status);";
 
-            cmd.Parameters.AddWithValue("@establishment_id", t.EstablishmentId);
-            cmd.Parameters.AddWithValue("@category_id", t.CategoryId);
-            cmd.Parameters.AddWithValue("@payment_date", t.PaymentDate);
-            cmd.Parameters.AddWithValue("@amount_paid", t.AmountPaid);
-            cmd.Parameters.AddWithValue("@payment_method", t.PaymentMethod);
-            cmd.Parameters.AddWithValue("@receipt_number", t.ReceiptNumber);
-            cmd.Parameters.AddWithValue("@created_by", t.CreatedBy);
+            cmdPayment.Parameters.AddWithValue("@establishment_id", t.EstablishmentId);
+            cmdPayment.Parameters.AddWithValue("@payment_date", t.PaymentDate);
+            cmdPayment.Parameters.AddWithValue("@amount_paid", t.AmountPaid);
+            cmdPayment.Parameters.AddWithValue("@payment_method", t.PaymentMethod);
+            cmdPayment.Parameters.AddWithValue("@receipt_number", t.ReceiptNumber);
+            cmdPayment.Parameters.AddWithValue("@created_by", t.CreatedBy);
 
             var createdDate = t.CreatedDate == default ? DateTime.Now : t.CreatedDate;
             var lastUpdate = t.UpdateDate == default ? DateTime.Now : t.UpdateDate;
 
-            cmd.Parameters.AddWithValue("@created_date", createdDate);
-            cmd.Parameters.AddWithValue("@last_update", lastUpdate);
-            cmd.Parameters.AddWithValue("@status", 1);
+            cmdPayment.Parameters.AddWithValue("@created_date", createdDate);
+            cmdPayment.Parameters.AddWithValue("@last_update", lastUpdate);
+            cmdPayment.Parameters.AddWithValue("@status", 1);
 
-            await cmd.ExecuteNonQueryAsync();
+            await cmdPayment.ExecuteNonQueryAsync();
 
-            // LastInsertedId is returned as a long/ulong depending on provider; convert to int safely
-            var lastId = Convert.ToInt32(cmd.LastInsertedId);
-            if (lastId <= 0)
+            var paymentId = Convert.ToInt32(cmdPayment.LastInsertedId);
+            if (paymentId <= 0)
+            {
+                await transaction.RollbackAsync();
                 return Result<int>.Failure("InsertFailed");
+            }
 
-            return Result<int>.Success(lastId);
+            // Insert category_payment items
+            if (t.Items != null && t.Items.Any())
+            {
+                foreach (var item in t.Items)
+                {
+                    using var cmdItem = conn.CreateCommand();
+                    cmdItem.Transaction = transaction;
+                    cmdItem.CommandText = @"INSERT INTO category_payment
+(payment_id, category_id, quantity, unit_price)
+VALUES (@payment_id, @category_id, @quantity, @unit_price);";
+
+                    cmdItem.Parameters.AddWithValue("@payment_id", paymentId);
+                    cmdItem.Parameters.AddWithValue("@category_id", item.CategoryId);
+                    cmdItem.Parameters.AddWithValue("@quantity", item.Quantity);
+                    cmdItem.Parameters.AddWithValue("@unit_price", item.UnitPrice);
+
+                    await cmdItem.ExecuteNonQueryAsync();
+                }
+            }
+
+            await transaction.CommitAsync();
+            return Result<int>.Success(paymentId);
         }
         catch (Exception ex)
         {
-            // Consider logging here
+            if (transaction != null)
+                await transaction.RollbackAsync();
+            
             return Result<int>.Failure($"DbError: {ex.Message}");
+        }
+        finally
+        {
+            transaction?.Dispose();
+            conn?.Dispose();
         }
     }
 
     public async Task<Result<int>> Update(Payment.Dom.Model.Payment t)
     {
+        MySqlConnection? conn = null;
+        MySqlTransaction? transaction = null;
+        
         try
         {
-            using var conn = _connectionDB.GetConnection();
+            conn = _connectionDB.GetConnection();
             await conn.OpenAsync();
+            transaction = await conn.BeginTransactionAsync();
 
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = @"UPDATE payment SET
+            // Update payment
+            using var cmdPayment = conn.CreateCommand();
+            cmdPayment.Transaction = transaction;
+            cmdPayment.CommandText = @"UPDATE payment SET
 establishment_id = @establishment_id,
-category_id = @category_id,
 payment_date = @payment_date,
 amount_paid = @amount_paid,
 payment_method = @payment_method,
@@ -80,26 +120,64 @@ last_update = @last_update,
 status = @status
 WHERE id = @id;";
 
-            cmd.Parameters.AddWithValue("@establishment_id", t.EstablishmentId);
-            cmd.Parameters.AddWithValue("@category_id", t.CategoryId);
-            cmd.Parameters.AddWithValue("@payment_date", t.PaymentDate);
-            cmd.Parameters.AddWithValue("@amount_paid", t.AmountPaid);
-            cmd.Parameters.AddWithValue("@payment_method", t.PaymentMethod);
-            cmd.Parameters.AddWithValue("@receipt_number", t.ReceiptNumber);
-            cmd.Parameters.AddWithValue("@created_by", t.CreatedBy);
-            cmd.Parameters.AddWithValue("@last_update", t.UpdateDate == default ? DateTime.Now : t.UpdateDate);
-            cmd.Parameters.AddWithValue("@status", 1);
-            cmd.Parameters.AddWithValue("@id", t.Id);
+            cmdPayment.Parameters.AddWithValue("@establishment_id", t.EstablishmentId);
+            cmdPayment.Parameters.AddWithValue("@payment_date", t.PaymentDate);
+            cmdPayment.Parameters.AddWithValue("@amount_paid", t.AmountPaid);
+            cmdPayment.Parameters.AddWithValue("@payment_method", t.PaymentMethod);
+            cmdPayment.Parameters.AddWithValue("@receipt_number", t.ReceiptNumber);
+            cmdPayment.Parameters.AddWithValue("@created_by", t.CreatedBy);
+            cmdPayment.Parameters.AddWithValue("@last_update", t.UpdateDate == default ? DateTime.Now : t.UpdateDate);
+            cmdPayment.Parameters.AddWithValue("@status", 1);
+            cmdPayment.Parameters.AddWithValue("@id", t.Id);
 
-            var affected = await cmd.ExecuteNonQueryAsync();
+            var affected = await cmdPayment.ExecuteNonQueryAsync();
             if (affected == 0)
+            {
+                await transaction.RollbackAsync();
                 return Result<int>.Failure("NoRowsAffected");
+            }
 
+            // Delete existing category_payment items
+            using var cmdDelete = conn.CreateCommand();
+            cmdDelete.Transaction = transaction;
+            cmdDelete.CommandText = @"DELETE FROM category_payment WHERE payment_id = @payment_id;";
+            cmdDelete.Parameters.AddWithValue("@payment_id", t.Id);
+            await cmdDelete.ExecuteNonQueryAsync();
+
+            // Insert updated category_payment items
+            if (t.Items != null && t.Items.Any())
+            {
+                foreach (var item in t.Items)
+                {
+                    using var cmdItem = conn.CreateCommand();
+                    cmdItem.Transaction = transaction;
+                    cmdItem.CommandText = @"INSERT INTO category_payment
+(payment_id, category_id, quantity, unit_price)
+VALUES (@payment_id, @category_id, @quantity, @unit_price);";
+
+                    cmdItem.Parameters.AddWithValue("@payment_id", t.Id);
+                    cmdItem.Parameters.AddWithValue("@category_id", item.CategoryId);
+                    cmdItem.Parameters.AddWithValue("@quantity", item.Quantity);
+                    cmdItem.Parameters.AddWithValue("@unit_price", item.UnitPrice);
+
+                    await cmdItem.ExecuteNonQueryAsync();
+                }
+            }
+
+            await transaction.CommitAsync();
             return Result<int>.Success(affected);
         }
         catch (Exception ex)
         {
+            if (transaction != null)
+                await transaction.RollbackAsync();
+            
             return Result<int>.Failure($"DbError: {ex.Message}");
+        }
+        finally
+        {
+            transaction?.Dispose();
+            conn?.Dispose();
         }
     }
     
@@ -110,6 +188,8 @@ WHERE id = @id;";
             using var conn = _connectionDB.GetConnection();
             await conn.OpenAsync();
 
+            // Soft delete: only update status to 0
+            // category_payment records remain (for audit/restore purposes)
             using var cmd = conn.CreateCommand();
             cmd.CommandText = @"UPDATE payment SET status = 0, last_update = @last_update WHERE id = @id;";
             cmd.Parameters.AddWithValue("@last_update", t.UpdateDate == default ? DateTime.Now : t.UpdateDate);
@@ -127,6 +207,57 @@ WHERE id = @id;";
             return Result<int>.Failure($"DbError: {ex.Message}");
         }
     }
+    
+    // Optional: Hard delete method (if needed in the future)
+    // Note: If FK has ON DELETE CASCADE, only need to delete payment
+    // If FK doesn't have CASCADE, must delete category_payment first
+    public async Task<Result<int>> HardDelete(int paymentId)
+    {
+        MySqlConnection? conn = null;
+        MySqlTransaction? transaction = null;
+        
+        try
+        {
+            conn = _connectionDB.GetConnection();
+            await conn.OpenAsync();
+            transaction = await conn.BeginTransactionAsync();
+
+            // Delete category_payment records first (if no CASCADE)
+            using var cmdItems = conn.CreateCommand();
+            cmdItems.Transaction = transaction;
+            cmdItems.CommandText = @"DELETE FROM category_payment WHERE payment_id = @payment_id;";
+            cmdItems.Parameters.AddWithValue("@payment_id", paymentId);
+            await cmdItems.ExecuteNonQueryAsync();
+
+            // Delete payment
+            using var cmdPayment = conn.CreateCommand();
+            cmdPayment.Transaction = transaction;
+            cmdPayment.CommandText = @"DELETE FROM payment WHERE id = @id;";
+            cmdPayment.Parameters.AddWithValue("@id", paymentId);
+            
+            var affected = await cmdPayment.ExecuteNonQueryAsync();
+            if (affected == 0)
+            {
+                await transaction.RollbackAsync();
+                return Result<int>.Failure("NoRowsAffected");
+            }
+
+            await transaction.CommitAsync();
+            return Result<int>.Success(affected);
+        }
+        catch (Exception ex)
+        {
+            if (transaction != null)
+                await transaction.RollbackAsync();
+            
+            return Result<int>.Failure($"DbError: {ex.Message}");
+        }
+        finally
+        {
+            transaction?.Dispose();
+            conn?.Dispose();
+        }
+    }
 
     public async Task<Result<List<Payment.Dom.Model.Payment>>> Select()
     {
@@ -138,47 +269,40 @@ WHERE id = @id;";
             await conn.OpenAsync();
 
             using var cmd = conn.CreateCommand();
-            cmd.CommandText = @"SELECT id, establishment_id, category_id, payment_date, amount_paid, payment_method, receipt_number, created_by, created_date, last_update, status FROM payment WHERE status=1;";
+            cmd.CommandText = @"SELECT id, establishment_id, payment_date, amount_paid, payment_method, receipt_number, created_by, created_date, last_update, status FROM payment WHERE status=1;";
 
-            using var reader = await cmd.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            using (var reader = await cmd.ExecuteReaderAsync())
             {
-                // get ordinals once
-                var idxId = reader.GetOrdinal("id");
-                var idxEstablishmentId = reader.GetOrdinal("establishment_id");
-                var idxCategoryId = reader.GetOrdinal("category_id");
-                var idxPaymentDate = reader.GetOrdinal("payment_date");
-                var idxAmountPaid = reader.GetOrdinal("amount_paid");
-                var idxPaymentMethod = reader.GetOrdinal("payment_method");
-                var idxReceiptNumber = reader.GetOrdinal("receipt_number");
-                var idxCreatedBy = reader.GetOrdinal("created_by");
-                var idxCreatedDate = reader.GetOrdinal("created_date");
-                var idxLastUpdate = reader.GetOrdinal("last_update");
-                var idxStatus = reader.GetOrdinal("status");
-
-                var item = new Payment.Dom.Model.Payment
+                while (await reader.ReadAsync())
                 {
-                    Id = reader.GetInt32(idxId),
-                    EstablishmentId = reader.IsDBNull(idxEstablishmentId) ? 0 : reader.GetInt32(idxEstablishmentId),
-                    CategoryId = reader.IsDBNull(idxCategoryId) ? 0 : reader.GetInt32(idxCategoryId),
-                    PaymentDate = reader.IsDBNull(idxPaymentDate) ? DateTime.MinValue : reader.GetDateTime(idxPaymentDate),
-                    AmountPaid = reader.IsDBNull(idxAmountPaid) ? 0 : reader.GetDecimal(idxAmountPaid),
-                    PaymentMethod = reader.IsDBNull(idxPaymentMethod) ? string.Empty : reader.GetString(idxPaymentMethod),
-                    ReceiptNumber = reader.IsDBNull(idxReceiptNumber) ? string.Empty : reader.GetString(idxReceiptNumber),
-                    CreatedBy = reader.IsDBNull(idxCreatedBy) ? 0 : reader.GetInt32(idxCreatedBy),
-                    CreatedDate = reader.IsDBNull(idxCreatedDate) ? DateTime.MinValue : reader.GetDateTime(idxCreatedDate),
-                    UpdateDate = reader.IsDBNull(idxLastUpdate) ? DateTime.MinValue : reader.GetDateTime(idxLastUpdate),
-                    Status = reader.IsDBNull(idxStatus) ? false : reader.GetInt32(idxStatus) == 1
-                };
+                    var item = new Payment.Dom.Model.Payment
+                    {
+                        Id = reader.GetInt32(reader.GetOrdinal("id")),
+                        EstablishmentId = reader.IsDBNull(reader.GetOrdinal("establishment_id")) ? 0 : reader.GetInt32(reader.GetOrdinal("establishment_id")),
+                        PaymentDate = reader.IsDBNull(reader.GetOrdinal("payment_date")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("payment_date")),
+                        AmountPaid = reader.IsDBNull(reader.GetOrdinal("amount_paid")) ? 0 : reader.GetDecimal(reader.GetOrdinal("amount_paid")),
+                        PaymentMethod = reader.IsDBNull(reader.GetOrdinal("payment_method")) ? string.Empty : reader.GetString(reader.GetOrdinal("payment_method")),
+                        ReceiptNumber = reader.IsDBNull(reader.GetOrdinal("receipt_number")) ? 0 : reader.GetInt32(reader.GetOrdinal("receipt_number")),
+                        CreatedBy = reader.IsDBNull(reader.GetOrdinal("created_by")) ? 0 : reader.GetInt32(reader.GetOrdinal("created_by")),
+                        CreatedDate = reader.IsDBNull(reader.GetOrdinal("created_date")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("created_date")),
+                        UpdateDate = reader.IsDBNull(reader.GetOrdinal("last_update")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("last_update")),
+                        Status = reader.IsDBNull(reader.GetOrdinal("status")) ? false : reader.GetInt32(reader.GetOrdinal("status")) == 1
+                    };
 
-                result.Add(item);
+                    result.Add(item);
+                }
+            } // Reader is now closed
+
+            // Load items for each payment
+            foreach (var payment in result)
+            {
+                payment.Items = await LoadPaymentItems(conn, payment.Id);
             }
 
             return Result<List<Payment.Dom.Model.Payment>>.Success(result);
         }
         catch (Exception ex)
         {
-            // Consider logging here
             return Result<List<Payment.Dom.Model.Payment>>.Failure($"DbError: {ex.Message}");
         }
     }
@@ -190,51 +314,45 @@ WHERE id = @id;";
             using var conn = _connectionDB.GetConnection();
             await conn.OpenAsync();
 
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = @"SELECT id, establishment_id, category_id, payment_date, amount_paid, payment_method, receipt_number, created_by, created_date, last_update, status
-                            FROM payment
-                            WHERE id = @id;";
-            cmd.Parameters.AddWithValue("@id", id);
-
-            using var reader = await cmd.ExecuteReaderAsync();
-            if (!await reader.ReadAsync())
+            Payment.Dom.Model.Payment item;
+            
+            using (var cmd = conn.CreateCommand())
             {
-                return Result<Payment.Dom.Model.Payment>.Failure("NotFound");
-            }
+                cmd.CommandText = @"SELECT id, establishment_id, payment_date, amount_paid, payment_method, receipt_number, created_by, created_date, last_update, status
+                                FROM payment
+                                WHERE id = @id;";
+                cmd.Parameters.AddWithValue("@id", id);
 
-            // get ordinals once
-            var idxId = reader.GetOrdinal("id");
-            var idxEstablishmentId = reader.GetOrdinal("establishment_id");
-            var idxCategoryId = reader.GetOrdinal("category_id");
-            var idxPaymentDate = reader.GetOrdinal("payment_date");
-            var idxAmountPaid = reader.GetOrdinal("amount_paid");
-            var idxPaymentMethod = reader.GetOrdinal("payment_method");
-            var idxReceiptNumber = reader.GetOrdinal("receipt_number");
-            var idxCreatedBy = reader.GetOrdinal("created_by");
-            var idxCreatedDate = reader.GetOrdinal("created_date");
-            var idxLastUpdate = reader.GetOrdinal("last_update");
-            var idxStatus = reader.GetOrdinal("status");
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    if (!await reader.ReadAsync())
+                    {
+                        return Result<Payment.Dom.Model.Payment>.Failure("NotFound");
+                    }
 
-            var item = new Payment.Dom.Model.Payment
-            {
-                Id = reader.GetInt32(idxId),
-                EstablishmentId = reader.IsDBNull(idxEstablishmentId) ? 0 : reader.GetInt32(idxEstablishmentId),
-                CategoryId = reader.IsDBNull(idxCategoryId) ? 0 : reader.GetInt32(idxCategoryId),
-                PaymentDate = reader.IsDBNull(idxPaymentDate) ? DateTime.MinValue : reader.GetDateTime(idxPaymentDate),
-                AmountPaid = reader.IsDBNull(idxAmountPaid) ? 0 : reader.GetDecimal(idxAmountPaid),
-                PaymentMethod = reader.IsDBNull(idxPaymentMethod) ? string.Empty : reader.GetString(idxPaymentMethod),
-                ReceiptNumber = reader.IsDBNull(idxReceiptNumber) ? string.Empty : reader.GetString(idxReceiptNumber),
-                CreatedBy = reader.IsDBNull(idxCreatedBy) ? 0 : reader.GetInt32(idxCreatedBy),
-                CreatedDate = reader.IsDBNull(idxCreatedDate) ? DateTime.MinValue : reader.GetDateTime(idxCreatedDate),
-                UpdateDate = reader.IsDBNull(idxLastUpdate) ? DateTime.MinValue : reader.GetDateTime(idxLastUpdate),
-                Status = reader.IsDBNull(idxStatus) ? false : reader.GetInt32(idxStatus) == 1
-            };
+                    item = new Payment.Dom.Model.Payment
+                    {
+                        Id = reader.GetInt32(reader.GetOrdinal("id")),
+                        EstablishmentId = reader.IsDBNull(reader.GetOrdinal("establishment_id")) ? 0 : reader.GetInt32(reader.GetOrdinal("establishment_id")),
+                        PaymentDate = reader.IsDBNull(reader.GetOrdinal("payment_date")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("payment_date")),
+                        AmountPaid = reader.IsDBNull(reader.GetOrdinal("amount_paid")) ? 0 : reader.GetDecimal(reader.GetOrdinal("amount_paid")),
+                        PaymentMethod = reader.IsDBNull(reader.GetOrdinal("payment_method")) ? string.Empty : reader.GetString(reader.GetOrdinal("payment_method")),
+                        ReceiptNumber = reader.IsDBNull(reader.GetOrdinal("receipt_number")) ? 0 : reader.GetInt32(reader.GetOrdinal("receipt_number")),
+                        CreatedBy = reader.IsDBNull(reader.GetOrdinal("created_by")) ? 0 : reader.GetInt32(reader.GetOrdinal("created_by")),
+                        CreatedDate = reader.IsDBNull(reader.GetOrdinal("created_date")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("created_date")),
+                        UpdateDate = reader.IsDBNull(reader.GetOrdinal("last_update")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("last_update")),
+                        Status = reader.IsDBNull(reader.GetOrdinal("status")) ? false : reader.GetInt32(reader.GetOrdinal("status")) == 1
+                    };
+                }
+            } // Reader is now closed
+
+            // Load payment items
+            item.Items = await LoadPaymentItems(conn, id);
 
             return Result<Payment.Dom.Model.Payment>.Success(item);
         }
         catch (Exception ex)
         {
-            // Consider logging here
             return Result<Payment.Dom.Model.Payment>.Failure($"DbError: {ex.Message}");
         }
     }
@@ -245,7 +363,6 @@ WHERE id = @id;";
         SELECT
             id,
             establishment_id,
-            category_id,
             payment_date,
             amount_paid,
             payment_method,
@@ -257,7 +374,7 @@ WHERE id = @id;";
         FROM payment
         WHERE status = 1 AND (
             (@prop IS NOT NULL AND payment_method LIKE CONCAT('%', @prop, '%')) OR
-            (@prop IS NOT NULL AND receipt_number LIKE CONCAT('%', @prop, '%'))
+            (@prop IS NOT NULL AND CAST(receipt_number AS CHAR) LIKE CONCAT('%', @prop, '%'))
         )
         ORDER BY id DESC;";
     
@@ -272,10 +389,19 @@ WHERE id = @id;";
     
             cmd.Parameters.AddWithValue("@prop", string.IsNullOrWhiteSpace(property) ? DBNull.Value : property);
     
-            using var reader = (MySqlDataReader)await cmd.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            using (var reader = (MySqlDataReader)await cmd.ExecuteReaderAsync())
             {
-                list.Add(MapReaderToPayment(reader));
+                while (await reader.ReadAsync())
+                {
+                    var payment = MapReaderToPayment(reader);
+                    list.Add(payment);
+                }
+            } // Reader is now closed
+
+            // Load items for each payment
+            foreach (var payment in list)
+            {
+                payment.Items = await LoadPaymentItems(conn, payment.Id);
             }
     
             return Result<IEnumerable<Payment.Dom.Model.Payment>>.Success(list);
@@ -288,31 +414,43 @@ WHERE id = @id;";
     
     private static Payment.Dom.Model.Payment MapReaderToPayment(MySqlDataReader reader)
     {
-        var idxId = reader.GetOrdinal("id");
-        var idxEstablishmentId = reader.GetOrdinal("establishment_id");
-        var idxCategoryId = reader.GetOrdinal("category_id");
-        var idxPaymentDate = reader.GetOrdinal("payment_date");
-        var idxAmountPaid = reader.GetOrdinal("amount_paid");
-        var idxPaymentMethod = reader.GetOrdinal("payment_method");
-        var idxReceiptNumber = reader.GetOrdinal("receipt_number");
-        var idxCreatedBy = reader.GetOrdinal("created_by");
-        var idxCreatedDate = reader.GetOrdinal("created_date");
-        var idxLastUpdate = reader.GetOrdinal("last_update");
-        var idxStatus = reader.GetOrdinal("status");
-    
         return new Payment.Dom.Model.Payment
         {
-            Id = reader.IsDBNull(idxId) ? 0 : reader.GetInt32(idxId),
-            EstablishmentId = reader.IsDBNull(idxEstablishmentId) ? 0 : reader.GetInt32(idxEstablishmentId),
-            CategoryId = reader.IsDBNull(idxCategoryId) ? 0 : reader.GetInt32(idxCategoryId),
-            PaymentDate = reader.IsDBNull(idxPaymentDate) ? DateTime.MinValue : reader.GetDateTime(idxPaymentDate),
-            AmountPaid = reader.IsDBNull(idxAmountPaid) ? 0 : reader.GetDecimal(idxAmountPaid),
-            PaymentMethod = reader.IsDBNull(idxPaymentMethod) ? string.Empty : reader.GetString(idxPaymentMethod),
-            ReceiptNumber = reader.IsDBNull(idxReceiptNumber) ? string.Empty : reader.GetString(idxReceiptNumber),
-            CreatedBy = reader.IsDBNull(idxCreatedBy) ? 0 : reader.GetInt32(idxCreatedBy),
-            CreatedDate = reader.IsDBNull(idxCreatedDate) ? DateTime.MinValue : reader.GetDateTime(idxCreatedDate),
-            UpdateDate = reader.IsDBNull(idxLastUpdate) ? DateTime.MinValue : reader.GetDateTime(idxLastUpdate),
-            Status = reader.IsDBNull(idxStatus) ? false : reader.GetInt32(idxStatus) == 1
+            Id = reader.IsDBNull(reader.GetOrdinal("id")) ? 0 : reader.GetInt32(reader.GetOrdinal("id")),
+            EstablishmentId = reader.IsDBNull(reader.GetOrdinal("establishment_id")) ? 0 : reader.GetInt32(reader.GetOrdinal("establishment_id")),
+            PaymentDate = reader.IsDBNull(reader.GetOrdinal("payment_date")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("payment_date")),
+            AmountPaid = reader.IsDBNull(reader.GetOrdinal("amount_paid")) ? 0 : reader.GetDecimal(reader.GetOrdinal("amount_paid")),
+            PaymentMethod = reader.IsDBNull(reader.GetOrdinal("payment_method")) ? string.Empty : reader.GetString(reader.GetOrdinal("payment_method")),
+            ReceiptNumber = reader.IsDBNull(reader.GetOrdinal("receipt_number")) ? 0 : reader.GetInt32(reader.GetOrdinal("receipt_number")),
+            CreatedBy = reader.IsDBNull(reader.GetOrdinal("created_by")) ? 0 : reader.GetInt32(reader.GetOrdinal("created_by")),
+            CreatedDate = reader.IsDBNull(reader.GetOrdinal("created_date")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("created_date")),
+            UpdateDate = reader.IsDBNull(reader.GetOrdinal("last_update")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("last_update")),
+            Status = reader.IsDBNull(reader.GetOrdinal("status")) ? false : reader.GetInt32(reader.GetOrdinal("status")) == 1
         };
+    }
+
+    private async Task<List<CategoryPayment>> LoadPaymentItems(MySqlConnection conn, int paymentId)
+    {
+        var items = new List<CategoryPayment>();
+        
+        using var cmd = conn.CreateCommand();
+        cmd.CommandText = @"SELECT payment_id, category_id, quantity, unit_price 
+                           FROM category_payment 
+                           WHERE payment_id = @payment_id;";
+        cmd.Parameters.AddWithValue("@payment_id", paymentId);
+
+        using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            items.Add(new CategoryPayment
+            {
+                PaymentId = reader.GetInt32(reader.GetOrdinal("payment_id")),
+                CategoryId = reader.GetInt32(reader.GetOrdinal("category_id")),
+                Quantity = reader.GetByte(reader.GetOrdinal("quantity")),
+                UnitPrice = reader.GetInt32(reader.GetOrdinal("unit_price"))
+            });
+        }
+
+        return items;
     }
 }

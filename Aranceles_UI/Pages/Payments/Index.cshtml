@@ -1,19 +1,105 @@
 @page
-@model Aranceles_UI.Pages.Payments.Index
+@model Aranceles_UI.Pages.Payments.IndexModel
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Gestión de Pagos";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    
+<!-- HEADER -->
+<div class="mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
+        <div>
+            <h2 class="mb-1 fw-bold text-dark">
+                <i class="bi bi-cash-stack text-primary me-2"></i>@ViewData["Title"]
+            </h2>
+            <p class="text-muted mb-0 small">Administra los pagos de aranceles registrados en el sistema</p>
+        </div>
+        <a asp-page="Create" class="btn btn-primary px-4">
+            <i class="bi bi-plus-circle me-2"></i>Nuevo Pago
+        </a>
+    </div>
+    <hr class="border-2 opacity-25">
 </div>
-</body>
-</html>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>@TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form method="post" asp-page-handler="Search" class="mb-3">
+    <div class="input-group">
+        <input asp-for="SearchTerm"
+               class="form-control"
+               placeholder="Buscar por número de recibo o método de pago" />
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <a asp-page="Index" class="btn btn-secondary">Limpiar</a>
+    </div>
+</form>
+
+@if(Model.Payments.Any())
+{
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-primary">
+            <tr>
+                <th>Fecha de Pago</th>
+                <th>Establecimiento</th>
+                <th>Monto Pagado (Bs)</th>
+                <th>Método de Pago</th>
+                <th>Número de Recibo</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+                @foreach (var item in Model.Payments)
+                {
+                    <tr>
+                        <td class="fw-semibold">@item.PaymentDate.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.EstablishmentName))
+                            {
+                                <span class="fw-semibold">@item.EstablishmentName</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">ID: @item.EstablishmentId</span>
+                            }
+                        </td>
+                        <td>
+                            <span class="badge bg-success-subtle text-success px-3 py-2">
+                                @item.AmountPaid Bs
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge bg-warning-subtle text-warning px-2 py-1">
+                                @item.PaymentMethod
+                            </span>
+                        </td>
+                        <td class="fw-semibold">@item.ReceiptNumber</td>
+                        <td class="text-end">
+                            <a asp-page="Details" asp-route-id="@(Model.Protect(item.Id))"
+                               class="btn btn-sm bg-info bg-opacity-25 text-dark border-info btn-hover-info">
+                                <i class="bi bi-eye me-1"></i>Ver
+                            </a>
+                        </td>
+                    </tr>
+                }
+        </tbody>
+    </table>
+</div>
+}
+else
+{
+    <div class="text-center py-5">
+        <div class="text-muted">
+            <i class="bi bi-inbox display-4 d-block mb-3 opacity-25"></i>
+            <p class="mb-0">No hay pagos registrados.</p>
+            <small>Comienza creando un nuevo pago</small>
+        </div>
+    </div>
+}
+
+

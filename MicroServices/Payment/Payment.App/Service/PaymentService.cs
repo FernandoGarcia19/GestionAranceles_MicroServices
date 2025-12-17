@@ -21,6 +21,17 @@ public class PaymentService
         if (validationErrors.Any())
             return Result<int>.Failure(validationErrors.ToArray());
 
+        // Validate items
+        if (t.Items == null || !t.Items.Any())
+            return Result<int>.Failure("InvalidInput: payment must have at least one item");
+
+        foreach (var item in t.Items)
+        {
+            var itemErrors = ValidateItem(item);
+            if (itemErrors.Any())
+                return Result<int>.Failure(itemErrors.ToArray());
+        }
+
         var repoRes = await _repository.Insert(t);
         if (repoRes.IsFailure)
             return Result<int>.Failure(repoRes.Errors.ToArray());
@@ -61,6 +72,17 @@ public class PaymentService
         if (validationErrors.Any())
             return Result<int>.Failure(validationErrors.ToArray());
 
+        // Validate items
+        if (t.Items == null || !t.Items.Any())
+            return Result<int>.Failure("InvalidInput: payment must have at least one item");
+
+        foreach (var item in t.Items)
+        {
+            var itemErrors = ValidateItem(item);
+            if (itemErrors.Any())
+                return Result<int>.Failure(itemErrors.ToArray());
+        }
+
         var repoRes = await _repository.Update(t);
         if (repoRes.IsFailure)
             return Result<int>.Failure(repoRes.Errors.ToArray());
@@ -93,6 +115,14 @@ public class PaymentService
         var validationResults = new List<ValidationResult>();
         var ctx = new ValidationContext(model, serviceProvider: null, items: null);
         Validator.TryValidateObject(model, ctx, validationResults, validateAllProperties: true);
+        return validationResults.Select(r => r.ErrorMessage ?? "").Where(m => !string.IsNullOrWhiteSpace(m)).ToList();
+    }
+
+    private List<string> ValidateItem(CategoryPayment item)
+    {
+        var validationResults = new List<ValidationResult>();
+        var ctx = new ValidationContext(item, serviceProvider: null, items: null);
+        Validator.TryValidateObject(item, ctx, validationResults, validateAllProperties: true);
         return validationResults.Select(r => r.ErrorMessage ?? "").Where(m => !string.IsNullOrWhiteSpace(m)).ToList();
     }
 }

@@ -19,7 +19,8 @@ builder.Services.AddSwaggerGen();
 
 // JWT Configuration
 var jwtSection = builder.Configuration.GetSection("Jwt");
-var keyBytes = Encoding.UTF8.GetBytes(jwtSection["Key"]);
+var jwtKey = jwtSection["Key"] ?? throw new InvalidOperationException("JWT Key not configured");
+var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
 
 builder.Services
     .AddAuthentication(options =>

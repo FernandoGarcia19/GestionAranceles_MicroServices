@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace Payment.Dom.Model;
+namespace Aranceles_UI.Domain.Dtos;
 
-public class Payment
+public class PaymentDto
 {
     public int Id { get; set; }
 
@@ -11,7 +11,7 @@ public class Payment
     public int EstablishmentId { get; set; }
 
     [Required(ErrorMessage = "La fecha de pago es obligatoria.")]
-    public DateTime PaymentDate { get; set; }
+    public DateTime PaymentDate { get; set; } = DateTime.Now;
 
     [Required(ErrorMessage = "El monto pagado es obligatorio.")]
     [Range(0.01, double.MaxValue, ErrorMessage = "El monto pagado debe ser mayor a 0.")]
@@ -25,11 +25,9 @@ public class Payment
     [Range(1, 16777215, ErrorMessage = "El número de recibo debe estar entre 1 y 16777215.")]
     public int ReceiptNumber { get; set; }
 
-    public DateTime CreatedDate { get; set; }
-    public DateTime UpdateDate { get; set; }
-    public bool Status { get; set; }
-    public int CreatedBy { get; set; }
-
     // Payment items (categories with quantities and prices)
-    public List<CategoryPayment> Items { get; set; } = new List<CategoryPayment>();
+    public List<CategoryPaymentDto> Items { get; set; } = new List<CategoryPaymentDto>();
+    
+    // Navigation properties for display purposes
+    public string? EstablishmentName { get; set; }
 }

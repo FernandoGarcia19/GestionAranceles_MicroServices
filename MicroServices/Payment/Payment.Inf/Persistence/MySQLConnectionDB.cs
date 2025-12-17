@@ -9,7 +9,7 @@ public class MySqlConnectionDB
 
     public MySqlConnectionDB(IConfiguration configuration)
     {
-        connectionString = configuration.GetConnectionString("PaymentDB");
+        connectionString = configuration.GetConnectionString("PaymentDB") ?? throw new InvalidOperationException("PaymentDB connection string not found");
     }
 
     public MySqlConnection GetConnection() {
