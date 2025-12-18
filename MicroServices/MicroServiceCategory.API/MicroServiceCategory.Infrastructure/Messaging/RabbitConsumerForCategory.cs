@@ -34,13 +34,13 @@ public class RabbitConsumerForCategory: BackgroundService
         
         ConnectionFactory factory = new ConnectionFactory
         {
-            HostName = configuration["RabbitMQ:HostName"],  
-            UserName = configuration["RabbitMQ:UserName"],
-            Password = configuration["RabbitMQ:Password"],
+            HostName = configuration["Rabbit:HostName"],  
+            UserName = configuration["Rabbit:UserName"],
+            Password = configuration["Rabbit:Password"],
             DispatchConsumersAsync = true
         };
         
-        _exchange = configuration["RabbitMQ:Exchange"];
+        _exchange = configuration["Rabbit:Exchange"];
         
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();

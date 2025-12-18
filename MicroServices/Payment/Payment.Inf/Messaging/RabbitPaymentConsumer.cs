@@ -38,6 +38,8 @@ public class RabbitPaymentConsumer : BackgroundService
             DispatchConsumersAsync = true
         };
         
+        _exchangeName = configuration["Rabbit:Exchange"];
+
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
         _channel.ExchangeDeclare(_exchangeName, ExchangeType.Topic, durable: true);
@@ -50,7 +52,10 @@ public class RabbitPaymentConsumer : BackgroundService
     
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        throw new NotImplementedException();
+        AsyncEventingBasicConsumer consumer = new AsyncEventingBasicConsumer(_channel);
+        consumer.Received += OnCategoryMessageRecieved;
+        _channel.BasicConsume(queueName, true, consumer);
+        return Task.CompletedTask;
     }
 
     private async Task OnCategoryMessageRecieved(object sender, BasicDeliverEventArgs eventArgs)
