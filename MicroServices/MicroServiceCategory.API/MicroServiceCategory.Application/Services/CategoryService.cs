@@ -116,6 +116,22 @@ namespace MicroServiceCategory.Application.Services
                 return Result<Category>.Failure("ServerError", ex.Message);
             }
         }
+        
+        public async Task<Result<int>> IncrementNumberOfInserts(int categoryId, int increment)
+        {
+            try
+            {
+                var result = await _categoryRepository.IncrementNumberOfInserts(categoryId, increment);
+                if (result == 0)
+                    return Result<int>.Failure("NotFound");
+
+                return Result<int>.Success(result);
+            }
+            catch (Exception ex)
+            {
+                return Result<int>.Failure("ServerError", ex.Message);
+            }
+        }
 
     }
 }

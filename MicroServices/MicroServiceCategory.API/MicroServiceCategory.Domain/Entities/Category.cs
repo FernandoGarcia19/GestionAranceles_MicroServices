@@ -28,6 +28,7 @@ namespace MicroServiceCategory.Domain.Entities
         [RegularExpression(@"^[-+]?\d*.?\d*$")]
         public decimal BaseAmount { get; set; }
         public int CreatedBy { get; set; }
+        public int NumberOfInserts { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime LastUpdate { get; set; }
         public byte Status { get; set; }

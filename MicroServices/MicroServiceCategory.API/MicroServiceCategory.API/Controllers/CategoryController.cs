@@ -10,7 +10,6 @@ namespace MicroServiceCategory.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize] // Require authentication for all endpoints
     public class CategoryController : ControllerBase
     {
         private readonly CategoryService _categoryService;

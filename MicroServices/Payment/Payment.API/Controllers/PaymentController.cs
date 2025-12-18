@@ -1,7 +1,10 @@
+using System.Security.Policy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.VisualBasic;
 using Payment.App.Service;
 using Payment.Dom.Model;
+using ZstdSharp.Unsafe;
 
 namespace Payment.API.Controllers;
 
@@ -23,9 +26,12 @@ public class PaymentController: ControllerBase
         var res = await _service.Insert(t);
         if (res.IsSuccess)
         {
+            // Payments, sagaStatus
+            //            OK | PENDING | FAILED
+            // Publisher.Publish()
+            // UI.select_payments(  )
             return CreatedAtAction(nameof(Get), new { id = res.Value }, new { id = res.Value });
         }
-
         return MapFailure(res.Errors);
     }
 

@@ -24,8 +24,8 @@ namespace MicroServiceCategory.Infrastructure.Repository
         {
             int id = 0;
             string query = @"INSERT INTO 
-                           category(name, description, base_amount, created_by, status) 
-                           VALUES (@Name, @Description, @BaseAmount, @CreatedBy, 1);
+                           category(name, description, base_amount, created_by, status, number_of_inserts) 
+                           VALUES (@Name, @Description, @BaseAmount, @CreatedBy, 1, @NumberOfInserts);
                            SELECT LAST_INSERT_ID();";
 
             using (var connection = _connectionDB.GetConnection())
@@ -38,6 +38,7 @@ namespace MicroServiceCategory.Infrastructure.Repository
                     command.Parameters.AddWithValue("@Description", model.Description);
                     command.Parameters.AddWithValue("@BaseAmount", model.BaseAmount);
                     command.Parameters.AddWithValue("@CreatedBy", model.CreatedBy);
+                    command.Parameters.AddWithValue("@NumberOfInserts", model.NumberOfInserts);
 
                     var result = await command.ExecuteScalarAsync();
                     id = Convert.ToInt32(result);
@@ -53,6 +54,7 @@ namespace MicroServiceCategory.Infrastructure.Repository
                            SET name = @Name, 
                            description = @Description, 
                            base_amount = @BaseAmount, 
+                           number_of_inserts = @NumberOfInserts,
                            last_update = NOW()
                            WHERE id = @Id;";
 
@@ -66,6 +68,7 @@ namespace MicroServiceCategory.Infrastructure.Repository
                     command.Parameters.AddWithValue("@Name", model.Name);
                     command.Parameters.AddWithValue("@Description", model.Description);
                     command.Parameters.AddWithValue("@BaseAmount", model.BaseAmount);
+                    command.Parameters.AddWithValue("@NumberOfInserts", model.NumberOfInserts);
 
                     int rowsAffected = await command.ExecuteNonQueryAsync();
                     return rowsAffected > 0 ? model.Id : 0;
@@ -99,7 +102,7 @@ namespace MicroServiceCategory.Infrastructure.Repository
 
             string query = @"SELECT id, 
                            name, description, base_amount, created_by, 
-                           created_date, last_update, status
+                           created_date, last_update, status, number_of_inserts
 
                            FROM category 
                            WHERE status = 1;";
@@ -123,7 +126,8 @@ namespace MicroServiceCategory.Infrastructure.Repository
                                 CreatedBy = Convert.ToInt32(reader["created_by"]),
                                 CreatedDate = Convert.ToDateTime(reader["created_date"]),
                                 LastUpdate = Convert.ToDateTime(reader["last_update"]),
-                                Status = Convert.ToByte(reader["status"])
+                                Status = Convert.ToByte(reader["status"]),
+                                NumberOfInserts = Convert.ToInt32(reader["number_of_inserts"])
                             });
                         }
                     }
@@ -135,7 +139,7 @@ namespace MicroServiceCategory.Infrastructure.Repository
 
         public async Task<Category> SelectById(int id)
         {
-            string query = @"SELECT id, name, description, base_amount, created_by, created_date, last_update, status
+            string query = @"SELECT id, name, description, base_amount, created_by, created_date, last_update, status, number_of_inserts
                      FROM category
                      WHERE id = @Id AND status = 1;";
 
@@ -162,7 +166,8 @@ namespace MicroServiceCategory.Infrastructure.Repository
                                 CreatedBy = Convert.ToInt32(reader["created_by"]),
                                 CreatedDate = Convert.ToDateTime(reader["created_date"]),
                                 LastUpdate = Convert.ToDateTime(reader["last_update"]),
-                                Status = Convert.ToByte(reader["status"])
+                                Status = Convert.ToByte(reader["status"]),
+                                NumberOfInserts = Convert.ToInt32(reader["number_of_inserts"])
                             };
 
                             return category;
@@ -182,7 +187,7 @@ namespace MicroServiceCategory.Infrastructure.Repository
 
             string query = @"SELECT id, 
                            name, description, base_amount, created_by,
-                           created_date, last_update, status 
+                           created_date, last_update, status,  number_of_inserts
                            FROM category 
                            WHERE status = 1 
                            AND (name LIKE @Search OR description LIKE @Search);";
@@ -208,7 +213,8 @@ namespace MicroServiceCategory.Infrastructure.Repository
                                 CreatedBy = Convert.ToInt32(reader["created_by"]),
                                 CreatedDate = Convert.ToDateTime(reader["created_date"]),
                                 LastUpdate = Convert.ToDateTime(reader["last_update"]),
-                                Status = Convert.ToByte(reader["status"])
+                                Status = Convert.ToByte(reader["status"]),
+                                NumberOfInserts = Convert.ToInt32(reader["number_of_inserts"])
                             });
                         }
                     }
@@ -217,5 +223,32 @@ namespace MicroServiceCategory.Infrastructure.Repository
 
             return listaCategories;
         }
+        public async Task<int> IncrementNumberOfInserts(int categoryId, int increment)
+        {
+            // We update the count and refresh the last_update timestamp
+            string query = @"UPDATE category 
+                   SET number_of_inserts = number_of_inserts + @Increment,
+                   last_update = NOW()
+                   WHERE id = @Id;";
+
+            using (var connection = _connectionDB.GetConnection())
+            {
+                await connection.OpenAsync();
+
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", categoryId);
+                    command.Parameters.AddWithValue("@Increment", increment);
+
+                    // ExecuteNonQueryAsync returns the number of rows affected
+                    int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                    // Return the ID if successful (row found and updated), otherwise 0
+                    return rowsAffected > 0 ? categoryId : 0;
+                }
+            }
+        }
     }
+    
+    
 }

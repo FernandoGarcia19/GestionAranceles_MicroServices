@@ -14,5 +14,6 @@ namespace MicroServiceCategory.Domain.Interfaces
         Task<List<TModel>> Select();
         Task<List<TModel>> Search(string property);
         Task<TModel> SelectById(int id);
+        Task<int> IncrementNumberOfInserts(int categoryId, int increment);
     }
 }
