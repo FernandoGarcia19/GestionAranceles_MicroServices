@@ -7,7 +7,7 @@ namespace PersonInCharge.API.Controller;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize] // Require authentication for all endpoints
+// [Authorize] // Require authentication for all endpoints
 public class PersonInChargeController: ControllerBase
 {
     private readonly PersonInChargeService _service;

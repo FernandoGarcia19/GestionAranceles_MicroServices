@@ -46,5 +46,8 @@ public class EstablishmentDto
     [Required(ErrorMessage = "Debe seleccionar un encargado")]
     public int PersonInChargeId { get; set; }
 
-    public int? CreatedBy { get; set; }
+    // public DateTime CreatedDate { get; set; }
+    // public DateTime LastUpdate { get; set; }
+    // public bool Status { get; set; }
+    public int CreatedBy { get; set; }
 }

@@ -32,5 +32,8 @@ public class PersonInChargeDto
     [RegularExpression(@"^[a-zA-Z0-9\-]+$", ErrorMessage = "El CI solo puede contener números, letras y guiones.")]
     public string Ci { get; set; }
 
-    public int? CreatedBy { get; set; }
+    // public DateTime CreatedDate { get; set; }
+    // public DateTime UpdateDate { get; set; }
+    // public bool Status { get; set; }
+    public int CreatedBy { get; set; }
 }

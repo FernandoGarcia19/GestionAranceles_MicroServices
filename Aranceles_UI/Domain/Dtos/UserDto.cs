@@ -33,5 +33,10 @@ public class UserDto
 
     [Required(ErrorMessage = "El rol es obligatorio.")]
     public string Role { get; set; }
+    
+    public int CreatedBy { get; set; }
+    // public DateTime CreatedDate { get; set; }
+    // public DateTime LastUpdate { get; set; }
+    // public bool Status { get; set; }
     public int FirstLogin { get; set; }
 }

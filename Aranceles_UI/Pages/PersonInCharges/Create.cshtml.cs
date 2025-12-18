@@ -30,7 +30,7 @@ namespace Aranceles_UI.Pages.PersonInCharges
         public string? SecondLastName { get; set; }
         
         [BindProperty]
-        [StringLength(3, ErrorMessage = "El complemento solo puede tener 2 caracteres")]
+        [StringLength(2, ErrorMessage = "El complemento solo puede tener 2 caracteres")]
         public string? Complemento { get; set; }
 
         public CreateModel(IPersonInChargeService personService)

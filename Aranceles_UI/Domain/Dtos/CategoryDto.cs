@@ -20,5 +20,9 @@ public class CategoryDto
     [Range(0, 100000, ErrorMessage = "El monto base debe ser positivo y menor a 100000.")]
     public decimal? BaseAmount { get; set; }
 
-    public int ? CreatedBy { get; set; }
+    public int CreatedBy { get; set; }
+    public int NumberOfInserts { get; set; }
+    // public DateTime CreatedDate { get; set; }
+    // public DateTime LastUpdate { get; set; }
+    // public byte Status { get; set; }
 }
