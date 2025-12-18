@@ -29,6 +29,14 @@
     </div>
 }
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>@TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <form method="post" asp-page-handler="Search" class="mb-3">
     <div class="input-group">
         <input asp-for="SearchTerm"
@@ -80,10 +88,16 @@
                         </td>
                         <td class="fw-semibold">@item.ReceiptNumber</td>
                         <td class="text-end">
-                            <a asp-page="Details" asp-route-id="@(Model.Protect(item.Id))"
-                               class="btn btn-sm bg-info bg-opacity-25 text-dark border-info btn-hover-info">
-                                <i class="bi bi-eye me-1"></i>Ver
-                            </a>
+                            <div class="btn-group" role="group">
+                                <button type="button" onclick="showPaymentDetails(@item.Id)"
+                                   class="btn btn-sm bg-info bg-opacity-25 text-dark border-info btn-hover-info">
+                                    <i class="bi bi-eye me-1"></i>Ver
+                                </button>
+                                <button type="button" onclick="showDeleteConfirmation(@item.Id)"
+                                   class="btn btn-sm bg-danger bg-opacity-25 text-dark border-danger btn-hover-danger">
+                                    <i class="bi bi-trash me-1"></i>Eliminar
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 }
@@ -102,4 +116,217 @@ else
     </div>
 }
 
+<!-- Payment Details Modal -->
+<div class="modal fade" id="paymentDetailsModal" tabindex="-1" aria-labelledby="paymentDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-primary text-white border-0">
+                <h5 class="modal-title" id="paymentDetailsModalLabel">
+                    <i class="bi bi-receipt me-2"></i>Detalle del Pago
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="paymentDetailsContent">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 bg-light" id="paymentDetailsFooter" style="display: none;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-2"></i>Cerrar
+                </button>
+                <a id="deletePaymentBtn" href="#" class="btn btn-danger">
+                    <i class="bi bi-trash me-2"></i>Eliminar Pago
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-danger text-white border-0">
+                <h5 class="modal-title" id="deleteConfirmModalLabel">
+                    <i class="bi bi-exclamation-triangle me-2"></i>Confirmar Eliminación
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4">
+                <p class="mb-3 fs-6">¿Está seguro de que desea eliminar este pago?</p>
+                <div class="alert alert-warning mb-0">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <small>Esta acción no se puede deshacer.</small>
+                </div>
+            </div>
+            <div class="modal-footer border-0 bg-light">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-2"></i>No, Cancelar
+                </button>
+                <a id="confirmDeleteBtn" href="#" class="btn btn-danger">
+                    <i class="bi bi-check-circle me-2"></i>Sí, Eliminar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const payments = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Payments));
+        const protectedIds = {
+            @foreach (var payment in Model.Payments)
+            {
+                <text>@payment.Id: '@Model.Protect(payment.Id)',</text>
+            }
+        };
+
+        function showPaymentDetails(paymentId) {
+            const payment = payments.find(p => p.Id === paymentId);
+            
+            if (!payment) {
+                alert('No se encontró el pago');
+                return;
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('paymentDetailsModal'));
+            const content = document.getElementById('paymentDetailsContent');
+            const footer = document.getElementById('paymentDetailsFooter');
+            
+            // Build the details HTML
+            let html = `
+                <div class="card shadow-sm border-0 mb-3">
+                    <div class="card-header bg-primary bg-opacity-10">
+                        <h6 class="mb-0 fw-bold">
+                            <i class="bi bi-info-circle me-2 text-primary"></i>Información General
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="text-muted small mb-1">
+                                    <i class="bi bi-building me-1"></i>Establecimiento
+                                </label>
+                                <p class="fw-semibold mb-0">
+                                    ${payment.EstablishmentName || 'ID: ' + payment.EstablishmentId}
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small mb-1">
+                                    <i class="bi bi-calendar-event me-1"></i>Fecha de Pago
+                                </label>
+                                <p class="fw-semibold mb-0">${new Date(payment.PaymentDate).toLocaleDateString('es-ES')}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small mb-1">
+                                    <i class="bi bi-credit-card me-1"></i>Método de Pago
+                                </label>
+                                <p class="mb-0">
+                                    <span class="badge bg-warning-subtle text-warning px-3 py-2">
+                                        ${payment.PaymentMethod}
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small mb-1">
+                                    <i class="bi bi-receipt me-1"></i>Número de Recibo
+                                </label>
+                                <p class="fw-semibold mb-0">#${payment.ReceiptNumber}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0 mb-3">
+                    <div class="card-header bg-info bg-opacity-10">
+                        <h6 class="mb-0 fw-bold">
+                            <i class="bi bi-tags me-2 text-info"></i>Categorías de Pago
+                        </h6>
+                    </div>
+                    <div class="card-body">`;
+
+            if (payment.Items && payment.Items.length > 0) {
+                html += `
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Categoría</th>
+                                        <th class="text-center">Cantidad</th>
+                                        <th class="text-end">Precio Unitario</th>
+                                        <th class="text-end">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+                
+                payment.Items.forEach(item => {
+                    const subtotal = item.Quantity * item.UnitPrice;
+                    html += `
+                                    <tr>
+                                        <td>
+                                            <span class="fw-semibold">${item.CategoryName || 'ID: ' + item.CategoryId}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-secondary">${item.Quantity}</span>
+                                        </td>
+                                        <td class="text-end">${item.UnitPrice.toFixed(2)} Bs</td>
+                                        <td class="text-end fw-semibold">${subtotal.toFixed(2)} Bs</td>
+                                    </tr>`;
+                });
+
+                html += `
+                                </tbody>
+                            </table>
+                        </div>`;
+            } else {
+                html += `
+                        <div class="alert alert-warning mb-0">
+                            <i class="bi bi-exclamation-triangle me-2"></i>No hay categorías asociadas a este pago.
+                        </div>`;
+            }
+
+            html += `
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body bg-success bg-opacity-10">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <h6 class="mb-0 fw-bold">
+                                    <i class="bi bi-cash-coin text-success me-2"></i>Monto Total Pagado
+                                </h6>
+                            </div>
+                            <div class="col-6 text-end">
+                                <h4 class="mb-0 text-success fw-bold">
+                                    ${payment.AmountPaid.toFixed(2)} Bs
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+            content.innerHTML = html;
+            
+            // Update delete button link
+            const deleteBtn = document.getElementById('deletePaymentBtn');
+            deleteBtn.href = '/Payments/Delete?id=' + protectedIds[paymentId];
+            
+            footer.style.display = 'flex';
+            modal.show();
+        }
+
+        function showDeleteConfirmation(paymentId) {
+            const modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+            const confirmBtn = document.getElementById('confirmDeleteBtn');
+            
+            // Set the delete URL
+            confirmBtn.href = '/Payments/Delete?id=' + protectedIds[paymentId];
+            
+            modal.show();
+        }
+    </script>
+}

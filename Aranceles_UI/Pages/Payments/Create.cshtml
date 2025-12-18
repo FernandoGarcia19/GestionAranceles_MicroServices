@@ -34,13 +34,11 @@
                         <label asp-for="Payment.EstablishmentId" class="form-label fw-semibold">
                             <i class="bi bi-building text-primary me-1"></i>Establecimiento
                         </label>
-                        <select asp-for="Payment.EstablishmentId" class="form-select">
-                            <option value="">-- Seleccionar establecimiento --</option>
-                            @foreach (var establishment in Model.Establishments)
-                            {
-                                <option value="@establishment.Id">@establishment.Name (NIT: @establishment.TaxId)</option>
-                            }
-                        </select>
+                        <div style="position: relative;">
+                            <input type="text" class="form-control" id="establishmentSearch" placeholder="Buscar establecimiento..." autocomplete="off" oninput="filterEstablishments()" onfocus="showEstablishmentSuggestions()" />
+                            <input type="hidden" asp-for="Payment.EstablishmentId" id="establishmentId" />
+                            <div class="autocomplete-suggestions" id="establishmentSuggestions"></div>
+                        </div>
                         <span asp-validation-for="Payment.EstablishmentId" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
                     </div>
 
@@ -57,7 +55,6 @@
                             <i class="bi bi-credit-card text-primary me-1"></i>Método de Pago
                         </label>
                         <select asp-for="Payment.PaymentMethod" class="form-select">
-                            <option value="">-- Seleccionar método --</option>
                             <option value="Efectivo">Efectivo</option>
                             <option value="Tarjeta de Débito">Tarjeta de Débito</option>
                             <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
@@ -125,7 +122,7 @@
                     <a asp-page="Index" class="btn btn-outline-secondary px-4">
                         <i class="bi bi-x-circle me-2"></i>Cancelar
                     </a>
-                    <button type="submit" class="btn btn-success px-5">
+                    <button type="button" class="btn btn-success px-5" onclick="showConfirmModal()">
                         <i class="bi bi-check-circle me-2"></i>Guardar
                     </button>
                 </div>
@@ -135,12 +132,136 @@
     </div>
 </div>
 
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-primary text-white border-0">
+                <h5 class="modal-title" id="confirmModalLabel">
+                    <i class="bi bi-question-circle me-2"></i>Confirmar Registro
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4">
+                <p class="mb-0 fs-6">¿Está seguro de que desea registrar este pago?</p>
+            </div>
+            <div class="modal-footer border-0 bg-light">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-2"></i>No, Cancelar
+                </button>
+                <button type="button" class="btn btn-success" onclick="confirmSubmit()">
+                    <i class="bi bi-check-circle me-2"></i>Sí, Registrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    
+    <style>
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+        .quantity-control button {
+            width: 36px;
+            height: 38px;
+            padding: 0;
+            border: 1px solid #dee2e6;
+            background: #f8f9fa;
+        }
+        .quantity-control button:hover {
+            background: #e9ecef;
+        }
+        .quantity-control input {
+            text-align: center;
+            border-left: 0;
+            border-right: 0;
+        }
+        .autocomplete-suggestions {
+            position: absolute;
+            border: 1px solid #dee2e6;
+            background: white;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .autocomplete-suggestion {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .autocomplete-suggestion:hover {
+            background-color: #f8f9fa;
+        }
+        .autocomplete-suggestion.active {
+            background-color: #e9ecef;
+        }
+    </style>
     
     <script>
         let categoryCounter = 0;
         const categories = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Categories.Select(c => new { c.Id, c.Name, c.BaseAmount })));
+        const establishments = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Establishments.Select(e => new { e.Id, e.Name, e.TaxId })));
+
+        function filterEstablishments() {
+            const searchInput = document.getElementById('establishmentSearch');
+            const searchTerm = searchInput.value.toLowerCase();
+            const suggestionsDiv = document.getElementById('establishmentSuggestions');
+            
+            if (searchTerm.length === 0) {
+                suggestionsDiv.style.display = 'none';
+                return;
+            }
+            
+            const filtered = establishments.filter(e => 
+                e.Name.toLowerCase().includes(searchTerm) || 
+                e.TaxId.toLowerCase().includes(searchTerm)
+            );
+            
+            if (filtered.length > 0) {
+                suggestionsDiv.innerHTML = filtered.map(e => 
+                    `<div class="autocomplete-suggestion" onclick="selectEstablishment(${e.Id}, '${e.Name}', '${e.TaxId}')">
+                        ${e.Name} (NIT: ${e.TaxId})
+                    </div>`
+                ).join('');
+                suggestionsDiv.style.display = 'block';
+            } else {
+                suggestionsDiv.innerHTML = '<div class="autocomplete-suggestion">No se encontraron resultados</div>';
+                suggestionsDiv.style.display = 'block';
+            }
+        }
+
+        function showEstablishmentSuggestions() {
+            const searchInput = document.getElementById('establishmentSearch');
+            const suggestionsDiv = document.getElementById('establishmentSuggestions');
+            
+            if (searchInput.value.length > 0) {
+                filterEstablishments();
+            } else {
+                suggestionsDiv.innerHTML = establishments.map(e => 
+                    `<div class="autocomplete-suggestion" onclick="selectEstablishment(${e.Id}, '${e.Name}', '${e.TaxId}')">
+                        ${e.Name} (NIT: ${e.TaxId})
+                    </div>`
+                ).join('');
+                suggestionsDiv.style.display = 'block';
+            }
+        }
+
+        function selectEstablishment(id, name, taxId) {
+            const searchInput = document.getElementById('establishmentSearch');
+            const hiddenInput = document.getElementById('establishmentId');
+            const suggestionsDiv = document.getElementById('establishmentSuggestions');
+            
+            searchInput.value = `${name} (NIT: ${taxId})`;
+            hiddenInput.value = id;
+            suggestionsDiv.style.display = 'none';
+        }
 
         function addCategoryItem() {
             const container = document.getElementById('categoryItems');
@@ -151,18 +272,27 @@
                             <div class="row g-3 align-items-end">
                                 <div class="col-md-5">
                                     <label class="form-label fw-semibold">Categoría</label>
-                                    <select class="form-select category-select" name="Payment.Items[${categoryCounter}].CategoryId" onchange="updateUnitPrice(${categoryCounter})">
-                                        <option value="">-- Seleccionar --</option>
-                                        ${categories.map(c => `<option value="${c.Id}" data-price="${c.BaseAmount}">${c.Name} (${c.BaseAmount} Bs)</option>`).join('')}
-                                    </select>
+                                    <div style="position: relative;">
+                                        <input type="text" class="form-control category-search" id="categorySearch_${categoryCounter}" placeholder="Buscar categoría..." autocomplete="off" oninput="filterCategories(${categoryCounter})" onfocus="showSuggestions(${categoryCounter})" />
+                                        <input type="hidden" class="category-id" name="Payment.Items[${categoryCounter}].CategoryId" />
+                                        <div class="autocomplete-suggestions" id="suggestions_${categoryCounter}"></div>
+                                    </div>
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label fw-semibold">Cantidad</label>
-                                    <input type="number" class="form-control quantity-input" name="Payment.Items[${categoryCounter}].Quantity" min="1" max="255" value="1" onchange="calculateTotal()" />
+                                    <div class="quantity-control">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="decrementQuantity(${categoryCounter})">
+                                            <i class="bi bi-dash"></i>
+                                        </button>
+                                        <input type="number" class="form-control quantity-input" id="quantity_${categoryCounter}" name="Payment.Items[${categoryCounter}].Quantity" min="1" max="255" value="1" onchange="validateQuantity(${categoryCounter}); calculateTotal();" oninput="validateQuantity(${categoryCounter})" />
+                                        <button type="button" class="btn btn-outline-secondary" onclick="incrementQuantity(${categoryCounter})">
+                                            <i class="bi bi-plus"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label fw-semibold">Precio Unit. (Bs)</label>
-                                    <input type="number" class="form-control unitprice-input" name="Payment.Items[${categoryCounter}].UnitPrice" min="1" max="16777215" readonly />
+                                    <input type="number" class="form-control unitprice-input" id="unitprice_${categoryCounter}" name="Payment.Items[${categoryCounter}].UnitPrice" min="1" max="16777215" readonly />
                                 </div>
                                 <div class="col-md-2 text-center">
                                     <button type="button" class="btn btn-danger btn-sm w-100" onclick="removeCategoryItem(${categoryCounter})">
@@ -188,6 +318,113 @@
                 updateNoCategoriesMessage();
                 calculateTotal();
             }
+        }
+
+        function removeCategoryItem(index) {
+            const item = document.getElementById(`categoryItem_${index}`);
+            if (item) {
+                item.remove();
+                updateNoCategoriesMessage();
+                calculateTotal();
+            }
+        }
+
+        function filterCategories(index) {
+            const searchInput = document.getElementById(`categorySearch_${index}`);
+            const searchTerm = searchInput.value.toLowerCase();
+            const suggestionsDiv = document.getElementById(`suggestions_${index}`);
+            
+            if (searchTerm.length === 0) {
+                suggestionsDiv.style.display = 'none';
+                return;
+            }
+            
+            const filtered = categories.filter(c => 
+                c.Name.toLowerCase().includes(searchTerm) || 
+                c.BaseAmount.toString().includes(searchTerm)
+            );
+            
+            if (filtered.length > 0) {
+                suggestionsDiv.innerHTML = filtered.map(c => 
+                    `<div class="autocomplete-suggestion" onclick="selectCategory(${index}, ${c.Id}, '${c.Name}', ${c.BaseAmount})">
+                        ${c.Name} (${c.BaseAmount} Bs)
+                    </div>`
+                ).join('');
+                suggestionsDiv.style.display = 'block';
+            } else {
+                suggestionsDiv.innerHTML = '<div class="autocomplete-suggestion">No se encontraron resultados</div>';
+                suggestionsDiv.style.display = 'block';
+            }
+        }
+
+        function showSuggestions(index) {
+            const searchInput = document.getElementById(`categorySearch_${index}`);
+            const suggestionsDiv = document.getElementById(`suggestions_${index}`);
+            
+            if (searchInput.value.length > 0) {
+                filterCategories(index);
+            } else {
+                suggestionsDiv.innerHTML = categories.map(c => 
+                    `<div class="autocomplete-suggestion" onclick="selectCategory(${index}, ${c.Id}, '${c.Name}', ${c.BaseAmount})">
+                        ${c.Name} (${c.BaseAmount} Bs)
+                    </div>`
+                ).join('');
+                suggestionsDiv.style.display = 'block';
+            }
+        }
+
+        function selectCategory(index, id, name, price) {
+            const searchInput = document.getElementById(`categorySearch_${index}`);
+            const hiddenInput = document.getElementById(`categoryItem_${index}`).querySelector('.category-id');
+            const unitPriceInput = document.getElementById(`unitprice_${index}`);
+            const suggestionsDiv = document.getElementById(`suggestions_${index}`);
+            
+            searchInput.value = `${name} (${price} Bs)`;
+            hiddenInput.value = id;
+            unitPriceInput.value = Math.round(parseFloat(price));
+            suggestionsDiv.style.display = 'none';
+            
+            calculateTotal();
+        }
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.classList.contains('category-search') && e.target.id !== 'establishmentSearch') {
+                document.querySelectorAll('.autocomplete-suggestions').forEach(div => {
+                    div.style.display = 'none';
+                });
+            }
+        });
+
+        function incrementQuantity(index) {
+            const input = document.getElementById(`quantity_${index}`);
+            let value = parseInt(input.value) || 1;
+            if (value < 255) {
+                input.value = value + 1;
+                calculateTotal();
+            }
+        }
+
+        function decrementQuantity(index) {
+            const input = document.getElementById(`quantity_${index}`);
+            let value = parseInt(input.value) || 1;
+            if (value > 1) {
+                input.value = value - 1;
+                calculateTotal();
+            }
+        }
+
+        function validateQuantity(index) {
+            const input = document.getElementById(`quantity_${index}`);
+            let value = parseInt(input.value);
+            
+            if (isNaN(value) || value < 1) {
+                input.value = 1;
+            } else if (value > 255) {
+                input.value = 255;
+            }
+            
+            calculateTotal();
         }
 
         function updateUnitPrice(index) {
@@ -235,6 +472,30 @@
         document.addEventListener('DOMContentLoaded', function() {
             addCategoryItem();
         });
+
+        // Confirmation modal functions
+        function showConfirmModal() {
+            const form = document.querySelector('form');
+            
+            // Trigger client-side validation
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            // Show the confirmation modal
+            const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+            modal.show();
+        }
+
+        function confirmSubmit() {
+            // Hide the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('confirmModal'));
+            modal.hide();
+            
+            // Submit the form
+            document.querySelector('form').submit();
+        }
     </script>
 }
 
