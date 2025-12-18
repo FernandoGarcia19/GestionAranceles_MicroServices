@@ -133,13 +133,10 @@ else
                     </div>
                 </div>
             </div>
-            <div class="modal-footer border-0 bg-light" id="paymentDetailsFooter" style="display: none;">
+            <div class="modal-footer border-0 bg-light">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="bi bi-x-circle me-2"></i>Cerrar
                 </button>
-                <a id="deletePaymentBtn" href="#" class="btn btn-danger">
-                    <i class="bi bi-trash me-2"></i>Eliminar Pago
-                </a>
             </div>
         </div>
     </div>
@@ -166,9 +163,9 @@ else
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="bi bi-x-circle me-2"></i>No, Cancelar
                 </button>
-                <a id="confirmDeleteBtn" href="#" class="btn btn-danger">
+                <button type="button" id="confirmDeleteBtn" class="btn btn-danger" onclick="submitDelete()">
                     <i class="bi bi-check-circle me-2"></i>Sí, Eliminar
-                </a>
+                </button>
             </div>
         </div>
     </div>
@@ -310,23 +307,38 @@ else
                 </div>`;
 
             content.innerHTML = html;
-            
-            // Update delete button link
-            const deleteBtn = document.getElementById('deletePaymentBtn');
-            deleteBtn.href = '/Payments/Delete?id=' + protectedIds[paymentId];
-            
-            footer.style.display = 'flex';
             modal.show();
         }
 
+        let deletePaymentId = null;
+
         function showDeleteConfirmation(paymentId) {
+            deletePaymentId = paymentId;
             const modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
-            const confirmBtn = document.getElementById('confirmDeleteBtn');
-            
-            // Set the delete URL
-            confirmBtn.href = '/Payments/Delete?id=' + protectedIds[paymentId];
-            
             modal.show();
+        }
+
+        function submitDelete() {
+            if (deletePaymentId) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '?handler=Delete';
+                
+                const idInput = document.createElement('input');
+                idInput.type = 'hidden';
+                idInput.name = 'id';
+                idInput.value = protectedIds[deletePaymentId];
+                form.appendChild(idInput);
+                
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '__RequestVerificationToken';
+                tokenInput.value = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                form.appendChild(tokenInput);
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
         }
     </script>
 }

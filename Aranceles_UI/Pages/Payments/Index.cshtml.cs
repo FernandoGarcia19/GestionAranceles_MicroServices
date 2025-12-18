@@ -44,6 +44,30 @@ namespace Aranceles_UI.Pages.Payments
             await PopulateNames();
         }
 
+        public async Task<IActionResult> OnPostDelete(string id)
+        {
+            var paymentId = _idProtector.UnprotectInt(id);
+            
+            if (paymentId <= 0)
+            {
+                TempData["ErrorMessage"] = "ID de pago inválido.";
+                return RedirectToPage();
+            }
+
+            var success = await _paymentService.DeletePaymentAsync(paymentId);
+            
+            if (success)
+            {
+                TempData["SuccessMessage"] = "El pago ha sido eliminado exitosamente.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Ocurrió un error al eliminar el pago.";
+            }
+
+            return RedirectToPage();
+        }
+
         private async Task PopulateNames()
         {
             if (!Payments.Any()) return;
