@@ -71,7 +71,7 @@ public class RabbitPaymentConsumer : BackgroundService
             using var jsonDoc = JsonDocument.Parse(jsonData);
             var jsonRoot =  jsonDoc.RootElement;
             var routingKey = eventArgs.RoutingKey;
-            int paymentId = jsonRoot.GetProperty("paymentId").GetInt32();
+            int paymentId = jsonRoot.GetProperty("PaymentId").GetInt32();
             if (routingKey == "category.failed_increment")
             {
                 paymentService.UpdateSagaStatus(new Dom.Model.Payment
