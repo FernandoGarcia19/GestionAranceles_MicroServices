@@ -39,7 +39,7 @@ namespace MicroServiceCategory.Application.Services
         public async Task<Result<int>> Update(Category c)
         {
             c.LastUpdate = DateTime.Now;
-
+            
             try
             {
                 var result = await _categoryRepository.Update(c);

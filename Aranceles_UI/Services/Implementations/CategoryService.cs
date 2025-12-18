@@ -34,12 +34,21 @@ public class CategoryService : BaseHttpService, ICategoryService
     public async Task<bool> CreateCategoryAsync(CategoryDto category)
     {
         var result = await PostAsJsonAuthenticatedAsync("api/Category", category);
+        
+        if (!result.IsSuccessStatusCode)
+        {
+            var errorContent = await result.Content.ReadAsStringAsync();
+            Console.WriteLine($"Category creation failed. Status: {result.StatusCode}");
+            Console.WriteLine($"Error response: {errorContent}");
+        }
+        
         return result.IsSuccessStatusCode;
     }
 
     public async Task<bool> UpdateCategoryAsync(CategoryDto category)
     {
         var result = await PutAsJsonAuthenticatedAsync($"api/Category/{category.Id}", category);
+        Console.WriteLine(result.Content);
         return result.IsSuccessStatusCode;
     }
 

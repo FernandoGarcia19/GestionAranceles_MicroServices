@@ -19,8 +19,7 @@ namespace MicroServiceCategory.Domain.Entities
 
         [Required(ErrorMessage = "La descripción es obligatorio.")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "El nombre puede tener entre 10 a 120 caracteres.")]
-        [RegularExpression(@"^(?!.* {2})[a-zA-ZÁÉÍÓÚáéíóúÑñ][a-zA-ZÁÉÍÓÚáéíóúÑñ\s\.,]*$",
-        ErrorMessage = "Solo se permiten letras, espacios, puntos y comas.")]
+        [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s.,]+$", ErrorMessage = "La descripción solo puede contener letras, números, espacios, puntos y comas.")]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "El monto base es obligatorio.")]

@@ -29,18 +29,28 @@ public class CreateModel : PageModel
                    ?? User.FindFirstValue(JwtRegisteredClaimNames.NameId);
 
         Category.CreatedBy = int.Parse(userIdStr);
+        
+        Console.WriteLine($"Creating category: Name={Category.Name}, Description={Category.Description}, BaseAmount={Category.BaseAmount}, CreatedBy={Category.CreatedBy}");
 
         if (!ModelState.IsValid)
         {
+            Console.WriteLine("ModelState is invalid:");
+            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                Console.WriteLine($"  - {error.ErrorMessage}");
+            }
             return Page();
         }
         
         var success = await _categoryService.CreateCategoryAsync(Category);
+        Console.WriteLine($"Create category result: {success}");
+        
         if (success)
         {
             return RedirectToPage("./Index");
         }
 
+        TempData["ErrorMessage"] = "Error al crear la categoría. Verifique los datos.";
         return Page();
     }
 }

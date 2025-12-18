@@ -134,6 +134,9 @@ else
                 </div>
             </div>
             <div class="modal-footer border-0 bg-light">
+                <button type="button" class="btn btn-success" id="btnGeneratePdf">
+                    <i class="bi bi-file-earmark-pdf me-2"></i>Generar PDF
+                </button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="bi bi-x-circle me-2"></i>Cerrar
                 </button>
@@ -192,6 +195,9 @@ else
             const modal = new bootstrap.Modal(document.getElementById('paymentDetailsModal'));
             const content = document.getElementById('paymentDetailsContent');
             const footer = document.getElementById('paymentDetailsFooter');
+            
+            // Store current payment ID for PDF generation
+            document.getElementById('btnGeneratePdf').setAttribute('data-payment-id', protectedIds[paymentId]);
             
             // Build the details HTML
             let html = `
@@ -340,5 +346,32 @@ else
                 form.submit();
             }
         }
+
+        // PDF Generation
+        document.getElementById('btnGeneratePdf').addEventListener('click', function() {
+            const paymentId = this.getAttribute('data-payment-id');
+            console.log('Protected Payment ID:', paymentId);
+            
+            if (!paymentId) {
+                alert('Error: No se pudo obtener el ID del pago');
+                return;
+            }
+            
+            // Show loading state
+            const originalText = this.innerHTML;
+            this.disabled = true;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Generando...';
+            
+            // Generate PDF - encode the protected ID for URL
+            const url = `/Payments?handler=GeneratePdf&id=${encodeURIComponent(paymentId)}`;
+            console.log('Navigating to:', url);
+            window.location.href = url;
+            
+            // Reset button after a delay
+            setTimeout(() => {
+                this.disabled = false;
+                this.innerHTML = originalText;
+            }, 2000);
+        });
     </script>
 }

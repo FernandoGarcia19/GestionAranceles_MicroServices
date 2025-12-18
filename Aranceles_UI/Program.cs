@@ -41,6 +41,9 @@ builder.Services.AddHttpClient("personInChargeApi", p => {
 builder.Services.AddHttpClient("paymentApi", p => {
     p.BaseAddress = new Uri("http://localhost:5092");
 });
+builder.Services.AddHttpClient("reportApi", r => {
+    r.BaseAddress = new Uri("http://localhost:5007");
+});
 builder.Services.AddHttpClient("userApi", u => {
     u.BaseAddress = new Uri("http://localhost:5249");
 }).ConfigurePrimaryHttpMessageHandler(() =>
@@ -57,6 +60,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEstablishmentService, EstablishmentService>();
 builder.Services.AddScoped<IPersonInChargeService, PersonInChargeService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 
 var app = builder.Build();
 
