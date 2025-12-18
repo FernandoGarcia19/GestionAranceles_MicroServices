@@ -19,4 +19,6 @@ public class CategoryDto
     [Required(ErrorMessage = "El monto base es obligatorio.")]
     [Range(0, 100000, ErrorMessage = "El monto base debe ser positivo y menor a 100000.")]
     public decimal? BaseAmount { get; set; }
+
+    public int ? CreatedBy { get; set; }
 }

@@ -66,21 +66,22 @@ public class LoginModel : PageModel
         }
 
         string accessToken = response.Token;
-        
+
         var handler = new JwtSecurityTokenHandler();
-        var jwt = handler.ReadJwtToken(accessToken); 
+        var jwt = handler.ReadJwtToken(accessToken);
         var claims = new List<Claim>();
-        int userId =int.Parse(jwt.Claims.Where(c => c.Type == JwtRegisteredClaimNames.NameId).First().Value);
+        int userId = int.Parse(jwt.Claims.Where(c => c.Type == JwtRegisteredClaimNames.NameId).First().Value);
+        claims.Add(new Claim(ClaimTypes.NameIdentifier, userId.ToString()));
         foreach (var c in jwt.Claims)
         {
             claims.Add(c);
         }
-        
+
         claims.Add(new Claim("access_token", accessToken));
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var principal = new ClaimsPrincipal(identity);
-        
-        
+
+
         await HttpContext.SignInAsync(
             CookieAuthenticationDefaults.AuthenticationScheme,
             principal,
