@@ -1,9 +1,12 @@
 using System.Text;
+using MicroServiceCategory.Infrastructure.Messaging;
 using Payment.App.Service;
 using Payment.Dom.Interface;
 using Payment.Inf.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Payment.API.Messaging;
+using Payment.Inf.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +47,10 @@ builder.Services
             ClockSkew = TimeSpan.Zero 
         };
     });
+
+builder.Services.AddSingleton<IEventPublisher, RabbitPaymentPublisher>();
+builder.Services.AddHostedService<RabbitPaymentConsumer>();
+builder.Services.AddSingleton<RabbitPaymentInitialPublisher>();
 
 builder.Services.AddAuthorization();
 

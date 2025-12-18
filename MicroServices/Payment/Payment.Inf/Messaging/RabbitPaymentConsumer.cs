@@ -43,6 +43,7 @@ public class RabbitPaymentConsumer : BackgroundService
         _channel.ExchangeDeclare(_exchangeName, ExchangeType.Topic, durable: true);
         
         _channel.QueueDeclare(queueName, true, false, false);
+        
         _channel.QueueBind(queueName, _exchangeName, "category.failed_increment");
         _channel.QueueBind(queueName, _exchangeName, "category.increment_updated");
     }
@@ -78,11 +79,12 @@ public class RabbitPaymentConsumer : BackgroundService
             }
             else if (routingKey == "category.increment_updated")
             {
-                paymentService.UpdateSagaStatus(new Dom.Model.Payment{ Id = paymentId, 
-                    SagaStatus = (int)Dom.Model.PaymentSagaStatus.COMPLETED});
+                paymentService.UpdateSagaStatus(new Dom.Model.Payment
+                {
+                    Id = paymentId,
+                    SagaStatus = (int)Dom.Model.PaymentSagaStatus.COMPLETED
+                });
             }
-            
-            
         }
         catch (Exception e)
         {

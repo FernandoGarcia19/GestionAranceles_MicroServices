@@ -2,6 +2,7 @@ using System.Text;
 using MicroServiceCategory.Application.Services;
 using MicroServiceCategory.Domain.Entities;
 using MicroServiceCategory.Domain.Interfaces;
+using MicroServiceCategory.Infrastructure.Messaging;
 using MicroServiceCategory.Infrastructure.Persistence;
 using MicroServiceCategory.Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -58,6 +59,10 @@ builder.Services
             ClockSkew = TimeSpan.Zero 
         };
     });
+
+builder.Services.AddSingleton<IEventPublisher, RabbitPublisherForCategory>();
+builder.Services.AddHostedService<RabbitConsumerForCategory>();
+
 
 builder.Services.AddAuthorization();
 

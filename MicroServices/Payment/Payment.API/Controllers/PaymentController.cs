@@ -2,6 +2,7 @@ using System.Security.Policy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.VisualBasic;
+using Payment.API.Messaging;
 using Payment.App.Service;
 using Payment.Dom.Model;
 using ZstdSharp.Unsafe;
@@ -14,14 +15,31 @@ namespace Payment.API.Controllers;
 public class PaymentController: ControllerBase
 {
     private readonly PaymentService _service;
+    private readonly RabbitPaymentInitialPublisher _publisher;
     
-    public PaymentController(PaymentService service)
+    public PaymentController(PaymentService service, RabbitPaymentInitialPublisher  rabbitPublisher)
     {
         _service = service;
+        _publisher = rabbitPublisher;
     }
 
     [HttpPost("insert")]
     public async Task<IActionResult> Insert([FromBody] Dom.Model.Payment t)
+    {
+        var res = await _service.Insert(t);
+        if (res.IsSuccess)
+        {
+            var categoryIds = t.Items.Select(i => i.CategoryId);
+            var categoryIncrements = t.Items.Select(i => i.Quantity);
+            var paymentId = res.Value;
+            _publisher.PublishPaymentAsync( new {  categoryIds,   categoryIncrements, paymentId  } );
+            return CreatedAtAction(nameof(Get), new { id = res.Value }, new { id = res.Value });
+        }
+        return MapFailure(res.Errors);
+    }
+    
+    [HttpPost("insert_with_category")]
+    public async Task<IActionResult> InsertWithCategory([FromBody] Dom.Model.Payment t)
     {
         var res = await _service.Insert(t);
         if (res.IsSuccess)
