@@ -68,11 +68,18 @@ public class RabbitPaymentConsumer : BackgroundService
             int paymentId = jsonRoot.GetProperty("paymentId").GetInt32();
             if (routingKey == "category.failed_increment")
             {
+                paymentService.UpdateSagaStatus(new Dom.Model.Payment
+                    { Id = paymentId, SagaStatus = (int)Dom.Model.PaymentSagaStatus.FAILED });
                 paymentService.Delete( new Dom.Model.Payment
                 {
                     Id = paymentId, 
                     UpdateDate = DateTime.Now
                 } );
+            }
+            else if (routingKey == "category.increment_updated")
+            {
+                paymentService.UpdateSagaStatus(new Dom.Model.Payment{ Id = paymentId, 
+                    SagaStatus = (int)Dom.Model.PaymentSagaStatus.COMPLETED});
             }
             
             

@@ -90,6 +90,11 @@ public class PaymentService
         return Result<int>.Success(repoRes.Value);
     }
 
+    public async Task<Result<int>> UpdateSagaStatus(Dom.Model.Payment t)
+    {
+        return await _repository.UpdateSagaStatus(t);
+    }
+    
     public async Task<Result<int>> Delete(Dom.Model.Payment t)
     {
         if (t == null)

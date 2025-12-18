@@ -32,8 +32,8 @@ public class PaymentRepository: IRepository
             using var cmdPayment = conn.CreateCommand();
             cmdPayment.Transaction = transaction;
             cmdPayment.CommandText = @"INSERT INTO payment
-(establishment_id, payment_date, amount_paid, payment_method, receipt_number, created_by, created_date, last_update, status)
-VALUES (@establishment_id, @payment_date, @amount_paid, @payment_method, @receipt_number, @created_by, @created_date, @last_update, @status);";
+(establishment_id, payment_date, amount_paid, payment_method, receipt_number, created_by, created_date, last_update, status, saga_status)
+VALUES (@establishment_id, @payment_date, @amount_paid, @payment_method, @receipt_number, @created_by, @created_date, @last_update, @status, @saga_status);";
 
             cmdPayment.Parameters.AddWithValue("@establishment_id", t.EstablishmentId);
             cmdPayment.Parameters.AddWithValue("@payment_date", t.PaymentDate);
@@ -41,6 +41,7 @@ VALUES (@establishment_id, @payment_date, @amount_paid, @payment_method, @receip
             cmdPayment.Parameters.AddWithValue("@payment_method", t.PaymentMethod);
             cmdPayment.Parameters.AddWithValue("@receipt_number", t.ReceiptNumber);
             cmdPayment.Parameters.AddWithValue("@created_by", t.CreatedBy);
+            cmdPayment.Parameters.AddWithValue("@saga_status", PaymentSagaStatus.PENDING);
 
             var createdDate = t.CreatedDate == default ? DateTime.Now : t.CreatedDate;
             var lastUpdate = t.UpdateDate == default ? DateTime.Now : t.UpdateDate;
@@ -94,7 +95,40 @@ VALUES (@payment_id, @category_id, @quantity, @unit_price);";
             conn?.Dispose();
         }
     }
+    public async Task<Result<int>> UpdateSagaStatus(Payment.Dom.Model.Payment t)
+    {
+        try
+        {
+            using var conn = _connectionDB.GetConnection();
+            await conn.OpenAsync();
 
+            using var cmd = conn.CreateCommand();
+            // We update the saga_status and ensure we record when this change happened
+            cmd.CommandText = @"UPDATE payment 
+                            SET saga_status = @saga_status, 
+                                last_update = @last_update 
+                            WHERE id = @id;";
+
+            cmd.Parameters.AddWithValue("@saga_status", (int)t.SagaStatus);
+            cmd.Parameters.AddWithValue("@last_update", DateTime.Now);
+            cmd.Parameters.AddWithValue("@id", t.Id);
+
+            var affected = await cmd.ExecuteNonQueryAsync();
+
+            if (affected == 0)
+            {
+                return Result<int>.Failure("PaymentNotFound");
+            }
+
+            return Result<int>.Success(affected);
+        }
+        catch (Exception ex)
+        {
+            // Log the error here if you have a logger
+            return Result<int>.Failure($"DbError: {ex.Message}");
+        }
+    }
+    
     public async Task<Result<int>> Update(Payment.Dom.Model.Payment t)
     {
         MySqlConnection? conn = null;

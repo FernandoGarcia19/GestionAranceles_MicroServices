@@ -2,6 +2,13 @@
 
 namespace Payment.Dom.Model;
 
+public enum PaymentSagaStatus
+{
+    PENDING,
+    COMPLETED,
+    FAILED
+}
+
 public class Payment
 {
     public int Id { get; set; }
@@ -29,6 +36,7 @@ public class Payment
     public DateTime UpdateDate { get; set; }
     public bool Status { get; set; }
     public int CreatedBy { get; set; }
+    public int SagaStatus { get; set; }
 
     // Payment items (categories with quantities and prices)
     public List<CategoryPayment> Items { get; set; } = new List<CategoryPayment>();

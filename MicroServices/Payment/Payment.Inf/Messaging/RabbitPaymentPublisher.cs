@@ -11,9 +11,9 @@ public class RabbitPaymentPublisher : IEventPublisher, IDisposable
     private readonly IConnection _connection;
     private readonly IModel _channel;
     private readonly string _exchange;
-    private readonly ILogger<RabbitPublisherForCategory> _logger;
+    private readonly ILogger<RabbitPaymentPublisher> _logger;
 
-    public RabbitPaymentPublisher(IConfiguration configuration, ILogger<RabbitPublisherForCategory> logger)
+    public RabbitPaymentPublisher(IConfiguration configuration, ILogger<RabbitPaymentPublisher> logger)
     {
         _logger = logger;
         var factory = new ConnectionFactory()

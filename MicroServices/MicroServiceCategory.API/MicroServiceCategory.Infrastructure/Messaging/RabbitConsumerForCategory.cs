@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Text.Json;
@@ -76,6 +77,7 @@ public class RabbitConsumerForCategory: BackgroundService
             CategoryService categoryService = scope.ServiceProvider.GetRequiredService<CategoryService>();
             IEventPublisher eventPublisher = scope.ServiceProvider.GetRequiredService<IEventPublisher>();
 
+            List<Tuple<int, int>> updatedCategoryPairs = new(); 
             var categoryDataPairs =  paymentCategories.Zip(paymentIncrements);
             foreach (var (categoryId, categoryIncrement) in categoryDataPairs)
             {
@@ -90,9 +92,14 @@ public class RabbitConsumerForCategory: BackgroundService
                         categoryName = resultCategory.Value.Name,
                         categoryDescription = resultCategory.Value.Description,
                     };
-                    
                     await eventPublisher.PublishAsync( "category.failed_increment", failedEventData );
+                    foreach (var (updatedId, updatedIncrement) in updatedCategoryPairs)
+                    {
+                        await categoryService.IncrementNumberOfInserts(updatedId, -updatedIncrement);
+                    }
+                    break;
                 }
+                updatedCategoryPairs.Add(Tuple.Create(categoryId, categoryIncrement));
             }
             
             var okEventData = new
