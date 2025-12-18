@@ -31,4 +31,6 @@ public class PersonInChargeDto
     [StringLength(15, MinimumLength = 5, ErrorMessage = "El CI debe tener entre 5 y 15 caracteres.")]
     [RegularExpression(@"^[a-zA-Z0-9\-]+$", ErrorMessage = "El CI solo puede contener números, letras y guiones.")]
     public string Ci { get; set; }
+
+    public int? CreatedBy { get; set; }
 }

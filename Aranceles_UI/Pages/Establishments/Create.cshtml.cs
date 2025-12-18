@@ -1,10 +1,12 @@
-using System;
-using System.Collections.Generic;
 using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Aranceles_UI.Pages.Establishments
 {
@@ -32,6 +34,11 @@ namespace Aranceles_UI.Pages.Establishments
 
         public async Task<IActionResult> OnPost()
         {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                  ?? User.FindFirstValue(JwtRegisteredClaimNames.NameId);
+
+            Establishment.CreatedBy = int.Parse(userIdStr);
+
             if (!ModelState.IsValid)
             {
                 PersonsInCharge = await _personService.GetAllPersonsInChargeAsync();

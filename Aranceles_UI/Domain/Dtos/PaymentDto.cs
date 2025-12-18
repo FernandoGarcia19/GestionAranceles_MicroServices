@@ -30,4 +30,6 @@ public class PaymentDto
     
     // Navigation properties for display purposes
     public string? EstablishmentName { get; set; }
+
+    public int? CreatedBy { get; set; }
 }

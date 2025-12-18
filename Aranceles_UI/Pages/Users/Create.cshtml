@@ -34,7 +34,7 @@
                 </p>
                 <div class="alert alert-info border-0 mt-3 mb-3">
                     <i class="bi bi-envelope-check-fill me-2"></i>
-                    <strong>Correo enviado:</strong> Se ha enviado un correo electrónico a <strong>@Model.User.Email</strong>
+                    <strong>Correo enviado:</strong> Se ha enviado un correo electrónico a <strong>@Model.UserDto.Email</strong>
                     con las credenciales de acceso y la contraseña generada.
                 </div>
                 <hr class="my-3">
@@ -62,11 +62,11 @@ else
 
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <label asp-for="User.FirstName" class="form-label fw-semibold">
+                            <label asp-for="UserDto.FirstName" class="form-label fw-semibold">
                                 <i class="bi bi-person me-1 text-primary"></i>Primer Nombre
                             </label>
-                            <input asp-for="User.FirstName" class="form-control" placeholder="Ej: Juan"  />
-                            <span asp-validation-for="User.FirstName" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
+                            <input asp-for="UserDto.FirstName" class="form-control" placeholder="Ej: Juan"  />
+                            <span asp-validation-for="UserDto.FirstName" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
                         </div>
 
                         <div class="col-md-6">
@@ -78,11 +78,11 @@ else
                         </div>
 
                         <div class="col-md-6">
-                            <label asp-for="User.LastName" class="form-label fw-semibold">
+                            <label asp-for="UserDto.LastName" class="form-label fw-semibold">
                                 <i class="bi bi-person me-1 text-primary"></i>Primer Apellido
                             </label>
-                            <input asp-for="User.LastName" class="form-control" placeholder="Ej: Pérez" />
-                            <span asp-validation-for="User.LastName" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
+                            <input asp-for="UserDto.LastName" class="form-control" placeholder="Ej: Pérez" />
+                            <span asp-validation-for="UserDto.LastName" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
                         </div>
 
                         <div class="col-md-6">
@@ -94,23 +94,23 @@ else
                         </div>
 
                         <div class="col-md-6">
-                            <label asp-for="User.Email" class="form-label fw-semibold">
+                            <label asp-for="UserDto.Email" class="form-label fw-semibold">
                                 <i class="bi bi-envelope me-1 text-primary"></i>Correo Electrónico
                             </label>
-                            <input asp-for="User.Email" type="email" class="form-control" placeholder="correo@ejemplo.com" />
-                            <span asp-validation-for="User.Email" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
+                            <input asp-for="UserDto.Email" type="email" class="form-control" placeholder="correo@ejemplo.com" />
+                            <span asp-validation-for="UserDto.Email" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
                         </div>
 
                         <div class="col-md-6">
-                            <label asp-for="User.Role" class="form-label fw-semibold">
+                            <label asp-for="UserDto.Role" class="form-label fw-semibold">
                                 <i class="bi bi-shield-check me-1 text-primary"></i>Rol
                             </label>
-                            <select asp-for="User.Role" class="form-select">
+                            <select asp-for="UserDto.Role" class="form-select">
                                 <option value="" selected>Seleccionar rol</option>
                                 <option value="Admin">Admin</option>
                                 <option value="Contador">Contador</option>
                             </select>
-                            <span asp-validation-for="User.Role" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
+                            <span asp-validation-for="UserDto.Role" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
                         </div>
                     </div>
 

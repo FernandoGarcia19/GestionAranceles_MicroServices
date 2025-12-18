@@ -21,9 +21,9 @@ public class EstablishmentRepository: IRepository
     public async Task<Result<int>> Insert(Establishment.Dom.Model.Establishment t)
     {
         const string sql = @"INSERT INTO establishment
-            (name, tax_id, sanitary_license, sanitary_license_expiry, address, phone, email, establishment_type, created_by, status, last_update)
+            (name, tax_id, sanitary_license, sanitary_license_expiry, address, phone, email, establishment_type, person_in_charge_id, created_by, status, last_update)
             VALUES
-            (@name, @tax_id, @sanitary_license, @sanitary_license_expiry, @address, @phone, @email, @establishment_type, @created_by, @status, @last_update);";
+            (@name, @tax_id, @sanitary_license, @sanitary_license_expiry, @address, @phone, @email, @establishment_type, @person_in_charge_id, @created_by, @status, @last_update);";
 
         try
         {
@@ -40,6 +40,7 @@ public class EstablishmentRepository: IRepository
             cmd.Parameters.AddWithValue("@phone", t.Phone ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("@email", t.Email ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("@establishment_type", t.EstablishmentType ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@person_in_charge_id", t.PersonInChargeId > 0 ? (object)t.PersonInChargeId : DBNull.Value);
             cmd.Parameters.AddWithValue("@created_by", t.CreatedBy);
             cmd.Parameters.AddWithValue("@status", 1);
             cmd.Parameters.AddWithValue("@last_update", lastUpdate);
@@ -69,6 +70,7 @@ public class EstablishmentRepository: IRepository
             phone = @phone,
             email = @email,
             establishment_type = @establishment_type,
+            person_in_charge_id = @person_in_charge_id,
             last_update = CURRENT_TIMESTAMP,
             status = @status
             WHERE id = @id;";
@@ -87,6 +89,7 @@ public class EstablishmentRepository: IRepository
             cmd.Parameters.AddWithValue("@phone", t.Phone ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("@email", t.Email ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("@establishment_type", t.EstablishmentType ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@person_in_charge_id", t.PersonInChargeId > 0 ? (object)t.PersonInChargeId : DBNull.Value);
             cmd.Parameters.AddWithValue("@status", 1);
             cmd.Parameters.AddWithValue("@id", t.Id);
 
@@ -128,7 +131,7 @@ public class EstablishmentRepository: IRepository
 
     public async Task<Result<Establishment.Dom.Model.Establishment>> SelectById(int id)
     {
-        const string sql = @"SELECT id, name, tax_id, sanitary_license, sanitary_license_expiry, address, phone, email, establishment_type, created_by, created_date, last_update, status
+        const string sql = @"SELECT id, name, tax_id, sanitary_license, sanitary_license_expiry, address, phone, email, establishment_type, person_in_charge_id, created_by, created_date, last_update, status
             FROM establishment WHERE id = @id;";
 
         try
@@ -152,7 +155,7 @@ public class EstablishmentRepository: IRepository
 
     public async Task<Result<List<Establishment.Dom.Model.Establishment>>> Select()
     {
-        const string sql = @"SELECT id, name, tax_id, sanitary_license, sanitary_license_expiry, address, phone, email, establishment_type, created_by, created_date, last_update, status
+        const string sql = @"SELECT id, name, tax_id, sanitary_license, sanitary_license_expiry, address, phone, email, establishment_type, person_in_charge_id, created_by, created_date, last_update, status
             FROM establishment WHERE status = 1;";
 
         var list = new List<Establishment.Dom.Model.Establishment>();
@@ -190,6 +193,7 @@ public class EstablishmentRepository: IRepository
         est.Phone = reader.IsDBNull(reader.GetOrdinal("phone")) ? null : reader.GetString("phone");
         est.Email = reader.IsDBNull(reader.GetOrdinal("email")) ? null : reader.GetString("email");
         est.EstablishmentType = reader.IsDBNull(reader.GetOrdinal("establishment_type")) ? null : reader.GetString("establishment_type");
+        est.PersonInChargeId = reader.IsDBNull(reader.GetOrdinal("person_in_charge_id")) ? 0 : reader.GetInt32("person_in_charge_id");
         est.CreatedBy = reader.IsDBNull(reader.GetOrdinal("created_by")) ? 0 : reader.GetInt32("created_by");
         est.CreatedDate = reader.IsDBNull(reader.GetOrdinal("created_date")) ? DateTime.MinValue : reader.GetDateTime("created_date");
         est.LastUpdate = reader.IsDBNull(reader.GetOrdinal("last_update")) ? DateTime.MinValue : reader.GetDateTime("last_update");
