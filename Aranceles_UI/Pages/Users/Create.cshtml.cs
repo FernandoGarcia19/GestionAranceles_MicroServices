@@ -1,10 +1,12 @@
-using System;
-using System.ComponentModel.DataAnnotations;
 using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Authorization;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 
 
@@ -29,6 +31,7 @@ namespace Aranceles_UI.Pages.Users
 
         [Required(ErrorMessage = "El rol es obligatorio.")]
         public string Role { get; set; }
+        public int ? CreatedBy { get; set; }
     }
     
     public class CreateModel : PageModel
@@ -43,7 +46,7 @@ namespace Aranceles_UI.Pages.Users
         public string GeneratedUsername { get; set; } = string.Empty;
         
         [BindProperty]
-        public RegisterDTO User { get; set; } = new();
+        public RegisterDTO UserDto { get; set; } = new();
 
         [BindProperty]
         [StringLength(50, ErrorMessage = "El segundo nombre no puede exceder 50 caracteres.")]
@@ -59,15 +62,20 @@ namespace Aranceles_UI.Pages.Users
 
         public async Task<IActionResult> OnPost()
         {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                  ?? User.FindFirstValue(JwtRegisteredClaimNames.NameId);
+
+            UserDto.CreatedBy = int.Parse(userIdStr);
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            var success = await _userService.CreateUserAsync(User, SecondName, SecondLastName);
+            var success = await _userService.CreateUserAsync(UserDto, SecondName, SecondLastName);
             if (success)
             {
-                GeneratedUsername = User.FirstName + User.LastName;
+                GeneratedUsername = UserDto.FirstName + UserDto.LastName;
                 return RedirectToPage("./Index");
             }
             return Page();

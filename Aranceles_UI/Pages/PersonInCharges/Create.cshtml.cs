@@ -1,11 +1,13 @@
-using System;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.ComponentModel.DataAnnotations;
 using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Security;
 using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Aranceles_UI.Pages.PersonInCharges
 {
@@ -40,6 +42,11 @@ namespace Aranceles_UI.Pages.PersonInCharges
 
         public async Task<IActionResult> OnPost()
         {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                  ?? User.FindFirstValue(JwtRegisteredClaimNames.NameId);
+
+            Person.CreatedBy = int.Parse(userIdStr);
+
             if (Complemento != null)
             {
                 Person.Ci = Person.Ci + "-" + Complemento.ToString();

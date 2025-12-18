@@ -45,4 +45,6 @@ public class EstablishmentDto
     public string EstablishmentType { get; set; }
     [Required(ErrorMessage = "Debe seleccionar un encargado")]
     public int PersonInChargeId { get; set; }
+
+    public int? CreatedBy { get; set; }
 }
