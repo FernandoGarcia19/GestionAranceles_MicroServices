@@ -2,15 +2,18 @@ using System;
 using System.Collections.Generic;
 using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Security;
+using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aranceles_UI.Pages.Establishments
 {
+    [Authorize(Roles = "Admin,Contador")]
     public class EditModel : PageModel
     {
-        private readonly HttpClient _establishmentClient;
-        private readonly HttpClient _personClient;
+        private readonly IEstablishmentService _establishmentService;
+        private readonly IPersonInChargeService _personService;
         private readonly IdProtector _idProtector;
 
         public List<PersonInChargeDto> PersonsInCharge { get; set; } = new();
@@ -18,12 +21,10 @@ namespace Aranceles_UI.Pages.Establishments
         [BindProperty]
         public EstablishmentDto Establishment { get; set; } = new();
         
-
-        
-        public EditModel(IHttpClientFactory factory, IdProtector idProtector)
+        public EditModel(IEstablishmentService establishmentService, IPersonInChargeService personService, IdProtector idProtector)
         {
-            _establishmentClient = factory.CreateClient("establishmentApi");
-            _personClient = factory.CreateClient("personInChargeApi");
+            _establishmentService = establishmentService;
+            _personService = personService;
             _idProtector = idProtector;
         }
 
@@ -39,7 +40,7 @@ namespace Aranceles_UI.Pages.Establishments
                 return RedirectToPage("../Error");
             }
 
-            var establishment = await _establishmentClient.GetFromJsonAsync<EstablishmentDto>($"api/Establishment/{realId}");
+            var establishment = await _establishmentService.GetEstablishmentByIdAsync(realId);
             if (establishment == null)
                 return RedirectToPage("./Index");
 
@@ -57,8 +58,8 @@ namespace Aranceles_UI.Pages.Establishments
                 return Page();
             }
 
-            var result = await _establishmentClient.PutAsJsonAsync($"api/Establishment", Establishment);
-            if (result.IsSuccessStatusCode)
+            var success = await _establishmentService.UpdateEstablishmentAsync(Establishment);
+            if (success)
             {
                 return RedirectToPage("./Index");
             }
@@ -69,8 +70,7 @@ namespace Aranceles_UI.Pages.Establishments
 
         private async Task LoadPersonsInCharge()
         {
-            var persons = await _personClient.GetFromJsonAsync<List<PersonInChargeDto>>("api/PersonInCharge/") ?? new();
-            PersonsInCharge = persons;
+            PersonsInCharge = await _personService.GetAllPersonsInChargeAsync();
         }
     }
 }

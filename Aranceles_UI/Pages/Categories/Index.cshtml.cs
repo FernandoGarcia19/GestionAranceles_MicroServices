@@ -1,20 +1,22 @@
 using System.Collections.Generic;
 using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Security;
+using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aranceles_UI.Pages.Categories
 {
+    [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
-        private readonly HttpClient categoryClient;
+        private readonly ICategoryService _categoryService;
         private readonly IdProtector _idProtector;
         
-        public IndexModel(IHttpClientFactory factory, IdProtector idProtector)
+        public IndexModel(ICategoryService categoryService, IdProtector idProtector)
         {
-            categoryClient = factory.CreateClient("categoryApi");
+            _categoryService = categoryService;
             _idProtector = idProtector;
         }
         
@@ -28,19 +30,14 @@ namespace Aranceles_UI.Pages.Categories
 
         public async Task OnGet()
         {
-            Categories = await categoryClient.GetFromJsonAsync<List<CategoryDto>>("/api/Category");
+            Categories = await _categoryService.GetAllCategoriesAsync();
         }
 
         public async Task OnPostSearch()
         {
-            if(!string.IsNullOrWhiteSpace(SearchTerm))
-                await categoryClient.GetFromJsonAsync<List<CategoryDto>>($"/api/Category/search/{SearchTerm}");
-                
-            // Categories = string.IsNullOrWhiteSpace(SearchTerm) ? 
-            //     await categoryClient.GetFromJsonAsync<List<CategoryDto>>("/api/Category") : 
-            //     await categoryClient.GetFromJsonAsync<List<CategoryDto>>("/api/category/search");
-                
+            Categories = await _categoryService.SearchCategoriesAsync(SearchTerm);
         }
+
         public string Protect(int id) => _idProtector.ProtectInt(id);
     }
 }

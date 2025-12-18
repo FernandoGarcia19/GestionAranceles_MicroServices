@@ -1,52 +1,51 @@
 using System;
 using System.Collections.Generic;
 using Aranceles_UI.Domain.Dtos;
+using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aranceles_UI.Pages.Establishments
 {
+    [Authorize(Roles = "Admin,Contador")]
     public class CreateModel : PageModel
     {
-        private readonly HttpClient _establishmentClient;
-        private readonly HttpClient _personClient;
+        private readonly IEstablishmentService _establishmentService;
+        private readonly IPersonInChargeService _personService;
 
         [BindProperty]
         public EstablishmentDto Establishment { get; set; } = new();
 
         public List<PersonInChargeDto> PersonsInCharge { get; set; } = new();
 
-        public CreateModel(IHttpClientFactory factory)
+        public CreateModel(IEstablishmentService establishmentService, IPersonInChargeService personService)
         {
-            _establishmentClient = factory.CreateClient("establishmentApi");
-            _personClient = factory.CreateClient("personInChargeApi");
+            _establishmentService = establishmentService;
+            _personService = personService;
         }
 
         public async Task OnGet()
         {
-            var persons = await _personClient.GetFromJsonAsync<List<PersonInChargeDto>>("api/PersonInCharge/") ?? new();
-            PersonsInCharge = persons;
+            PersonsInCharge = await _personService.GetAllPersonsInChargeAsync();
         }
 
         public async Task<IActionResult> OnPost()
         {
             if (!ModelState.IsValid)
             {
-                var persons = await _personClient.GetFromJsonAsync<List<PersonInChargeDto>>("api/PersonInCharge/") ?? new();
-                PersonsInCharge = persons;
+                PersonsInCharge = await _personService.GetAllPersonsInChargeAsync();
                 return Page();
             }
 
-            var result = await _establishmentClient.PostAsJsonAsync("api/Establishment/insert", Establishment);
-            Console.WriteLine(result);
-            if (result.IsSuccessStatusCode)
+            var success = await _establishmentService.CreateEstablishmentAsync(Establishment);
+            if (success)
             {
                 return RedirectToPage("./Index");
             }
 
             // If failed, reload persons
-            var personsRetry = await _personClient.GetFromJsonAsync<List<PersonInChargeDto>>("api/PersonInCharge/") ?? new();
-            PersonsInCharge = personsRetry;
+            PersonsInCharge = await _personService.GetAllPersonsInChargeAsync();
 
             return Page();
         }

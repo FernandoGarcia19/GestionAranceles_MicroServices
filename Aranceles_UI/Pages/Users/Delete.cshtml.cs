@@ -1,21 +1,24 @@
 using Aranceles_UI.Domain.Dtos;
 using Aranceles_UI.Security;
+using Aranceles_UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aranceles_UI.Pages.Users
 {
+    [Authorize(Roles = "Admin")]
     public class DeleteModel : PageModel
     {
-        private readonly HttpClient _userClient;
+        private readonly IUserService _userService;
         private readonly IdProtector _idProtector;
 
         [BindProperty]
         public UserDto User { get; set; } = new();
 
-        public DeleteModel(IHttpClientFactory factory, IdProtector idProtector)
+        public DeleteModel(IUserService userService, IdProtector idProtector)
         {
-            _userClient = factory.CreateClient("userApi");
+            _userService = userService;
             _idProtector = idProtector;
         }
 
@@ -31,7 +34,7 @@ namespace Aranceles_UI.Pages.Users
                 return RedirectToPage("./Index");
             }
 
-            var user = await _userClient.GetFromJsonAsync<UserDto>($"api/User/getById/{realId}");
+            var user = await _userService.GetUserByIdAsync(realId);
             if (user == null)
                 return RedirectToPage("./Index");
 
@@ -41,8 +44,8 @@ namespace Aranceles_UI.Pages.Users
 
         public async Task<IActionResult> OnPost()
         {
-            var result = await _userClient.DeleteAsync($"api/User/{User.Id}");
-            if (result.IsSuccessStatusCode)
+            var success = await _userService.DeleteUserAsync(User.Id);
+            if (success)
             {
                 return RedirectToPage("./Index");
             }

@@ -21,8 +21,8 @@
     <hr class="border-2 opacity-25">
 </div>
 
-@* @if (Model.GeneratedUsername != null) *@
-@* { *@
+@if (!String.IsNullOrEmpty(Model.GeneratedUsername))
+{
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
             <div class="alert alert-success shadow-sm border-0" role="alert">
@@ -65,7 +65,7 @@ else
                             <label asp-for="User.FirstName" class="form-label fw-semibold">
                                 <i class="bi bi-person me-1 text-primary"></i>Primer Nombre
                             </label>
-                            <input asp-for="User.FirstName" class="form-control" placeholder="Ej: Juan" required />
+                            <input asp-for="User.FirstName" class="form-control" placeholder="Ej: Juan"  />
                             <span asp-validation-for="User.FirstName" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
                         </div>
 
@@ -81,7 +81,7 @@ else
                             <label asp-for="User.LastName" class="form-label fw-semibold">
                                 <i class="bi bi-person me-1 text-primary"></i>Primer Apellido
                             </label>
-                            <input asp-for="User.LastName" class="form-control" placeholder="Ej: Pérez" required />
+                            <input asp-for="User.LastName" class="form-control" placeholder="Ej: Pérez" />
                             <span asp-validation-for="User.LastName" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
                         </div>
 
@@ -97,7 +97,7 @@ else
                             <label asp-for="User.Email" class="form-label fw-semibold">
                                 <i class="bi bi-envelope me-1 text-primary"></i>Correo Electrónico
                             </label>
-                            <input asp-for="User.Email" type="email" class="form-control" placeholder="correo@ejemplo.com" required />
+                            <input asp-for="User.Email" type="email" class="form-control" placeholder="correo@ejemplo.com" />
                             <span asp-validation-for="User.Email" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
                         </div>
 
@@ -105,7 +105,7 @@ else
                             <label asp-for="User.Role" class="form-label fw-semibold">
                                 <i class="bi bi-shield-check me-1 text-primary"></i>Rol
                             </label>
-                            <select asp-for="User.Role" class="form-select" required>
+                            <select asp-for="User.Role" class="form-select">
                                 <option value="" selected>Seleccionar rol</option>
                                 <option value="Admin">Admin</option>
                                 <option value="Contador">Contador</option>

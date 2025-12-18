@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using MicroServiceCategory.Domain.Entities;
 using MicroServiceCategory.Domain.Interfaces;
 
+
 namespace MicroServiceCategory.Infrastructure.Repository
 {
     public class CategoryRepository : IRepository<Category>
@@ -132,6 +133,49 @@ namespace MicroServiceCategory.Infrastructure.Repository
             return listaCategories;
         }
 
+        public async Task<Category> SelectById(int id)
+        {
+            string query = @"SELECT id, name, description, base_amount, created_by, created_date, last_update, status
+                     FROM category
+                     WHERE id = @Id AND status = 1;";
+
+            try
+            {
+                using (var connection = _connectionDB.GetConnection())
+                {
+                    await connection.OpenAsync();
+
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Id", id);
+
+                        using (var reader = await command.ExecuteReaderAsync())
+                        {
+                            if (!await reader.ReadAsync()) return null;
+
+                            var category = new Category
+                            {
+                                Id = Convert.ToInt32(reader["id"]),
+                                Name = reader["name"].ToString(),
+                                Description = reader["description"].ToString(),
+                                BaseAmount = Convert.ToDecimal(reader["base_amount"]),
+                                CreatedBy = Convert.ToInt32(reader["created_by"]),
+                                CreatedDate = Convert.ToDateTime(reader["created_date"]),
+                                LastUpdate = Convert.ToDateTime(reader["last_update"]),
+                                Status = Convert.ToByte(reader["status"])
+                            };
+
+                            return category;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        
         public async Task<List<Category>> Search(string property)
         {
             List<Category> listaCategories = new List<Category>();

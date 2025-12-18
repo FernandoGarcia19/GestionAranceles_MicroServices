@@ -46,7 +46,7 @@
                         <label asp-for="User.FirstName" class="form-label fw-semibold">
                             <i class="bi bi-person me-1 text-primary"></i>Nombre
                         </label>
-                        <input asp-for="User.FirstName" class="form-control" placeholder="Ingrese el nombre" required />
+                        <input asp-for="User.FirstName" class="form-control" placeholder="Ingrese el nombre"  />
                         <span asp-validation-for="User.FirstName" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
                     </div>
 
@@ -54,7 +54,7 @@
                         <label asp-for="User.LastName" class="form-label fw-semibold">
                             <i class="bi bi-person me-1 text-primary"></i>Apellido
                         </label>
-                        <input asp-for="User.LastName" class="form-control" placeholder="Ingrese el apellido" required />
+                        <input asp-for="User.LastName" class="form-control" placeholder="Ingrese el apellido"  />
                         <span asp-validation-for="User.LastName" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
                     </div>
 
@@ -62,7 +62,7 @@
                         <label asp-for="User.Email" class="form-label fw-semibold">
                             <i class="bi bi-envelope me-1 text-primary"></i>Correo Electrónico
                         </label>
-                        <input asp-for="User.Email" type="email" class="form-control" placeholder="correo@ejemplo.com" required />
+                        <input asp-for="User.Email" type="email" class="form-control" placeholder="correo@ejemplo.com"  />
                         <span asp-validation-for="User.Email" class="text-danger d-block mt-2 fw-semibold" style="font-size: 0.9rem;"></span>
                     </div>
 
@@ -70,7 +70,7 @@
                         <label asp-for="User.Role" class="form-label fw-semibold">
                             <i class="bi bi-shield-check me-1 text-primary"></i>Rol
                         </label>
-                        <select asp-for="User.Role" class="form-select" required>
+                        <select asp-for="User.Role" class="form-select" >
                             <option value="1">Admin</option>
                             <option value="2">Contador</option>
                         </select>
